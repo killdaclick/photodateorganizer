@@ -1,106 +1,109 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include "Utility.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+	QMainWindow(parent),
+	ui(new Ui::MainWindow)
 {
-    if( !QFile::exists(QDir::currentPath() + "/" + EXIV2_BIN) )
-    {
-        QMessageBox::warning(this, tr("Brak pliku aplikacji"), tr("Wykryto brak wymaganego pliku") + " " + QString(EXIV2_BIN), QMessageBox::Abort );
-        QTimer::singleShot(0, this, SLOT(close()));
-    }
-    if( !QFile::exists(QDir::currentPath() + "/" + EXIV2_DLL) )
-    {
-        QMessageBox::warning(this, tr("Brak pliku aplikacji"), tr("Wykryto brak wymaganego pliku") + " " + QString(EXIV2_DLL), QMessageBox::Abort );
-        QTimer::singleShot(0, this, SLOT(close()));
-    }
+	if( !QFile::exists(QDir::currentPath() + "/" + EXIV2_BIN) )
+	{
+		QMessageBox::warning(this, tr("Brak pliku aplikacji"), tr("Wykryto brak wymaganego pliku") + " " + QString(EXIV2_BIN), QMessageBox::Abort );
+		QTimer::singleShot(0, this, SLOT(close()));
+	}
+	if( !QFile::exists(QDir::currentPath() + "/" + EXIV2_DLL) )
+	{
+		QMessageBox::warning(this, tr("Brak pliku aplikacji"), tr("Wykryto brak wymaganego pliku") + " " + QString(EXIV2_DLL), QMessageBox::Abort );
+		QTimer::singleShot(0, this, SLOT(close()));
+	}
 
-    ui->setupUi(this);
+	ui->setupUi(this);
 	enableSignals(true);
 }
 
 MainWindow::~MainWindow()
 {
-    enableSignals(false);
+	enableSignals(false);
 	
 	delete ui;
 }
 
 bool MainWindow::changeFileTime( const QString& filePath, const QDateTime& t )
 {
-    //getthe handle to the file
+	//getthe handle to the file
 	HANDLE filename = CreateFile((LPCWSTR)filePath.utf16(),
-    GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
-    FILE_ATTRIBUTE_NORMAL, NULL);
-    if( filename == INVALID_HANDLE_VALUE )
+	GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+	FILE_ATTRIBUTE_NORMAL, NULL);
+	if( filename == INVALID_HANDLE_VALUE )
 		return false;
 
-    SYSTEMTIME st;
+	SYSTEMTIME st;
 	st.wDay = t.date().day();
-    st.wMonth = t.date().month();
-    st.wYear = t.date().year();
+	st.wMonth = t.date().month();
+	st.wYear = t.date().year();
 	st.wHour = t.toUTC().time().hour();
-    st.wMinute = t.toUTC().time().minute();
-    st.wSecond = t.toUTC().time().second();
+	st.wMinute = t.toUTC().time().minute();
+	st.wSecond = t.toUTC().time().second();
 
-    //creation of a filetimestruct and convert our new systemtime
-    FILETIME ft;
+	//creation of a filetimestruct and convert our new systemtime
+	FILETIME ft;
 
-    SystemTimeToFileTime(&st,&ft);
+	SystemTimeToFileTime(&st,&ft);
 
-    //set the filetime on the file
-    bool ret = SetFileTime(filename,&ft,(LPFILETIME) NULL,&ft);
-    //close our handle.
-    CloseHandle(filename);
+	//set the filetime on the file
+	bool ret = SetFileTime(filename,&ft,(LPFILETIME) NULL,&ft);
+	//close our handle.
+	CloseHandle(filename);
 
-    return ret;
+	return ret;
 }
 
 void MainWindow::enableSignals( bool enable )
 {
-    if( enable)
-    {
-        bool t = false;
+	if( enable)
+	{
+		bool t = false;
 		t = connect( ui->selectFilesBtn, SIGNAL(clicked()), this, SLOT(selectFiles()) );
-        t = connect( ui->selectFolderBtn, SIGNAL(clicked()), this, SLOT(selectFolder()) );
-        t = connect( ui->startBtn, SIGNAL(clicked()), this, SLOT(start()) );
-        t = connect( ui->outputFolderBtn, SIGNAL(clicked()), this, SLOT(outputFolder()) );
+		t = connect( ui->selectFolderBtn, SIGNAL(clicked()), this, SLOT(selectFolder()) );
+		t = connect( ui->startBtn, SIGNAL(clicked()), this, SLOT(start()) );
+		t = connect( ui->outputFolderBtn, SIGNAL(clicked()), this, SLOT(outputFolder()) );
 		t = connect( ui->subfoldersNameTemplate, SIGNAL(textEdited(const QString &)), this, SLOT(subfoldersNameTemplateChanged(const QString &)) );
 		t = connect( ui->newNameTemplate, SIGNAL(textEdited(const QString &)), this, SLOT(newNameTemplateChanged(const QString &)) );
-    }
-    else
-    {
-        disconnect( ui->selectFilesBtn, SIGNAL(clicked()), this, SLOT(selectFiles()) );
-        disconnect( ui->selectFolderBtn, SIGNAL(clicked()), this, SLOT(selectFolder()) );
-        disconnect( ui->startBtn, SIGNAL(clicked()), this, SLOT(start()) );
-        disconnect( ui->outputFolderBtn, SIGNAL(clicked()), this, SLOT(outputFolder()) );
+	}
+	else
+	{
+		disconnect( ui->selectFilesBtn, SIGNAL(clicked()), this, SLOT(selectFiles()) );
+		disconnect( ui->selectFolderBtn, SIGNAL(clicked()), this, SLOT(selectFolder()) );
+		disconnect( ui->startBtn, SIGNAL(clicked()), this, SLOT(start()) );
+		disconnect( ui->outputFolderBtn, SIGNAL(clicked()), this, SLOT(outputFolder()) );
 		disconnect( ui->subfoldersNameTemplate, SIGNAL(textEdited(const QString &)), this, SLOT(subfoldersNameTemplateChanged(const QString & text)) );
 		disconnect( ui->newNameTemplate, SIGNAL(textEdited(const QString &)), this, SLOT(newNameTemplateChanged(const QString & text)) );
 
-    }
+	}
 }
 
 void MainWindow::selectFiles( void )
 {
-    QStringList files = QFileDialog::getOpenFileNames(
-        this,
-        tr("Wybierz pliki źródłowe"),
-        QDir::currentPath(),
-        tr("Zdjęcia (*.jpg *.png)"));
-    
+	QStringList files = QFileDialog::getOpenFileNames(
+		this,
+		tr("Wybierz pliki źródłowe"),
+		QDir::currentPath(),
+		tr("Zdjęcia (*.jpg *.png)"));
+	
 	QStringList::iterator fi = files.begin();
 	if( fi == files.end() )
-        return;
+		return;
 
 	// czyscimy
 	inFileList.clear();
 	firstFileDate = FileExif();
-    
-    QString inF;
+	ui->status->clear();
+	
+	QString inF;
 	for( ; fi != files.end(); ++fi )
-    {
+	{
 		auto f = (*fi).replace("/","\\");
 		inFileList.push_back( f );
 		
@@ -129,11 +132,11 @@ void MainWindow::selectFiles( void )
 		inF.push_back( f );
 		inF.push_back("<br>");
 		//if( fi+1 == files.end() )
-        //    inF.push_back("; ");
-    }
-    if( inF.isEmpty() )
-        return;
-    ui->inputFilesList->setText(inF);
+		//    inF.push_back("; ");
+	}
+	if( inF.isEmpty() )
+		return;
+	ui->inputFilesList->setText(inF);
 
 	// odswiezamy podglad nowej nazwy pliku
 	updateViews();
@@ -147,24 +150,72 @@ void MainWindow::updateViews( void )
 
 void MainWindow::selectFolder( void )
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Wybierz katalog z plikami źródłowymi"),
-        QDir::currentPath(),
-        QFileDialog::ShowDirsOnly
-        | QFileDialog::DontResolveSymlinks);
+	QString dir = QFileDialog::getExistingDirectory(this, tr("Wybierz katalog z plikami źródłowymi"),
+		QDir::currentPath(),
+		QFileDialog::ShowDirsOnly
+		| QFileDialog::DontResolveSymlinks);
 
-	/* do dokonczenia */
+	if( dir == "" )
+		return;
+
+	// czyscimy
+	inFileList.clear();
+	firstFileDate = FileExif();
+	ui->status->clear();
+
+	// szukamy plikow w podkatalogach
+	auto files = Utility::findAll( "*.jp*g", dir, ui->recursiveFoldersCheckbox->isChecked(), QDir::Files );
+
+	QString inF;
+	for( QStringList::iterator f = files.begin(); f != files.end(); ++f )
+	{
+		auto fName = f->replace("/","\\");
+		inFileList.push_back( *f );
+		
+		if( f == files.begin() && ui->changeDatesUsingExif->isChecked() )
+		{
+			// szukamy pierwszego pliku z poprawna data EXIF
+			auto fiTmp = f;
+			while( fiTmp != files.end() )
+			{
+				firstFileDate.first = (*fiTmp).replace("/","\\");
+				QDateTime* dt = getExifImgDateTime(*f);
+				if( dt != nullptr && !dt->isNull() )
+				{
+					firstFileDate.second = *dt;
+					delete dt;
+					break;
+				}
+				else
+				{
+					ui->status->appendHtml(tr("<font color='orange'>Błąd odczytu daty EXIF</font> dla pliku: ") + firstFileDate.first + tr(" - <font color='orange'>sprawdzam następny plik...</font><br>"));
+					QApplication::processEvents();
+				}
+			}
+		}
+
+		inF.push_back( *f );
+		inF.push_back("<br>");
+	}
+
+	if( inF.isEmpty() )
+		return;
+	ui->inputFilesList->setText(inF);
+
+	// odswiezamy podglad nowej nazwy pliku
+	updateViews();
 }
 
 void MainWindow::start( void )
 {
 	if( inFileList.count() == 0 )
-        return;
+		return;
 
 	ui->startBtn->setEnabled(false);
 	ui->progressBar->setValue(0);
 	int fCnt = inFileList.count();
 	int fStep = 100 / fCnt;
-    ui->status->clear();
+	ui->status->clear();
 
 	if( ui->createOutputFiles->isChecked() && ui->outputFolder->text().isEmpty() )
 	{
@@ -173,18 +224,18 @@ void MainWindow::start( void )
 		return;
 	}
 
-    for( InFileList::iterator i = inFileList.begin(); i != inFileList.end(); ++i )
-    {
+	for( InFileList::iterator i = inFileList.begin(); i != inFileList.end(); ++i )
+	{
 		ui->progressBar->setValue(ui->progressBar->value() + fStep );
 		auto dt = getExifImgDateTime( *i );
-        //ui->status->appendHtml(*i);
-        if( dt == nullptr )
-        {
+		//ui->status->appendHtml(*i);
+		if( dt == nullptr )
+		{
 			ui->status->appendHtml(*i);
-            ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Błąd odczytu daty EXIF (1)</font><br>"));
-            QApplication::processEvents();
+			ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Błąd odczytu daty EXIF (1)</font><br>"));
+			QApplication::processEvents();
 			continue;
-        }
+		}
 
 		// tworzymy nowe nazwy
 		QFileInfo fi(*i);
@@ -225,16 +276,16 @@ void MainWindow::start( void )
 		}
 
 		ui->status->appendHtml(QString(fPath + "\\" + fName).replace("/","\\").replace("\\\\","\\"));
-        if( changeFileTime( fPath + "\\" + fName, *dt ) )
-            ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='green'>OK</font><br>"));
-        else
-            ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='red'>Błąd ustawiania daty</font><br>"));
+		if( changeFileTime( fPath + "\\" + fName, *dt ) )
+			ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='green'>OK</font><br>"));
+		else
+			ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='red'>Błąd ustawiania daty</font><br>"));
 
-        delete dt;
+		delete dt;
 
 		QApplication::processEvents();
-    }
-    ui->status->appendHtml(tr("<b>Koniec.</b><br>"));
+	}
+	ui->status->appendHtml(tr("<b>Koniec.</b><br>"));
 	ui->startBtn->setEnabled(true);
 }
 
@@ -347,38 +398,38 @@ bool MainWindow::changeFileName( const QString& filePath, QDateTime* fdt )
 
 void MainWindow::outputFolder( void )
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Wybierz katalog docelowy"),
-        QDir::currentPath(),
-        QFileDialog::ShowDirsOnly
-        | QFileDialog::DontResolveSymlinks);
+	QString dir = QFileDialog::getExistingDirectory(this, tr("Wybierz katalog docelowy"),
+		QDir::currentPath(),
+		QFileDialog::ShowDirsOnly
+		| QFileDialog::DontResolveSymlinks);
 
 	ui->outputFolder->setText(dir.replace("/","\\").replace("\\\\","\\"));
 }
 
 QDateTime* MainWindow::getExifImgDateTime( const QString& filePath )
 {
-    if( filePath.isEmpty() || !QFile::exists(filePath) )
-        return nullptr;
+	if( filePath.isEmpty() || !QFile::exists(filePath) )
+		return nullptr;
 
-    QProcess p;
+	QProcess p;
 	QString startCmd = "\"" + QDir::currentPath().replace("/","\\") + "\\" + QString(EXIV2_BIN) + "\" \"" + filePath + "\"";
 	p.start( startCmd );
 	p.waitForFinished();
-    while( p.canReadLine() )
-    {
-        auto l = QString(p.readLine());
-        if( !l.contains(EXIV2_IMG_TIMESTAMP))
-           continue;
+	while( p.canReadLine() )
+	{
+		auto l = QString(p.readLine());
+		if( !l.contains(EXIV2_IMG_TIMESTAMP))
+		   continue;
 		auto s = l.split(EXIV2_IMG_SPLIT, QString::SkipEmptyParts);
 		auto t1 = s[1].replace("\r\n","");
 		auto dttmp = QDateTime::fromString(s[1].replace("\r\n",""), "yyyy:MM:dd hh:mm:ss");
-        if( !dttmp.isNull() )
-            return new QDateTime(dttmp);
-        else
-            return nullptr;
-    }
+		if( !dttmp.isNull() )
+			return new QDateTime(dttmp);
+		else
+			return nullptr;
+	}
 
-    return nullptr;
+	return nullptr;
 }
 
 void MainWindow::newNameTemplateChanged(const QString & text)
