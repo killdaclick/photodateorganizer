@@ -399,8 +399,28 @@ bool MainWindow::getChangedFileName( const QString& filePath, QDateTime* fdt, QS
 				break;
 			switch( (*c).toLatin1() )
 			{
+				case 'R':
+					nn.push_back(fdt->toString("yyyy"));
+					break;
+
+				case 'M':
+					nn.push_back(fdt->toString("MM"));
+					break;
+
 				case 'D':
-					nn.push_back( fdt->toString("yyyyMMdd-hhmmss") );
+					nn.push_back(fdt->toString("dd"));
+					break;
+
+				case 'h':
+					nn.push_back(fdt->toString("hh"));
+					break;
+
+				case 'm':
+					nn.push_back(fdt->toString("mm"));
+					break;
+
+				case 's':
+					nn.push_back(fdt->toString("ss"));
 					break;
 
 				case 'N':

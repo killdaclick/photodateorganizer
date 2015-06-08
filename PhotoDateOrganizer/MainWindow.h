@@ -12,7 +12,7 @@
 #define APP_START_BUTTON_TXT	"Start"
 #define APP_STOP_BUTTON_TXT		"Stop"
 
-const int appVer = 0x010004;
+const int appVer = 0x010100;
 
 #include <QMainWindow>
 
