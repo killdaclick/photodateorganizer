@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>626</width>
-    <height>876</height>
+    <width>615</width>
+    <height>911</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>PhotoTimeMod</string>
+   <string>Photo Date Organizer</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -43,7 +43,7 @@
          <item>
           <widget class="QCheckBox" name="recursiveFoldersCheckbox">
            <property name="text">
-            <string>pliki wgłąb folderów</string>
+            <string>pliki w głąb folderów</string>
            </property>
           </widget>
          </item>
@@ -83,20 +83,34 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QCheckBox" name="changeDatesUsingExif">
-         <property name="enabled">
-          <bool>false</bool>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <property name="topMargin">
+          <number>0</number>
          </property>
-         <property name="text">
-          <string>Wykorzystaj datę zrobienia zdjęcia (metadane EXIF) jako %D oraz nadpisz datę utworzenia i modyfikacji pliku</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
+         <item>
+          <widget class="QRadioButton" name="useExifDate">
+           <property name="text">
+            <string>Użyj daty zrobienia zdjęcia (metadane EXIF)</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">buttonGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="useModificationDate">
+           <property name="text">
+            <string>Użyj daty modyfikacji pliku</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">buttonGroup</string>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QGroupBox" name="changeOutputFileName">
@@ -115,7 +129,7 @@
             <item>
              <widget class="QLabel" name="label_2">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%N&lt;/span&gt; - oryginalna nazwa | &lt;span style=&quot; font-weight:600;&quot;&gt;%D&lt;/span&gt; - data i godzina zrobienia zdjęcia; format: RRRRMMDD-hhmmss&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%N&lt;/span&gt; - oryginalna nazwa&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%D&lt;/span&gt; - data i godzina zrobienia zdjęcia; format: RRRRMMDD-hhmmss&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="textFormat">
                <enum>Qt::RichText</enum>
@@ -289,13 +303,6 @@
                </item>
               </layout>
              </item>
-             <item>
-              <widget class="Line" name="line_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
             </layout>
            </widget>
           </item>
@@ -365,7 +372,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>626</width>
+     <width>615</width>
      <height>21</height>
     </rect>
    </property>
@@ -373,13 +380,14 @@
     <property name="title">
      <string>Plik</string>
     </property>
-    <addaction name="actionWyjd"/>
+    <addaction name="actionRestoreDefaults"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuPomoc">
     <property name="title">
      <string>Pomoc</string>
     </property>
-    <addaction name="actionO_programie"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuPhoto_Time_Mod"/>
    <addaction name="menuPomoc"/>
@@ -393,18 +401,26 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionWyjd">
+  <action name="actionExit">
    <property name="text">
     <string>Wyjdź</string>
    </property>
   </action>
-  <action name="actionO_programie">
+  <action name="actionAbout">
    <property name="text">
     <string>O programie</string>
+   </property>
+  </action>
+  <action name="actionRestoreDefaults">
+   <property name="text">
+    <string>Przywróc ustawienia domyślne</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>

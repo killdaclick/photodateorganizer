@@ -5,6 +5,8 @@
 #define EXIV2_IMG_SPLIT         ": "
 #define EXIV2_BIN               "bin\\exiv2.exe"
 #define EXIV2_DLL               "bin\\libexpat.dll"
+#define APP_CONFIG_FILE			"config.ini"
+#define APP_CONFIG_VERSION		1
 
 #include <QMainWindow>
 
@@ -30,34 +32,40 @@ class MainWindow;
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+	explicit MainWindow(QWidget *parent = 0);
+	~MainWindow();
 
-    bool changeFileTime( const QString& filePath, const QDateTime& t );
-    QDateTime* getExifImgDateTime( const QString& filePath );
-    void enableSignals( bool enable );
+	bool changeFileTime( const QString& filePath, const QDateTime& t );
+	QDateTime* getExifImgDateTime( const QString& filePath );
+	void enableSignals( bool enable );
 	bool changeFileName( const QString& filePath, QDateTime* fdt );
 	bool getChangedFileName( const QString& filePath, QDateTime* fdt, QString& newName );
 	bool isNewNameTemplateValid( void );
 	bool getSubfolderPath( const QString& filePath, QDateTime* fdt, QString& subPath );
 	void updateViews( void );
+	void createDefaultSettings( void );
+	void serializeSettings( void );
+	void deserializeSettings( QByteArray* def = nullptr );
 
 public slots:
-    void selectFiles( void );
-    void selectFolder( void );
-    void start( void );
-    void outputFolder( void );
+	void selectFiles( void );
+	void selectFolder( void );
+	void start( void );
+	void outputFolder( void );
 	void newNameTemplateChanged(const QString & text);
 	void subfoldersNameTemplateChanged(const QString & text);
+	void restoreDefaultSettings( void );
+	void aboutToQuit( void );
 
 private:
-    Ui::MainWindow *ui;
+	Ui::MainWindow *ui;
 
-    InFileList inFileList;
+	InFileList inFileList;
 	FileExif firstFileDate;
+	QByteArray defaultSettings;
 };
 
 #endif // MAINWINDOW_H

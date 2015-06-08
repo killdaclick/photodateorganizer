@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	}
 
 	ui->setupUi(this);
+	createDefaultSettings();
+	deserializeSettings();
 	enableSignals(true);
 }
 
@@ -71,6 +73,9 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->outputFolderBtn, SIGNAL(clicked()), this, SLOT(outputFolder()) );
 		t = connect( ui->subfoldersNameTemplate, SIGNAL(textEdited(const QString &)), this, SLOT(subfoldersNameTemplateChanged(const QString &)) );
 		t = connect( ui->newNameTemplate, SIGNAL(textEdited(const QString &)), this, SLOT(newNameTemplateChanged(const QString &)) );
+		t = connect( ui->actionRestoreDefaults, SIGNAL(triggered()), this, SLOT(restoreDefaultSettings()) );
+		t = connect( qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()) );
+		t = connect( ui->actionExit, SIGNAL(triggered()), this, SLOT(close()) );
 	}
 	else
 	{
@@ -80,7 +85,9 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( ui->outputFolderBtn, SIGNAL(clicked()), this, SLOT(outputFolder()) );
 		disconnect( ui->subfoldersNameTemplate, SIGNAL(textEdited(const QString &)), this, SLOT(subfoldersNameTemplateChanged(const QString & text)) );
 		disconnect( ui->newNameTemplate, SIGNAL(textEdited(const QString &)), this, SLOT(newNameTemplateChanged(const QString & text)) );
-
+		disconnect( ui->actionRestoreDefaults, SIGNAL(triggered()), this, SLOT(restoreDefaultSettings()) );
+		disconnect( qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()) );
+		disconnect( ui->actionExit, SIGNAL(triggered()), this, SLOT(close()) );
 	}
 }
 
@@ -90,7 +97,7 @@ void MainWindow::selectFiles( void )
 		this,
 		tr("Wybierz pliki źródłowe"),
 		QDir::currentPath(),
-		tr("Zdjęcia (*.jpg *.png)"));
+		tr("Zdjęcia (*.jpg)"));
 	
 	QStringList::iterator fi = files.begin();
 	if( fi == files.end() )
@@ -107,7 +114,7 @@ void MainWindow::selectFiles( void )
 		auto f = (*fi).replace("/","\\");
 		inFileList.push_back( f );
 		
-		if( fi == files.begin() && ui->changeDatesUsingExif->isChecked() )
+		if( fi == files.begin() && ui->useExifDate->isChecked() )
 		{
 			// szukamy pierwszego pliku z poprawna data EXIF
 			auto fiTmp = fi;
@@ -172,7 +179,7 @@ void MainWindow::selectFolder( void )
 		auto fName = f->replace("/","\\");
 		inFileList.push_back( *f );
 		
-		if( f == files.begin() && ui->changeDatesUsingExif->isChecked() )
+		if( f == files.begin() && ui->useExifDate->isChecked() )
 		{
 			// szukamy pierwszego pliku z poprawna data EXIF
 			auto fiTmp = f;
@@ -260,7 +267,7 @@ void MainWindow::start( void )
 			if( ui->createOutputSubfolders->isChecked() )
 			{
 				QString subPath;
-				if( !getSubfolderPath( fPath, dt, subPath ) )
+				if( !getSubfolderPath( *i, dt, subPath ) )
 				{
 					delete dt;
 					ui->status->appendHtml(*i);
@@ -269,13 +276,30 @@ void MainWindow::start( void )
 					continue;
 				}
 				fPath.append("\\" + subPath);
-				/* do dokonczenia
-				createSubdirectories();*/
+				
+				Utility::mkPath( fPath );
+			}
+			ui->status->appendHtml(QString(fPath + "\\" + fName).replace("/","\\").replace("\\\\","\\"));
+			QFileInfo dstI(fPath + "\\" + fName);
+			int inc = 1;
+			QString statInfo = "";
+			if( dstI.exists() && dstI.isFile() )
+			{
+				statInfo += tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Plik docelowy o nazwie: ") + fName + tr(" już istnieje, zamieniam nazwę na: </font>");
+				while( dstI.exists() && dstI.isFile() )
+				{
+					// plik istnieje wiec zmienamy mu nazwe i probojemy do skutku
+					fName = dstI.baseName() + "_" + QString::number(inc) + "." + dstI.suffix();
+					dstI.setFile(fPath + "\\" + fName);
+					inc++;
+				}
+				ui->status->appendHtml(statInfo + "<font color='orange'>" + fName + "</font>");
 			}
 			QFile::copy( *i, fPath + "\\" + fName );
 		}
+		else
+			ui->status->appendHtml(QString(fPath + "\\" + fName).replace("/","\\").replace("\\\\","\\"));
 
-		ui->status->appendHtml(QString(fPath + "\\" + fName).replace("/","\\").replace("\\\\","\\"));
 		if( changeFileTime( fPath + "\\" + fName, *dt ) )
 			ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='green'>OK</font><br>"));
 		else
@@ -285,6 +309,7 @@ void MainWindow::start( void )
 
 		QApplication::processEvents();
 	}
+	ui->progressBar->setValue(100);
 	ui->status->appendHtml(tr("<b>Koniec.</b><br>"));
 	ui->startBtn->setEnabled(true);
 }
@@ -333,11 +358,9 @@ bool MainWindow::getChangedFileName( const QString& filePath, QDateTime* fdt, QS
 
 bool MainWindow::getSubfolderPath( const QString& filePath, QDateTime* fdt, QString& subPath )
 {
-	/* do dokonczenia
-	tu sie dzieje cos dziwnego bo w filePath przekazuje katalog a QFile::exists zwraca true */
-	auto t1 = QFile::exists(filePath);
+	QFileInfo fi( filePath );
 	
-	if( filePath.isEmpty() || !QFile::exists(filePath) || fdt == nullptr )
+	if( filePath.isEmpty() || !fi.exists() || fi.isDir() || fdt == nullptr )
 		return false;
 
 	QString tmplate = ui->subfoldersNameTemplate->text();
@@ -419,7 +442,7 @@ QDateTime* MainWindow::getExifImgDateTime( const QString& filePath )
 	{
 		auto l = QString(p.readLine());
 		if( !l.contains(EXIV2_IMG_TIMESTAMP))
-		   continue;
+			continue;
 		auto s = l.split(EXIV2_IMG_SPLIT, QString::SkipEmptyParts);
 		auto t1 = s[1].replace("\r\n","");
 		auto dttmp = QDateTime::fromString(s[1].replace("\r\n",""), "yyyy:MM:dd hh:mm:ss");
@@ -464,6 +487,131 @@ void MainWindow::subfoldersNameTemplateChanged(const QString & text)
 	{
 		ui->subfoldersNameTemplatePreview->setText( subPath );
 	}
+}
+
+void MainWindow::serializeSettings( void )
+{
+	QFile f(APP_CONFIG_FILE);
+	if( !f.open( QIODevice::WriteOnly) )
+	{
+		ui->status->appendHtml(tr("<font color='red'>Błąd zapisu do pliku konfiguracyjnego: ") + APP_CONFIG_FILE + "</font><br><br>");
+		return;
+	}
+
+	QDataStream ser(&f);
+	ser.setVersion( QDataStream::Qt_5_3 );
+
+	ser << APP_CONFIG_VERSION;
+	ser << ui->recursiveFoldersCheckbox->isChecked();
+	ser << ui->useExifDate->isChecked();
+	ser << ui->changeOutputFileName->isChecked();
+	ser << ui->newNameTemplate->text();
+	ser << ui->createOutputFiles->isChecked();
+	ser << ui->outputFolder->text();
+	ser << ui->createOutputSubfolders->isChecked();
+	ser << ui->subfoldersNameTemplate->text();
+
+	f.close();
+}
+
+void MainWindow::deserializeSettings( QByteArray* def )
+{
+	QDataStream* ser = nullptr;
+	QFile* f = nullptr;;
+	if( def == nullptr )
+	{
+		// nie podano argumentu jako dane wejsciowe wiec czytamy z pliku
+		f = new QFile(APP_CONFIG_FILE);
+		if( !f->exists() || !f->open(QIODevice::ReadOnly) )
+		{
+			if( f != nullptr )
+				delete f;
+			ui->status->appendHtml(tr("Brak pliku konfiguracyjnego - przywracam ustawienia domyślne<br><br>"));
+			restoreDefaultSettings();
+			return;
+		}
+		ser = new QDataStream(f);
+	}
+	else
+	{
+		// czytamy serializacje z danych podanych w argumencie funkcji
+		ser = new QDataStream(*def);
+	}
+	ser->setVersion( QDataStream::Qt_5_3 );
+
+	int app_config_version;
+	(*ser) >> app_config_version;
+	if( app_config_version != APP_CONFIG_VERSION )
+	{
+		ui->status->appendHtml(tr("<font color='red'>Plik konfiguracyjny w błędnej wersji - przywracam ustawienia domyślne</font><br><br>"));
+		restoreDefaultSettings();
+		if( ser != nullptr )
+			delete ser;
+		if( f != nullptr )
+			delete f;
+		return;
+	}
+
+	bool tb;
+	QString ts;
+
+	*ser >> tb;
+	ui->recursiveFoldersCheckbox->setChecked(tb);
+
+	*ser >> tb;
+	ui->useExifDate->setChecked(tb);
+	ui->useModificationDate->setChecked(!tb);
+
+	*ser >> tb;
+	ui->changeOutputFileName->setChecked(tb);
+
+	*ser >> ts;
+	ui->newNameTemplate->setText(ts);
+
+	*ser >> tb;
+	ui->createOutputFiles->setChecked(tb);
+
+	*ser >> ts;
+	ui->outputFolder->setText(ts);
+
+	*ser >> tb;
+	ui->createOutputSubfolders->setChecked(tb);
+
+	*ser >> ts;
+	ui->subfoldersNameTemplate->setText(ts);
+
+	if( ser != nullptr )
+		delete ser;
+	if( f != nullptr )
+		delete f;
+}
+
+void MainWindow::createDefaultSettings( void )
+{
+	defaultSettings.clear();
+	QDataStream def(&defaultSettings, QIODevice::WriteOnly);
+	def.setVersion( QDataStream::Qt_5_3 );
+
+	def << APP_CONFIG_VERSION;
+	def << ui->recursiveFoldersCheckbox->isChecked();
+	def << ui->useExifDate->isChecked();
+	def << ui->changeOutputFileName->isChecked();
+	def << ui->newNameTemplate->text();
+	def << ui->createOutputFiles->isChecked();
+	def << ui->outputFolder->text();
+	def << ui->createOutputSubfolders->isChecked();
+	def << ui->subfoldersNameTemplate->text();
+}
+
+void MainWindow::restoreDefaultSettings( void )
+{
+	deserializeSettings(&defaultSettings);
+	serializeSettings();
+}
+
+void MainWindow::aboutToQuit( void )
+{
+	serializeSettings();
 }
 
 
