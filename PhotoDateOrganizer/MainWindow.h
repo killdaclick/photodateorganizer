@@ -9,8 +9,10 @@
 #define APP_CONFIG_VERSION		1
 #define APP_VERSION_ABOUT_STR	"<html><head/><body><p><span style=' font-size:12pt; font-weight:600;'>VER_REPLACE</span></p></body></html>"
 #define APP_VERSION_ABOUT_REPLACE_STR	"VER_REPLACE"
+#define APP_START_BUTTON_TXT	"Start"
+#define APP_STOP_BUTTON_TXT		"Stop"
 
-const int appVer = 0x010000;
+const int appVer = 0x010001;
 
 #include <QMainWindow>
 
@@ -54,6 +56,7 @@ public:
 	void serializeSettings( void );
 	void deserializeSettings( QByteArray* def = nullptr );
 	QString getVersionString( void );
+	void updateFoundFilesCount( const QStringList& files );
 
 public slots:
 	void selectFiles( void );
@@ -72,6 +75,11 @@ private:
 	InFileList inFileList;
 	FileExif firstFileDate;
 	QByteArray defaultSettings;
+	bool started;
+	bool cancel;
+
+signals:
+	void progressBarSetValue( int val );
 };
 
 #endif // MAINWINDOW_H

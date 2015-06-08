@@ -6,7 +6,9 @@
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::MainWindow)
+	ui(new Ui::MainWindow),
+	started(false),
+	cancel(false)
 {
 	if( !QFile::exists(QDir::currentPath() + "/" + EXIV2_BIN) )
 	{
@@ -77,6 +79,7 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()) );
 		t = connect( ui->actionExit, SIGNAL(triggered()), this, SLOT(close()) );
 		t = connect( ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutWindow()) );
+		t = connect( this, SIGNAL(progressBarSetValue(int)), ui->progressBar, SLOT(setValue(int)) );
 	}
 	else
 	{
@@ -90,6 +93,7 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()) );
 		disconnect( ui->actionExit, SIGNAL(triggered()), this, SLOT(close()) );
 		disconnect( ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutWindow()) );
+		disconnect( this, SIGNAL(progressBarSetValue(int)), ui->progressBar, SLOT(setValue(int)) );
 	}
 }
 
@@ -105,12 +109,19 @@ void MainWindow::selectFiles( void )
 	if( fi == files.end() )
 		return;
 
+	updateFoundFilesCount(files);
+
 	// czyscimy
 	inFileList.clear();
 	firstFileDate = FileExif();
 	ui->status->clear();
+	ui->inputFilesList->clear();
+	ui->subfoldersNameTemplatePreview->setText("");
+	ui->newNameTemplatePreview->setText("");
 	
 	QString inF;
+	int fNr = 1;
+	int fCnt = files.count();
 	for( ; fi != files.end(); ++fi )
 	{
 		auto f = (*fi).replace("/","\\");
@@ -138,10 +149,10 @@ void MainWindow::selectFiles( void )
 			}
 		}
 
-		inF.push_back( f );
+		QString fNrStr = "<b>[" + QString::number(fNr) + " \\ " + QString::number(fCnt) + "] </b>";
+		inF.push_back( fNrStr + f );
 		inF.push_back("<br>");
-		//if( fi+1 == files.end() )
-		//    inF.push_back("; ");
+		fNr++;
 	}
 	if( inF.isEmpty() )
 		return;
@@ -171,11 +182,18 @@ void MainWindow::selectFolder( void )
 	inFileList.clear();
 	firstFileDate = FileExif();
 	ui->status->clear();
+	ui->inputFilesList->clear();
+	ui->subfoldersNameTemplatePreview->setText("");
+	ui->newNameTemplatePreview->setText("");
 
 	// szukamy plikow w podkatalogach
 	auto files = Utility::findAll( "*.jp*g", dir, ui->recursiveFoldersCheckbox->isChecked(), QDir::Files );
 
+	updateFoundFilesCount(files);
+
 	QString inF;
+	int fNr = 1;
+	int fCnt = files.count();
 	for( QStringList::iterator f = files.begin(); f != files.end(); ++f )
 	{
 		auto fName = f->replace("/","\\");
@@ -203,8 +221,10 @@ void MainWindow::selectFolder( void )
 			}
 		}
 
-		inF.push_back( *f );
+		QString fNrStr = "<b>[" + QString::number(fNr) + " \\ " + QString::number(fCnt) + "] </b>";
+		inF.push_back( fNrStr + *f );
 		inF.push_back("<br>");
+		fNr++;
 	}
 
 	if( inF.isEmpty() )
@@ -220,27 +240,48 @@ void MainWindow::start( void )
 	if( inFileList.count() == 0 )
 		return;
 
-	ui->startBtn->setEnabled(false);
+	if( started )
+	{
+		cancel = true;
+		started = false;;
+		ui->startBtn->setText(APP_START_BUTTON_TXT);
+		return;
+	}
+	else
+	{
+		cancel = false;
+		started = true;
+		ui->startBtn->setText(APP_STOP_BUTTON_TXT);
+	}
+
 	ui->progressBar->setValue(0);
+	int fNr = 1;
 	int fCnt = inFileList.count();
 	int fStep = 100 / fCnt;
 	ui->status->clear();
+	QTimer tim;
 
 	if( ui->createOutputFiles->isChecked() && ui->outputFolder->text().isEmpty() )
 	{
 		QMessageBox::warning( this, tr("Błąd"), tr("Aby kontynuować musisz wybrać katalog docelowy!"), QMessageBox::Ok );
-		ui->startBtn->setEnabled(true);
+		cancel = false;
+		ui->startBtn->setText(APP_START_BUTTON_TXT);
 		return;
 	}
 
 	for( InFileList::iterator i = inFileList.begin(); i != inFileList.end(); ++i )
 	{
-		ui->progressBar->setValue(ui->progressBar->value() + fStep );
+		if( cancel )
+			break;
+
+		QString fNrStr = "<b>[" + QString::number(fNr) + " \\ " + QString::number(fCnt) + "] </b>";
+		emit progressBarSetValue(ui->progressBar->value() + fStep );
+		QApplication::processEvents();
 		auto dt = getExifImgDateTime( *i );
 		//ui->status->appendHtml(*i);
 		if( dt == nullptr )
 		{
-			ui->status->appendHtml(*i);
+			ui->status->appendHtml(fNrStr + *i);
 			ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Błąd odczytu daty EXIF (1)</font><br>"));
 			QApplication::processEvents();
 			continue;
@@ -255,7 +296,7 @@ void MainWindow::start( void )
 			if( !getChangedFileName(*i, dt, fName ) )
 			{
 				delete dt;
-				ui->status->appendHtml(*i);
+				ui->status->appendHtml(fNrStr + *i);
 				ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Błąd odczytu daty EXIF (2)</font><br>"));
 				QApplication::processEvents();
 				continue;
@@ -272,7 +313,7 @@ void MainWindow::start( void )
 				if( !getSubfolderPath( *i, dt, subPath ) )
 				{
 					delete dt;
-					ui->status->appendHtml(*i);
+					ui->status->appendHtml(fNrStr + *i);
 					ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Błąd odczytu daty EXIF (3)</font><br>"));
 					QApplication::processEvents();
 					continue;
@@ -281,17 +322,18 @@ void MainWindow::start( void )
 				
 				Utility::mkPath( fPath );
 			}
-			ui->status->appendHtml(QString(fPath + "\\" + fName).replace("/","\\").replace("\\\\","\\"));
+			ui->status->appendHtml(fNrStr + QString(fPath + "\\" + fName).replace("/","\\").replace("\\\\","\\"));
 			QFileInfo dstI(fPath + "\\" + fName);
 			int inc = 1;
 			QString statInfo = "";
 			if( dstI.exists() && dstI.isFile() )
 			{
 				statInfo += tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Plik docelowy o nazwie: ") + fName + tr(" już istnieje, zamieniam nazwę na: </font>");
+				QString baseName = dstI.baseName();
 				while( dstI.exists() && dstI.isFile() )
 				{
 					// plik istnieje wiec zmienamy mu nazwe i probojemy do skutku
-					fName = dstI.baseName() + "_" + QString::number(inc) + "." + dstI.suffix();
+					fName = baseName + "_" + QString::number(inc) + "." + dstI.suffix();
 					dstI.setFile(fPath + "\\" + fName);
 					inc++;
 				}
@@ -300,7 +342,7 @@ void MainWindow::start( void )
 			QFile::copy( *i, fPath + "\\" + fName );
 		}
 		else
-			ui->status->appendHtml(QString(fPath + "\\" + fName).replace("/","\\").replace("\\\\","\\"));
+			ui->status->appendHtml(fNrStr + QString(fPath + "\\" + fName).replace("/","\\").replace("\\\\","\\"));
 
 		if( changeFileTime( fPath + "\\" + fName, *dt ) )
 			ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='green'>OK</font><br>"));
@@ -309,11 +351,18 @@ void MainWindow::start( void )
 
 		delete dt;
 
+		fNr++;
 		QApplication::processEvents();
 	}
-	ui->progressBar->setValue(100);
+
+	if( cancel )
+		ui->status->appendHtml(tr("<font color='red'>Przerwano pracę na życzenie użytkownika</font><br>"));
+	else
+		ui->progressBar->setValue(100);
 	ui->status->appendHtml(tr("<b>Koniec.</b><br>"));
-	ui->startBtn->setEnabled(true);
+	cancel = false;
+	started = false;
+	ui->startBtn->setText(APP_START_BUTTON_TXT);
 }
 
 bool MainWindow::isNewNameTemplateValid( void )
@@ -627,6 +676,11 @@ void MainWindow::aboutWindow( void )
 	a->setAttribute( Qt::WA_DeleteOnClose );
 	a->ui.version->setText( a->ui.version->text().replace(APP_VERSION_ABOUT_REPLACE_STR, getVersionString()) );
 	a->exec();
+}
+
+void MainWindow::updateFoundFilesCount( const QStringList& files )
+{
+	ui->filesCnt->setText(QString::number(files.count()));
 }
 
 
