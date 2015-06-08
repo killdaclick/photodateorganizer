@@ -77,6 +77,7 @@ private:
 	QByteArray defaultSettings;
 	bool started;
 	bool cancel;
+	QTime* tim;
 
 signals:
 	void progressBarSetValue( int val );

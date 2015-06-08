@@ -8,7 +8,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
 	started(false),
-	cancel(false)
+	cancel(false),
+	tim(nullptr)
 {
 	if( !QFile::exists(QDir::currentPath() + "/" + EXIV2_BIN) )
 	{
@@ -259,7 +260,6 @@ void MainWindow::start( void )
 	int fCnt = inFileList.count();
 	int fStep = 100 / fCnt;
 	ui->status->clear();
-	QTimer tim;
 
 	if( ui->createOutputFiles->isChecked() && ui->outputFolder->text().isEmpty() )
 	{
@@ -269,6 +269,10 @@ void MainWindow::start( void )
 		return;
 	}
 
+	if( tim != nullptr )
+		delete tim;
+	tim = new QTime();
+	tim->start();
 	for( InFileList::iterator i = inFileList.begin(); i != inFileList.end(); ++i )
 	{
 		if( cancel )
@@ -359,7 +363,10 @@ void MainWindow::start( void )
 		ui->status->appendHtml(tr("<font color='red'>Przerwano pracę na życzenie użytkownika</font><br>"));
 	else
 		ui->progressBar->setValue(100);
-	ui->status->appendHtml(tr("<b>Koniec.</b><br>"));
+	int elapsed = tim->elapsed();
+	delete tim;
+	tim = nullptr;
+	ui->status->appendHtml(tr("<b>Zakończono pracę w ") + QString::number(elapsed/1000) + "." + QString::number(elapsed%1000) + tr(" sekundy.</b><br>"));
 	cancel = false;
 	started = false;
 	ui->startBtn->setText(APP_START_BUTTON_TXT);
