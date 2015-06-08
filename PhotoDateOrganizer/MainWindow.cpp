@@ -2,7 +2,7 @@
 #include "ui_MainWindow.h"
 
 #include "Utility.h"
-
+#include "AboutWindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -76,6 +76,7 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->actionRestoreDefaults, SIGNAL(triggered()), this, SLOT(restoreDefaultSettings()) );
 		t = connect( qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()) );
 		t = connect( ui->actionExit, SIGNAL(triggered()), this, SLOT(close()) );
+		t = connect( ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutWindow()) );
 	}
 	else
 	{
@@ -88,6 +89,7 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( ui->actionRestoreDefaults, SIGNAL(triggered()), this, SLOT(restoreDefaultSettings()) );
 		disconnect( qApp, SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()) );
 		disconnect( ui->actionExit, SIGNAL(triggered()), this, SLOT(close()) );
+		disconnect( ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutWindow()) );
 	}
 }
 
@@ -612,6 +614,19 @@ void MainWindow::restoreDefaultSettings( void )
 void MainWindow::aboutToQuit( void )
 {
 	serializeSettings();
+}
+
+QString MainWindow::getVersionString( void )
+{
+	return QString("v" + QString::number((appVer&0xFF0000)>>16) + "." + QString::number((appVer&0x00FF00)>>8) + "." + QString::number(appVer&0x0000FF));
+}
+
+void MainWindow::aboutWindow( void )
+{
+	AboutWindow* a = new AboutWindow(this);
+	a->setAttribute( Qt::WA_DeleteOnClose );
+	a->ui.version->setText( a->ui.version->text().replace(APP_VERSION_ABOUT_REPLACE_STR, getVersionString()) );
+	a->exec();
 }
 
 

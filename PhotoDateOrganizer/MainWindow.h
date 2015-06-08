@@ -7,6 +7,10 @@
 #define EXIV2_DLL               "bin\\libexpat.dll"
 #define APP_CONFIG_FILE			"config.ini"
 #define APP_CONFIG_VERSION		1
+#define APP_VERSION_ABOUT_STR	"<html><head/><body><p><span style=' font-size:12pt; font-weight:600;'>VER_REPLACE</span></p></body></html>"
+#define APP_VERSION_ABOUT_REPLACE_STR	"VER_REPLACE"
+
+const int appVer = 0x010000;
 
 #include <QMainWindow>
 
@@ -49,6 +53,7 @@ public:
 	void createDefaultSettings( void );
 	void serializeSettings( void );
 	void deserializeSettings( QByteArray* def = nullptr );
+	QString getVersionString( void );
 
 public slots:
 	void selectFiles( void );
@@ -59,6 +64,7 @@ public slots:
 	void subfoldersNameTemplateChanged(const QString & text);
 	void restoreDefaultSettings( void );
 	void aboutToQuit( void );
+	void aboutWindow( void );
 
 private:
 	Ui::MainWindow *ui;

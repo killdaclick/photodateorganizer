@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>615</width>
-    <height>911</height>
+    <height>900</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,6 +92,9 @@
          </property>
          <item>
           <widget class="QRadioButton" name="useExifDate">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Użyj daty zrobienia zdjęcia (metadane EXIF)</string>
            </property>
@@ -102,6 +108,9 @@
          </item>
          <item>
           <widget class="QRadioButton" name="useModificationDate">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Użyj daty modyfikacji pliku</string>
            </property>
@@ -392,15 +401,6 @@
    <addaction name="menuPhoto_Time_Mod"/>
    <addaction name="menuPomoc"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
    <property name="text">
     <string>Wyjdź</string>
