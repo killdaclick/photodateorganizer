@@ -1,9 +1,13 @@
 <RCC>
-  <qresource prefix="/icons">
-    <file>icons/floppy-icon.png</file>
-    <file>icons/control-panel-icon.png</file>
-    <file>icons/explorer-icon.png</file>
-    <file>icons/my-documents-icon.png</file>
-    <file>icons/folder-open-icon.png</file>
+  <qresource prefix="/app">
+    <file>icons/app/ImageCapture-icon.ico</file>
+  </qresource>
+  <qresource prefix="/icons/rubber">
+    <file>icons/rubber-icons/burn_badge.ico</file>
+    <file>icons/rubber-icons/development_tools.ico</file>
+    <file>icons/rubber-icons/folder-open.ico</file>
+    <file>icons/rubber-icons/home.ico</file>
+    <file>icons/rubber-icons/hdd_USB.ico</file>
+    <file>icons/rubber-icons/pictures_folder.ico</file>
   </qresource>
 </RCC>

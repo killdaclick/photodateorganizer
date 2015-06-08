@@ -3,6 +3,7 @@
 
 #include "Utility.h"
 #include "AboutWindow.h"
+#include <QStyleFactory>
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -11,6 +12,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	cancel(false),
 	tim(nullptr)
 {
+	QStyle* fusion = QStyleFactory::create("fusion");
+	qApp->setStyle(fusion);
+	
 	if( !QFile::exists(QDir::currentPath() + "/" + EXIV2_BIN) )
 	{
 		QMessageBox::warning(this, tr("Brak pliku aplikacji"), tr("Wykryto brak wymaganego pliku") + " " + QString(EXIV2_BIN), QMessageBox::Abort );

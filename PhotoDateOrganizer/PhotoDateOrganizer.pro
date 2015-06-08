@@ -8,13 +8,22 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = PhotoDateOrganizer
+TARGET = "Photo Date Organizer"
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        MainWindow.cpp \
+        AboutWindow.cpp \
+        Utility.cpp
 
-HEADERS  += MainWindow.h
+HEADERS  += MainWindow.h \
+			AboutWindow.h \
+			Utility.h
 
-FORMS    += MainWindow.ui
+FORMS    += MainWindow.ui \
+			AboutWindow.ui
+			
+RESOURCES     = resource.qrc
+
+win32:RC_ICONS += icons/app/ImageCapture-icon.ico
