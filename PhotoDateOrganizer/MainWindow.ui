@@ -120,6 +120,9 @@
            <property name="text">
             <string>pliki w głąb folderów</string>
            </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
         </layout>
