@@ -6,7 +6,7 @@
 #define EXIV2_BIN               "bin\\exiv2.exe"
 #define EXIV2_DLL               "bin\\libexpat.dll"
 #define APP_CONFIG_FILE			"config.ini"
-#define APP_CONFIG_VERSION		1
+#define APP_CONFIG_VERSION		2
 #define APP_VERSION_ABOUT_STR	"<html><head/><body><p><span style=' font-size:12pt; font-weight:600;'>VER_REPLACE</span></p></body></html>"
 #define APP_VERSION_ABOUT_REPLACE_STR	"VER_REPLACE"
 #define APP_START_BUTTON_TXT	"Start"
@@ -104,7 +104,7 @@ private:
 	QByteArray defaultSettings;
 	bool started;
 	bool cancel;
-	//QTime* tim;
+	QString srcFolder;
 	TimeToFinish* timToF;
 
 signals:

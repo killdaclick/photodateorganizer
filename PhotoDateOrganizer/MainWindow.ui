@@ -361,9 +361,22 @@
             </layout>
            </item>
            <item>
+            <widget class="QCheckBox" name="saveOrgSubfolders">
+             <property name="toolTip">
+              <string>Zachowuje oryginalną strukturę katalogów począwszy od katalogu wskazanego jako źródłowy</string>
+             </property>
+             <property name="text">
+              <string>Zachowaj oryginalną strukturę podkatalogów</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QGroupBox" name="createOutputSubfolders">
              <property name="toolTip">
-              <string>Włącza tworzenie podkatalogów według szablonu</string>
+              <string>Włącza tworzenie podkatalogów według szablonu. Uwzględnia oryginalną strukturę podkatalogów jeżeli ta opcja jest włączona</string>
              </property>
              <property name="title">
               <string>Twórz pliki w podfolderach według szablonu</string>
@@ -396,7 +409,7 @@
                    <string>Szablon do konfiguracji nazw podkatalogów (PATRZ ŚCIĄGA)</string>
                   </property>
                   <property name="text">
-                   <string>%R-%M%\%R-%M-%D</string>
+                   <string>%Y-%M%\%Y-%M-%D</string>
                   </property>
                  </widget>
                 </item>
@@ -477,7 +490,7 @@
                 <string>Szablon do konfiguracji nazw plików (PATRZ ŚCIĄGA)</string>
                </property>
                <property name="text">
-                <string>%R%M%D-%h%m%s_%N</string>
+                <string>%Y%M%D-%h%m%s_%N</string>
                </property>
               </widget>
              </item>
@@ -559,7 +572,7 @@
             <item>
              <widget class="QLabel" name="label_10">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%R&lt;/span&gt; - rok zrobienia zdjęcia; ---------- format: RRRR&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%M&lt;/span&gt; - miesiąc zrobienia zdjęcia; ----- format: MM&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%D&lt;/span&gt; - dzień zrobienia zdjęcia; -------- format: DD&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%N&lt;/span&gt; - oryginalna nazwa&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y&lt;/span&gt; - rok zrobienia zdjęcia; ---------- format: RRRR&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%M&lt;/span&gt; - miesiąc zrobienia zdjęcia; ----- format: MM&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%D&lt;/span&gt; - dzień zrobienia zdjęcia; -------- format: DD&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%N&lt;/span&gt; - oryginalna nazwa&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="textFormat">
                <enum>Qt::RichText</enum>
@@ -594,7 +607,7 @@
              <number>1</number>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład tworzenia katalogów: &lt;/span&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%R-%M%\%R-%M-%D&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Umieści zdjęcia w podkatalogach według schematu: 2015-03 \ 2015-03-27&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład zmiany nazwy: &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%R%M%D-%h%m%s&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;_&lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%N&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Zmieni nazwę według schematu: 20150327-145513_NazwaPliku&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład tworzenia katalogów: &lt;/span&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y-%M%\%Y-%M-%D&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Umieści zdjęcia w podkatalogach według schematu: 2015-03 \ 2015-03-27&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład zmiany nazwy: &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%Y%M%D-%h%m%s&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;_&lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%N&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Zmieni nazwę według schematu: 20150327-145513_NazwaPliku&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="textFormat">
              <enum>Qt::RichText</enum>
@@ -776,22 +789,70 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuSzybka_konfiguracja">
+    <property name="title">
+     <string>Szybka konfiguracja</string>
+    </property>
+    <addaction name="actionSetupUpdate"/>
+    <addaction name="actionSetupOrgNew"/>
+    <addaction name="actionSetupNew"/>
+   </widget>
    <addaction name="menuPhoto_Time_Mod"/>
+   <addaction name="menuSzybka_konfiguracja"/>
    <addaction name="menuPomoc"/>
   </widget>
   <action name="actionExit">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/rubber/icons/rubber-icons/shared_badge.ico</normaloff>:/icons/rubber/icons/rubber-icons/shared_badge.ico</iconset>
+   </property>
    <property name="text">
     <string>Wyjdź</string>
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/rubber/icons/rubber-icons/internet.ico</normaloff>:/icons/rubber/icons/rubber-icons/internet.ico</iconset>
+   </property>
    <property name="text">
     <string>O programie</string>
    </property>
   </action>
   <action name="actionRestoreDefaults">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/rubber/icons/rubber-icons/applications.ico</normaloff>:/icons/rubber/icons/rubber-icons/applications.ico</iconset>
+   </property>
    <property name="text">
     <string>Przywróc ustawienia domyślne</string>
+   </property>
+  </action>
+  <action name="actionSetupUpdate">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/rubber/icons/rubber-icons/network.ico</normaloff>:/icons/rubber/icons/rubber-icons/network.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Aktualizuj istniejące pliki</string>
+   </property>
+  </action>
+  <action name="actionSetupOrgNew">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/rubber/icons/rubber-icons/network.ico</normaloff>:/icons/rubber/icons/rubber-icons/network.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Twórz nowe pliki z oryginalną strukturą podkatalogów</string>
+   </property>
+  </action>
+  <action name="actionSetupNew">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/rubber/icons/rubber-icons/network.ico</normaloff>:/icons/rubber/icons/rubber-icons/network.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Twórz nowe pliki z nazwą i ze strukturą katalogów wykorzytsującą datę</string>
    </property>
   </action>
  </widget>

@@ -195,6 +195,8 @@ void MainWindow::selectFolder( void )
 	updateAvgTimeToFinish(0);
 	emit progressBarSetValue(0);
 
+	// zapamietujemy katalog zrodlowy - potrzebne gdy wybrana opcja saveOrgSubfolders
+	srcFolder = dir;
 	// szukamy plikow w podkatalogach
 	auto files = Utility::findAll( "*.jp*g", dir, ui->recursiveFoldersCheckbox->isChecked(), QDir::Files );
 
@@ -331,7 +333,12 @@ void MainWindow::start( void )
 		// tworzymy sciezke do katalogu docelowego + subfoldery
 		if( ui->createOutputFiles->isChecked() )
 		{
+			// tworzymy subfoldery zwiazane z oryginlana struktura
+			QString orgSub = "";
+			if( ui->saveOrgSubfolders->isChecked() )
+				orgSub = fPath.replace(srcFolder, "");	// czyscimy czesc wspolna i dodajemy do sciezki katalogu wynikowego
 			fPath = ui->outputFolder->text();
+			fPath += orgSub;
 			if( ui->createOutputSubfolders->isChecked() )
 			{
 				QString subPath;
@@ -428,7 +435,7 @@ bool MainWindow::getChangedFileName( const QString& filePath, QDateTime* fdt, QS
 				break;
 			switch( (*c).toLatin1() )
 			{
-				case 'R':
+				case 'Y':
 					nn.push_back(fdt->toString("yyyy"));
 					break;
 
@@ -485,7 +492,7 @@ bool MainWindow::getSubfolderPath( const QString& filePath, QDateTime* fdt, QStr
 				break;
 			switch( (*c).toLatin1() )
 			{
-				case 'R':
+				case 'Y':
 					nn.push_back(fdt->toString("yyyy"));
 					break;
 
@@ -621,6 +628,7 @@ void MainWindow::serializeSettings( void )
 	ser << ui->outputFolder->text();
 	ser << ui->createOutputSubfolders->isChecked();
 	ser << ui->subfoldersNameTemplate->text();
+	ser << ui->saveOrgSubfolders->isChecked();
 
 	f.close();
 }
@@ -691,6 +699,9 @@ void MainWindow::deserializeSettings( QByteArray* def )
 	*ser >> ts;
 	ui->subfoldersNameTemplate->setText(ts);
 
+	*ser >> tb;
+	ui->saveOrgSubfolders->setChecked(tb);
+
 	if( ser != nullptr )
 		delete ser;
 	if( f != nullptr )
@@ -712,6 +723,7 @@ void MainWindow::createDefaultSettings( void )
 	def << ui->outputFolder->text();
 	def << ui->createOutputSubfolders->isChecked();
 	def << ui->subfoldersNameTemplate->text();
+	def << ui->saveOrgSubfolders->isChecked();
 }
 
 void MainWindow::restoreDefaultSettings( void )

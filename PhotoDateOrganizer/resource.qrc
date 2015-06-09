@@ -3,6 +3,10 @@
     <file>icons/app/ImageCapture-icon.ico</file>
   </qresource>
   <qresource prefix="/icons/rubber">
+    <file>icons/rubber-icons/internet.ico</file>
+    <file>icons/rubber-icons/network.ico</file>
+    <file>icons/rubber-icons/shared_badge.ico</file>
+    <file>icons/rubber-icons/applications.ico</file>
     <file>icons/rubber-icons/burn_badge.ico</file>
     <file>icons/rubber-icons/development_tools.ico</file>
     <file>icons/rubber-icons/folder-open.ico</file>
