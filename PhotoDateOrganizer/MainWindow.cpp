@@ -211,11 +211,12 @@ void MainWindow::selectFolder( void )
 			while( fiTmp != files.end() )
 			{
 				firstFileDate.first = (*fiTmp).replace("/","\\");
-				QDateTime* dt = getExifImgDateTime(*f);
+				QDateTime* dt = getExifImgDateTime(*fiTmp);
 				if( dt != nullptr && !dt->isNull() )
 				{
 					firstFileDate.second = *dt;
 					delete dt;
+					ui->status->appendHtml(tr("Odczyt daty EXIF do podglądu: <font color='green'>OK</font><br>"));
 					break;
 				}
 				else
@@ -223,6 +224,7 @@ void MainWindow::selectFolder( void )
 					ui->status->appendHtml(tr("<font color='orange'>Błąd odczytu daty EXIF</font> dla pliku: ") + firstFileDate.first + tr(" - <font color='orange'>sprawdzam następny plik...</font><br>"));
 					QApplication::processEvents();
 				}
+				++fiTmp;
 			}
 		}
 
@@ -263,6 +265,7 @@ void MainWindow::start( void )
 	int fNr = 1;
 	int fCnt = inFileList.count();
 	int fStep = 100 / fCnt;
+	int errCnt = 0;
 	ui->status->clear();
 
 	if( ui->createOutputFiles->isChecked() && ui->outputFolder->text().isEmpty() )
@@ -292,6 +295,8 @@ void MainWindow::start( void )
 			ui->status->appendHtml(fNrStr + *i);
 			ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Błąd odczytu daty EXIF (1)</font><br>"));
 			QApplication::processEvents();
+			fNr++;
+			errCnt++;
 			continue;
 		}
 
@@ -307,6 +312,8 @@ void MainWindow::start( void )
 				ui->status->appendHtml(fNrStr + *i);
 				ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Błąd odczytu daty EXIF (2)</font><br>"));
 				QApplication::processEvents();
+				fNr++;
+				errCnt++;
 				continue;
 			}
 		}
@@ -324,6 +331,8 @@ void MainWindow::start( void )
 					ui->status->appendHtml(fNrStr + *i);
 					ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Błąd odczytu daty EXIF (3)</font><br>"));
 					QApplication::processEvents();
+					fNr++;
+					errCnt++;
 					continue;
 				}
 				fPath.append("\\" + subPath);
@@ -370,7 +379,13 @@ void MainWindow::start( void )
 	int elapsed = tim->elapsed();
 	delete tim;
 	tim = nullptr;
-	ui->status->appendHtml(tr("<b>Zakończono pracę w ") + QString::number(elapsed/1000) + "." + QString::number(elapsed%1000) + tr(" sekundy.</b><br>"));
+	QString allOk = "";
+	if( errCnt != 0 )
+		allOk = "<font color='red'>";
+	else
+		allOk = "<font color='green'>";
+	ui->status->appendHtml(tr("<b>Przekonwertowano poprawnie ") + allOk + QString::number(fCnt-errCnt) + "</font>" + tr(" z <font color='green'>") + QString::number(fCnt) +
+		tr("</font> plików w ") + QString::number(elapsed/1000) + "." + QString::number(elapsed%1000) + tr(" sekundy.</font></b><br>"));
 	cancel = false;
 	started = false;
 	ui->startBtn->setText(APP_START_BUTTON_TXT);
