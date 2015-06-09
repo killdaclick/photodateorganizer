@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow),
 	started(false),
 	cancel(false),
-	tim(nullptr)
+	timToF(nullptr)
 {
 	QStyle* fusion = QStyleFactory::create("fusion");
 	qApp->setStyle(fusion);
@@ -123,6 +123,8 @@ void MainWindow::selectFiles( void )
 	ui->inputFilesList->clear();
 	ui->subfoldersNameTemplatePreview->setText("");
 	ui->newNameTemplatePreview->setText("");
+	updateAvgTimeToFinish(0);
+	emit progressBarSetValue(0);
 	
 	QString inF;
 	int fNr = 1;
@@ -190,6 +192,8 @@ void MainWindow::selectFolder( void )
 	ui->inputFilesList->clear();
 	ui->subfoldersNameTemplatePreview->setText("");
 	ui->newNameTemplatePreview->setText("");
+	updateAvgTimeToFinish(0);
+	emit progressBarSetValue(0);
 
 	// szukamy plikow w podkatalogach
 	auto files = Utility::findAll( "*.jp*g", dir, ui->recursiveFoldersCheckbox->isChecked(), QDir::Files );
@@ -264,7 +268,8 @@ void MainWindow::start( void )
 	ui->progressBar->setValue(0);
 	int fNr = 1;
 	int fCnt = inFileList.count();
-	int fStep = 100 / fCnt;
+	float prog = 0;
+	float fStep = (float)100 / (float)fCnt;
 	int errCnt = 0;
 	ui->status->clear();
 
@@ -276,17 +281,18 @@ void MainWindow::start( void )
 		return;
 	}
 
-	if( tim != nullptr )
-		delete tim;
-	tim = new QTime();
-	tim->start();
+	if( timToF != nullptr )
+		delete timToF;
+	timToF = new TimeToFinish( 100, fCnt );
+	timToF->start();
 	for( InFileList::iterator i = inFileList.begin(); i != inFileList.end(); ++i )
 	{
 		if( cancel )
 			break;
 
 		QString fNrStr = "<b>[" + QString::number(fNr) + " \\ " + QString::number(fCnt) + "] </b>";
-		emit progressBarSetValue(ui->progressBar->value() + fStep );
+		prog += fStep;
+		emit progressBarSetValue(/*ui->progressBar->value() + fStep*/ (int)prog );
 		QApplication::processEvents();
 		auto dt = getExifImgDateTime( *i );
 		//ui->status->appendHtml(*i);
@@ -294,9 +300,11 @@ void MainWindow::start( void )
 		{
 			ui->status->appendHtml(fNrStr + *i);
 			ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Błąd odczytu daty EXIF (1)</font><br>"));
-			QApplication::processEvents();
 			fNr++;
 			errCnt++;
+			timToF->step();
+			updateAvgTimeToFinish( timToF->getAvgTimeToFinish() );
+			QApplication::processEvents();
 			continue;
 		}
 
@@ -311,9 +319,11 @@ void MainWindow::start( void )
 				delete dt;
 				ui->status->appendHtml(fNrStr + *i);
 				ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Błąd odczytu daty EXIF (2)</font><br>"));
-				QApplication::processEvents();
 				fNr++;
 				errCnt++;
+				timToF->step();
+				updateAvgTimeToFinish( timToF->getAvgTimeToFinish() );
+				QApplication::processEvents();
 				continue;
 			}
 		}
@@ -330,9 +340,11 @@ void MainWindow::start( void )
 					delete dt;
 					ui->status->appendHtml(fNrStr + *i);
 					ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='orange'>Błąd odczytu daty EXIF (3)</font><br>"));
-					QApplication::processEvents();
 					fNr++;
 					errCnt++;
+					timToF->step();
+					updateAvgTimeToFinish( timToF->getAvgTimeToFinish() );
+					QApplication::processEvents();
 					continue;
 				}
 				fPath.append("\\" + subPath);
@@ -369,6 +381,8 @@ void MainWindow::start( void )
 		delete dt;
 
 		fNr++;
+		timToF->step();
+		updateAvgTimeToFinish( timToF->getAvgTimeToFinish() );
 		QApplication::processEvents();
 	}
 
@@ -376,15 +390,15 @@ void MainWindow::start( void )
 		ui->status->appendHtml(tr("<font color='red'>Przerwano pracę na życzenie użytkownika</font><br>"));
 	else
 		ui->progressBar->setValue(100);
-	int elapsed = tim->elapsed();
-	delete tim;
-	tim = nullptr;
+	int elapsed = timToF->getTotalTime();
+	delete timToF;
+	timToF = nullptr;
 	QString allOk = "";
-	if( errCnt != 0 )
+	if( fNr-1-errCnt != fCnt )
 		allOk = "<font color='red'>";
 	else
 		allOk = "<font color='green'>";
-	ui->status->appendHtml(tr("<b>Przekonwertowano poprawnie ") + allOk + QString::number(fCnt-errCnt) + "</font>" + tr(" z <font color='green'>") + QString::number(fCnt) +
+	ui->status->appendHtml(tr("<b>Przekonwertowano poprawnie ") + allOk + QString::number(fNr-1-errCnt) + "</font>" + tr(" z <font color='green'>") + QString::number(fCnt) +
 		tr("</font> plików w ") + QString::number(elapsed/1000) + "." + QString::number(elapsed%1000) + tr(" sekundy.</font></b><br>"));
 	cancel = false;
 	started = false;
@@ -729,4 +743,108 @@ void MainWindow::updateFoundFilesCount( const QStringList& files )
 	ui->filesCnt->setText(QString::number(files.count()));
 }
 
+void MainWindow::updateAvgTimeToFinish( int timeToF )
+{
+	int min = 0;
+	int sec = 0;
+	if( timeToF != 0 )
+	{
+		min = (timeToF /1000) / 60;
+		sec = (timeToF - (min * 60000))/1000;
+	}
+	ui->timeToFinish->setText( QString::number(min) + "m : " + QString::number(sec) + "s" );
+}
+
+TimeToFinish::TimeToFinish(int avgStepVar, int maxStepCnt) : tim(nullptr),
+								avgStepVar_(avgStepVar),
+								maxStepCnt_(maxStepCnt)
+{
+}
+
+TimeToFinish::~TimeToFinish()
+{
+	if( tim != nullptr )
+		delete tim;
+}
+
+void TimeToFinish::start( void )
+{
+	if( tim != nullptr )
+		stop();
+	tim = new QTime();
+	tim->start();
+}
+
+void TimeToFinish::stop( void )
+{
+	if( tim != nullptr )
+		delete tim;
+	tim = nullptr;
+	timeSteps.clear();
+	avgTimeToFinish = 0;
+}
+
+bool TimeToFinish::step( void )
+{
+	if( tim == nullptr )
+		return false;
+	timeSteps.push_back(tim->elapsed());
+	avgTimeToFinish = calcAvgTimeToFinish();
+	tim->restart();
+	return true;
+}
+
+int TimeToFinish::lastStepsTime( int avgStepVar ) const
+{
+	if( avgStepVar == -1 )
+		avgStepVar = avgStepVar_;
+	if( timeSteps.count() < avgStepVar )
+		avgStepVar = timeSteps.count();
+	int t = 0;
+	for( int i = timeSteps.count()-avgStepVar; i < timeSteps.count(); i++ )
+	{
+		t += timeSteps[i];
+	}
+
+	return t;
+}
+
+int TimeToFinish::avgStepTimeFromLastNsteps( int avgStepVar ) const
+{
+	if( avgStepVar == -1 )
+		avgStepVar = avgStepVar_;
+	if( timeSteps.count() < avgStepVar )
+		avgStepVar = timeSteps.count();
+	int avg = 0;
+	for( int i = timeSteps.count()-avgStepVar; i < timeSteps.count(); i++ )
+	{
+		avg += timeSteps[i];
+	}
+	avg = avg / avgStepVar;
+
+	return avg;
+}
+
+int TimeToFinish::calcAvgTimeToFinish( void ) const
+{
+	//if( timeSteps.count() <= avgStepVar_ )	// czekamy na zebranie danych
+	//	return 0;
+
+	int avg = avgStepTimeFromLastNsteps();	// sredni czas wykonania na krok
+	int stepsToFinish = maxStepCnt_ - timeSteps.count();	// ilosc krokow do konca
+	return avg * stepsToFinish;
+}
+
+int TimeToFinish::getAvgTimeToFinish( void )
+{
+	return avgTimeToFinish;
+}
+
+int TimeToFinish::getTotalTime( void )
+{
+	int tot = 0;
+	for( int i=0; i < timeSteps.count(); i++ )
+		tot += timeSteps[i];
+	return tot;
+}
 

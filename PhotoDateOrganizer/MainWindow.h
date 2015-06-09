@@ -12,7 +12,7 @@
 #define APP_START_BUTTON_TXT	"Start"
 #define APP_STOP_BUTTON_TXT		"Stop"
 
-const int appVer = 0x010102;
+const int appVer = 0x010200;
 
 #include <QMainWindow>
 
@@ -26,11 +26,37 @@ const int appVer = 0x010102;
 #include <QList>
 #include <QMessageBox>
 #include <QTimer>
+#include <QVector>
 
 #include <windows.h>
 
 typedef QStringList					InFileList;
 typedef QPair<QString,QDateTime>	FileExif;
+typedef QVector<int>	TimeStepList;
+
+class TimeToFinish
+{
+public:
+	TimeToFinish( int avgStepVar, int maxStepCnt );
+	~TimeToFinish();
+
+	void start( void );
+	bool step( void );
+	void stop( void );
+	int lastStepsTime( int avgStepVar = -1 ) const;
+	int avgStepTimeFromLastNsteps( int avgStepVar = -1 ) const;
+	int getAvgTimeToFinish( void );
+	int getTotalTime( void );
+
+private:
+	int avgStepVar_;
+	int maxStepCnt_;
+	int avgTimeToFinish;
+	QTime* tim;
+	TimeStepList timeSteps;
+
+	int calcAvgTimeToFinish( void ) const;
+};
 
 namespace Ui {
 class MainWindow;
@@ -57,6 +83,7 @@ public:
 	void deserializeSettings( QByteArray* def = nullptr );
 	QString getVersionString( void );
 	void updateFoundFilesCount( const QStringList& files );
+	void updateAvgTimeToFinish( int timeToF );
 
 public slots:
 	void selectFiles( void );
@@ -77,7 +104,8 @@ private:
 	QByteArray defaultSettings;
 	bool started;
 	bool cancel;
-	QTime* tim;
+	//QTime* tim;
+	TimeToFinish* timToF;
 
 signals:
 	void progressBarSetValue( int val );

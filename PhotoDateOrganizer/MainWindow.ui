@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>669</width>
+    <width>670</width>
     <height>816</height>
    </rect>
   </property>
@@ -678,23 +678,56 @@
      </layout>
     </item>
     <item>
-     <widget class="QProgressBar" name="progressBar">
-      <property name="toolTip">
-       <string>Pasek postępu prac</string>
-      </property>
-      <property name="value">
+     <layout class="QHBoxLayout" name="horizontalLayout_12">
+      <property name="topMargin">
        <number>0</number>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-      <property name="invertedAppearance">
-       <bool>false</bool>
-      </property>
-      <property name="format">
-       <string>%p%</string>
-      </property>
-     </widget>
+      <item>
+       <widget class="QProgressBar" name="progressBar">
+        <property name="toolTip">
+         <string>Pasek postępu prac</string>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+        <property name="format">
+         <string>%p%</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="toolTip">
+         <string>Przewidywany czas na ukończenie operacji konwersji</string>
+        </property>
+        <property name="text">
+         <string>Czas na ukończenie:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="timeToFinish">
+        <property name="minimumSize">
+         <size>
+          <width>55</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Przewidywany czas na ukończenie operacji konwersji</string>
+        </property>
+        <property name="text">
+         <string>0m : 0s</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QPushButton" name="startBtn">
@@ -723,7 +756,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>669</width>
+     <width>670</width>
      <height>21</height>
     </rect>
    </property>
