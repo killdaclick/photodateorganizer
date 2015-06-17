@@ -106,6 +106,7 @@ private:
 	bool cancel;
 	QString srcFolder;
 	TimeToFinish* timToF;
+	qint64 filesSize;
 
 signals:
 	void progressBarSetValue( int val );

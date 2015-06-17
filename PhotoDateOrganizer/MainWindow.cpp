@@ -123,8 +123,14 @@ void MainWindow::selectFiles( void )
 	ui->inputFilesList->clear();
 	ui->subfoldersNameTemplatePreview->setText("");
 	ui->newNameTemplatePreview->setText("");
+	filesSize = 0;
+	ui->filesCnt->setText("0");
+	ui->filesSize->setText("0 MB");
+	ui->totalSize->setText("0 MB");
 	updateAvgTimeToFinish(0);
 	emit progressBarSetValue(0);
+	ui->inputFilesList->setText(tr("<b>Ładuję...</b>"));
+	QApplication::processEvents();
 	
 	QString inF;
 	int fNr = 1;
@@ -156,6 +162,10 @@ void MainWindow::selectFiles( void )
 			}
 		}
 
+		// podliczamy rozmiar plikow
+		QFileInfo fInfo(f);
+		filesSize += fInfo.size();
+
 		QString fNrStr = "<b>[" + QString::number(fNr) + " \\ " + QString::number(fCnt) + "] </b>";
 		inF.push_back( fNrStr + f );
 		inF.push_back("<br>");
@@ -163,7 +173,13 @@ void MainWindow::selectFiles( void )
 	}
 	if( inF.isEmpty() )
 		return;
+	// printujemy wszystkie sciezki plikow
 	ui->inputFilesList->setText(inF);
+	// printujemy sumaryczny rozmiar plikow
+	qint64 sMB = filesSize/1000000;
+	qint64 sKB = (filesSize%1000000)/1000;
+	ui->filesSize->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB" );
+	ui->totalSize->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB" );
 
 	// odswiezamy podglad nowej nazwy pliku
 	updateViews();
@@ -192,8 +208,14 @@ void MainWindow::selectFolder( void )
 	ui->inputFilesList->clear();
 	ui->subfoldersNameTemplatePreview->setText("");
 	ui->newNameTemplatePreview->setText("");
+	filesSize = 0;
+	ui->filesCnt->setText("0");
+	ui->filesSize->setText("0 MB");
+	ui->totalSize->setText("0 MB");
 	updateAvgTimeToFinish(0);
 	emit progressBarSetValue(0);
+	ui->inputFilesList->setText(tr("<b>Ładuję...</b>"));
+	QApplication::processEvents();
 
 	// zapamietujemy katalog zrodlowy - potrzebne gdy wybrana opcja saveOrgSubfolders
 	srcFolder = dir;
@@ -234,6 +256,10 @@ void MainWindow::selectFolder( void )
 			}
 		}
 
+		// podliczamy rozmiar plikow
+		QFileInfo fInfo(fName);
+		filesSize += fInfo.size();
+
 		QString fNrStr = "<b>[" + QString::number(fNr) + " \\ " + QString::number(fCnt) + "] </b>";
 		inF.push_back( fNrStr + *f );
 		inF.push_back("<br>");
@@ -242,7 +268,14 @@ void MainWindow::selectFolder( void )
 
 	if( inF.isEmpty() )
 		return;
+
+	// printujemy wszystkie sciezki do plikow
 	ui->inputFilesList->setText(inF);
+	// printujemy sumaryczny rozmiar plikow
+	qint64 sMB = filesSize/1000000;
+	qint64 sKB = (filesSize%1000000)/1000;
+	ui->filesSize->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB" );
+	ui->totalSize->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB" );
 
 	// odswiezamy podglad nowej nazwy pliku
 	updateViews();
