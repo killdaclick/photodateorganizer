@@ -203,6 +203,45 @@
           </spacer>
          </item>
          <item>
+          <widget class="QLabel" name="label_7">
+           <property name="toolTip">
+            <string>Rozmiar wybranych plików</string>
+           </property>
+           <property name="text">
+            <string>Rozmiar:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="filesSize">
+           <property name="minimumSize">
+            <size>
+             <width>42</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Rozmiar wybranych plików</string>
+           </property>
+           <property name="text">
+            <string>0 MB</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string> | </string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label_9">
            <property name="toolTip">
             <string>Liczba wybranych plików</string>
@@ -217,6 +256,12 @@
          </item>
          <item>
           <widget class="QLabel" name="filesCnt">
+           <property name="minimumSize">
+            <size>
+             <width>30</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>Liczba wybranych plików</string>
            </property>
@@ -694,6 +739,33 @@
      </layout>
     </item>
     <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_13">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="startBtn">
+        <property name="toolTip">
+         <string>Uruchomienie konwersji</string>
+        </property>
+        <property name="text">
+         <string>Start konwersji</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resource.qrc">
+          <normaloff>:/icons/rubber/icons/rubber-icons/burn_badge.ico</normaloff>:/icons/rubber/icons/rubber-icons/burn_badge.ico</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout_12">
       <property name="topMargin">
        <number>0</number>
@@ -718,12 +790,116 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="label_15">
+        <property name="toolTip">
+         <string>Przetworzony rozmiar plików wynikowych</string>
+        </property>
+        <property name="text">
+         <string>Rozmiar:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="sizeToFinish">
+        <property name="minimumSize">
+         <size>
+          <width>41</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Przetworzony rozmiar plików wynikowych</string>
+        </property>
+        <property name="text">
+         <string>0 MB</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>/</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="totalSize">
+        <property name="minimumSize">
+         <size>
+          <width>41</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Całkowity rozmiar plików wynikowych</string>
+        </property>
+        <property name="text">
+         <string>0 MB</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string> | </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>Prędkość:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_19">
+        <property name="minimumSize">
+         <size>
+          <width>55</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>0 MB/s</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string> | </string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="label_2">
         <property name="toolTip">
          <string>Przewidywany czas na ukończenie operacji konwersji</string>
         </property>
         <property name="text">
-         <string>Czas na ukończenie:</string>
+         <string>Czas do ukończenia:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -741,29 +917,12 @@
         <property name="text">
          <string>0m : 0s</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <widget class="QPushButton" name="startBtn">
-      <property name="toolTip">
-       <string>Uruchomienie konwersji</string>
-      </property>
-      <property name="text">
-       <string>Start</string>
-      </property>
-      <property name="icon">
-       <iconset resource="resource.qrc">
-        <normaloff>:/icons/rubber/icons/rubber-icons/burn_badge.ico</normaloff>:/icons/rubber/icons/rubber-icons/burn_badge.ico</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>
@@ -795,7 +954,8 @@
     </property>
     <addaction name="actionSetupUpdate"/>
     <addaction name="actionSetupOrgNew"/>
-    <addaction name="actionSetupNew"/>
+    <addaction name="actionSetupNewDate"/>
+    <addaction name="actionSetupOrgNewDate"/>
    </widget>
    <addaction name="menuPhoto_Time_Mod"/>
    <addaction name="menuSzybka_konfiguracja"/>
@@ -829,6 +989,9 @@
    </property>
   </action>
   <action name="actionSetupUpdate">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/icons/rubber/icons/rubber-icons/network.ico</normaloff>:/icons/rubber/icons/rubber-icons/network.ico</iconset>
@@ -838,6 +1001,9 @@
    </property>
   </action>
   <action name="actionSetupOrgNew">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/icons/rubber/icons/rubber-icons/network.ico</normaloff>:/icons/rubber/icons/rubber-icons/network.ico</iconset>
@@ -846,13 +1012,28 @@
     <string>Twórz nowe pliki z oryginalną strukturą podkatalogów</string>
    </property>
   </action>
-  <action name="actionSetupNew">
+  <action name="actionSetupNewDate">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/icons/rubber/icons/rubber-icons/network.ico</normaloff>:/icons/rubber/icons/rubber-icons/network.ico</iconset>
    </property>
    <property name="text">
-    <string>Twórz nowe pliki z nazwą i ze strukturą katalogów wykorzytsującą datę</string>
+    <string>Twórz nowe pliki z nazwą i ze strukturą katalogów wykorzystującą datę</string>
+   </property>
+  </action>
+  <action name="actionSetupOrgNewDate">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/rubber/icons/rubber-icons/network.ico</normaloff>:/icons/rubber/icons/rubber-icons/network.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Twórz nowe pliki z oryginalną strukturą oraz nazwa i podkatalogami z datą</string>
    </property>
   </action>
  </widget>
