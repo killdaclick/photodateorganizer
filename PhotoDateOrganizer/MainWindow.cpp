@@ -172,14 +172,16 @@ void MainWindow::selectFiles( void )
 		fNr++;
 	}
 	if( inF.isEmpty() )
+	{
+		ui->inputFilesList->setText("");
 		return;
+	}
+
 	// printujemy wszystkie sciezki plikow
 	ui->inputFilesList->setText(inF);
 	// printujemy sumaryczny rozmiar plikow
-	qint64 sMB = filesSize/1000000;
-	qint64 sKB = (filesSize%1000000)/1000;
-	ui->filesSize->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB" );
-	ui->totalSize->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB" );
+	updateFileSizeLabel( ui->filesSize, filesSize );
+	updateFileSizeLabel( ui->totalSize, filesSize );
 
 	// odswiezamy podglad nowej nazwy pliku
 	updateViews();
@@ -267,15 +269,16 @@ void MainWindow::selectFolder( void )
 	}
 
 	if( inF.isEmpty() )
+	{
+		ui->inputFilesList->setText("");
 		return;
+	}
 
 	// printujemy wszystkie sciezki do plikow
 	ui->inputFilesList->setText(inF);
 	// printujemy sumaryczny rozmiar plikow
-	qint64 sMB = filesSize/1000000;
-	qint64 sKB = (filesSize%1000000)/1000;
-	ui->filesSize->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB" );
-	ui->totalSize->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB" );
+	updateFileSizeLabel( ui->filesSize, filesSize );
+	updateFileSizeLabel( ui->totalSize, filesSize );
 
 	// odswiezamy podglad nowej nazwy pliku
 	updateViews();
@@ -318,6 +321,8 @@ void MainWindow::start( void )
 
 	if( timToF != nullptr )
 		delete timToF;
+	qint64 fSize = 0;
+	qint64 totFsize = filesSize;	// calkowity rozmiar plikow do przetworzenia ktory moze sie zmniejszac ze wzgledu na pliki ktorych nie mozna byly przekonwertowac
 	timToF = new TimeToFinish( 100, fCnt );
 	timToF->start();
 	for( InFileList::iterator i = inFileList.begin(); i != inFileList.end(); ++i )
@@ -339,6 +344,11 @@ void MainWindow::start( void )
 			errCnt++;
 			timToF->step();
 			updateAvgTimeToFinish( timToF->getAvgTimeToFinish() );
+			
+			QFileInfo fiTmp(*i);
+			totFsize -= fiTmp.size();
+			updateFileSizeLabel( ui->totalSize, totFsize );
+			
 			QApplication::processEvents();
 			continue;
 		}
@@ -358,12 +368,18 @@ void MainWindow::start( void )
 				errCnt++;
 				timToF->step();
 				updateAvgTimeToFinish( timToF->getAvgTimeToFinish() );
+
+				QFileInfo fiTmp(*i);
+				totFsize -= fiTmp.size();
+				updateFileSizeLabel( ui->totalSize, totFsize );
+
 				QApplication::processEvents();
 				continue;
 			}
 		}
 
 		// tworzymy sciezke do katalogu docelowego + subfoldery
+		bool copySuccess = true;
 		if( ui->createOutputFiles->isChecked() )
 		{
 			// tworzymy subfoldery zwiazane z oryginlana struktura
@@ -384,12 +400,15 @@ void MainWindow::start( void )
 					errCnt++;
 					timToF->step();
 					updateAvgTimeToFinish( timToF->getAvgTimeToFinish() );
+
+					QFileInfo fiTmp(*i);
+					totFsize -= fiTmp.size();
+					updateFileSizeLabel( ui->totalSize, totFsize );
+
 					QApplication::processEvents();
 					continue;
 				}
 				fPath.append("\\" + subPath);
-				
-				Utility::mkPath( fPath );
 			}
 			ui->status->appendHtml(fNrStr + QString(fPath + "\\" + fName).replace("/","\\").replace("\\\\","\\"));
 			QFileInfo dstI(fPath + "\\" + fName);
@@ -408,15 +427,27 @@ void MainWindow::start( void )
 				}
 				ui->status->appendHtml(statInfo + "<font color='orange'>" + fName + "</font>");
 			}
-			QFile::copy( *i, fPath + "\\" + fName );
+
+			if( !Utility::mkPath( fPath ) )
+				ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='red'>Błąd tworzenia ścieżki</font><br>"));
+			copySuccess = QFile::copy( *i, fPath + "\\" + fName );
+			if( !copySuccess )
+				ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='red'>Błąd kopiowania pliku</font><br>"));
 		}
 		else
 			ui->status->appendHtml(fNrStr + QString(fPath + "\\" + fName).replace("/","\\").replace("\\\\","\\"));
 
-		if( changeFileTime( fPath + "\\" + fName, *dt ) )
-			ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='green'>OK</font><br>"));
-		else
-			ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='red'>Błąd ustawiania daty</font><br>"));
+		if( copySuccess )
+		{
+			if( changeFileTime( fPath + "\\" + fName, *dt ) )
+				ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='green'>OK</font><br>"));
+			else
+				ui->status->appendHtml(tr("&nbsp;&nbsp;&nbsp;&nbsp;<font color='red'>Błąd ustawiania daty</font><br>"));
+		}
+
+		// sumujemy rozmiar plikow
+		fSize += fi.size();
+		updateFileSizeLabel( ui->sizeToFinish, fSize );
 
 		delete dt;
 
@@ -800,6 +831,14 @@ void MainWindow::updateAvgTimeToFinish( int timeToF )
 	ui->timeToFinish->setText( QString::number(min) + "m : " + QString::number(sec) + "s" );
 }
 
+
+void MainWindow::updateFileSizeLabel( QLabel* label, qint64 size )
+{
+	qint64 sMB = size/1000000;
+	qint64 sKB = (size%1000000)/1000;
+	label->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB" );
+}
+
 TimeToFinish::TimeToFinish(int avgStepVar, int maxStepCnt) : tim(nullptr),
 								avgStepVar_(avgStepVar),
 								maxStepCnt_(maxStepCnt)
@@ -892,4 +931,5 @@ int TimeToFinish::getTotalTime( void )
 		tot += timeSteps[i];
 	return tot;
 }
+
 

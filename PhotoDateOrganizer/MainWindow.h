@@ -84,6 +84,7 @@ public:
 	QString getVersionString( void );
 	void updateFoundFilesCount( const QStringList& files );
 	void updateAvgTimeToFinish( int timeToF );
+	void updateFileSizeLabel( QLabel* label, qint64 size );
 
 public slots:
 	void selectFiles( void );
