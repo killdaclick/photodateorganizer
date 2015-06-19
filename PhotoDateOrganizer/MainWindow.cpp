@@ -10,7 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow),
 	started(false),
 	cancel(false),
-	timToF(nullptr)
+	timToF(nullptr),
+	convFilesSizeTim(nullptr)
 {
 	QStyle* fusion = QStyleFactory::create("fusion");
 	qApp->setStyle(fusion);
@@ -321,9 +322,10 @@ void MainWindow::start( void )
 
 	if( timToF != nullptr )
 		delete timToF;
-	qint64 fSize = 0;
+	convFilesSize = 0;
 	qint64 totFsize = filesSize;	// calkowity rozmiar plikow do przetworzenia ktory moze sie zmniejszac ze wzgledu na pliki ktorych nie mozna byly przekonwertowac
 	timToF = new TimeToFinish( 100, fCnt );
+	convFilesSizeTim = new SizeSpeed( ui->sizeTime, &convFilesSize );
 	timToF->start();
 	for( InFileList::iterator i = inFileList.begin(); i != inFileList.end(); ++i )
 	{
@@ -446,8 +448,8 @@ void MainWindow::start( void )
 		}
 
 		// sumujemy rozmiar plikow
-		fSize += fi.size();
-		updateFileSizeLabel( ui->sizeToFinish, fSize );
+		convFilesSize += fi.size();
+		updateFileSizeLabel( ui->sizeToFinish, convFilesSize );
 
 		delete dt;
 
@@ -461,6 +463,8 @@ void MainWindow::start( void )
 		ui->status->appendHtml(tr("<font color='red'>Przerwano pracę na życzenie użytkownika</font><br>"));
 	else
 		ui->progressBar->setValue(100);
+	delete convFilesSizeTim;
+	convFilesSizeTim = nullptr;
 	int elapsed = timToF->getTotalTime();
 	delete timToF;
 	timToF = nullptr;
@@ -839,6 +843,19 @@ void MainWindow::updateFileSizeLabel( QLabel* label, qint64 size )
 	label->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB" );
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 TimeToFinish::TimeToFinish(int avgStepVar, int maxStepCnt) : tim(nullptr),
 								avgStepVar_(avgStepVar),
 								maxStepCnt_(maxStepCnt)
@@ -932,4 +949,50 @@ int TimeToFinish::getTotalTime( void )
 	return tot;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SizeSpeed::SizeSpeed( QLabel* qlabel, qint64* convFilesSize ) : label(qlabel), convFilesSize(convFilesSize)
+{
+	tim.setInterval(1000);
+	connect( &tim, SIGNAL(timeout()), this, SLOT(timeout()) );
+	tim.start();
+}
+
+SizeSpeed::~SizeSpeed()
+{
+	tim.stop();
+	disconnect( &tim, SIGNAL(timeout()), this, SLOT(timeout()) );
+}
+
+void SizeSpeed::timeout( void )
+{	
+	sizeSpeedSteps.push_back(*convFilesSize - lastSize);
+
+	// liczymy srednia za ostatnie 10 sekund
+	auto s = sizeSpeedSteps.size();
+	int nLast = 10;
+	if( s < nLast )
+		nLast = s;
+	qint64 speed = 0;
+	for( int i = s - nLast; i<s; i++ )
+		speed += sizeSpeedSteps[i];
+
+	qint64 sMB = speed/nLast/1000000;
+	qint64 sKB = ((speed/nLast)%1000000)/1000;
+
+	label->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB/s" );
+	lastSize = *convFilesSize;
+}
 

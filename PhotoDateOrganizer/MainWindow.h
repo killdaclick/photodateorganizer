@@ -33,6 +33,26 @@ const int appVer = 0x010201;
 typedef QStringList					InFileList;
 typedef QPair<QString,QDateTime>	FileExif;
 typedef QVector<int>	TimeStepList;
+typedef QVector<int>	SizeSpeedList;
+
+class SizeSpeed : QObject
+{
+	Q_OBJECT
+
+public:
+	SizeSpeed( QLabel* qlabel, qint64* convFilesSize );
+	~SizeSpeed();
+
+public slots:
+	void timeout( void );
+
+private:
+	QTimer tim;
+	QLabel* label;
+	qint64 lastSize;
+	qint64* convFilesSize;
+	SizeSpeedList sizeSpeedSteps;
+};
 
 class TimeToFinish
 {
@@ -108,6 +128,8 @@ private:
 	QString srcFolder;
 	TimeToFinish* timToF;
 	qint64 filesSize;
+	qint64 convFilesSize;
+	SizeSpeed* convFilesSizeTim;
 
 signals:
 	void progressBarSetValue( int val );
