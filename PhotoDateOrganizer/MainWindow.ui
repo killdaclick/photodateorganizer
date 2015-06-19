@@ -990,7 +990,7 @@
   </action>
   <action name="actionSetupUpdate">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="resource.qrc">
@@ -1002,7 +1002,7 @@
   </action>
   <action name="actionSetupOrgNew">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="resource.qrc">
@@ -1014,7 +1014,7 @@
   </action>
   <action name="actionSetupNewDate">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="resource.qrc">
@@ -1026,14 +1026,14 @@
   </action>
   <action name="actionSetupOrgNewDate">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/icons/rubber/icons/rubber-icons/network.ico</normaloff>:/icons/rubber/icons/rubber-icons/network.ico</iconset>
    </property>
    <property name="text">
-    <string>Twórz nowe pliki z oryginalną strukturą oraz nazwa i podkatalogami z datą</string>
+    <string>Twórz nowe pliki z oryginalną strukturą oraz nazwą i podkatalogami z datą</string>
    </property>
   </action>
  </widget>
