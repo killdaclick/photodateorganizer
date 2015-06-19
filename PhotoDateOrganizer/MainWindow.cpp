@@ -86,6 +86,10 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->actionExit, SIGNAL(triggered()), this, SLOT(close()) );
 		t = connect( ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutWindow()) );
 		t = connect( this, SIGNAL(progressBarSetValue(int)), ui->progressBar, SLOT(setValue(int)) );
+		t = connect( ui->actionSetupNewDate, SIGNAL(triggered()), this, SLOT(actionSetupNewDateSlot()) );
+		t = connect( ui->actionSetupUpdate, SIGNAL(triggered()), this, SLOT(actionSetupUpdateSlot()) );
+		t = connect( ui->actionSetupOrgNew, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewSlot()) );
+		t = connect( ui->actionSetupOrgNewDate, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewDateSlot()) );
 	}
 	else
 	{
@@ -100,15 +104,22 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( ui->actionExit, SIGNAL(triggered()), this, SLOT(close()) );
 		disconnect( ui->actionAbout, SIGNAL(triggered()), this, SLOT(aboutWindow()) );
 		disconnect( this, SIGNAL(progressBarSetValue(int)), ui->progressBar, SLOT(setValue(int)) );
+		disconnect( ui->actionSetupNewDate, SIGNAL(triggered()), this, SLOT(actionSetupNewDateSlot()) );
+		disconnect( ui->actionSetupUpdate, SIGNAL(triggered()), this, SLOT(actionSetupUpdateSlot()) );
+		disconnect( ui->actionSetupOrgNew, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewSlot()) );
+		disconnect( ui->actionSetupOrgNewDate, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewDateSlot()) );
 	}
 }
 
 void MainWindow::selectFiles( void )
 {
+	QString dir = lastPath;
+	if( !QFile::exists(dir) )
+		dir = QDir::currentPath();
 	QStringList files = QFileDialog::getOpenFileNames(
 		this,
 		tr("Wybierz pliki źródłowe"),
-		QDir::currentPath(),
+		dir,
 		tr("Zdjęcia (*.jpg)"));
 	
 	QStringList::iterator fi = files.begin();
@@ -167,6 +178,9 @@ void MainWindow::selectFiles( void )
 		QFileInfo fInfo(f);
 		filesSize += fInfo.size();
 
+		// zapamietujemy sciezke do katalogu z plikami (dla wygody uzytkowania - pozniej gdy klikamy wybor plikow albo folderow domyslnie otwiera sie ostatni katalog)
+		lastPath = fInfo.absolutePath();
+
 		QString fNrStr = "<b>[" + QString::number(fNr) + " \\ " + QString::number(fCnt) + "] </b>";
 		inF.push_back( fNrStr + f );
 		inF.push_back("<br>");
@@ -196,8 +210,11 @@ void MainWindow::updateViews( void )
 
 void MainWindow::selectFolder( void )
 {
-	QString dir = QFileDialog::getExistingDirectory(this, tr("Wybierz katalog z plikami źródłowymi"),
-		QDir::currentPath(),
+	QString dir = lastPath;
+	if( !QFile::exists(dir) )
+		dir = QDir::currentPath();
+	dir = QFileDialog::getExistingDirectory(this, tr("Wybierz katalog z plikami źródłowymi"),
+		dir,
 		QFileDialog::ShowDirsOnly
 		| QFileDialog::DontResolveSymlinks);
 
@@ -220,6 +237,8 @@ void MainWindow::selectFolder( void )
 	ui->inputFilesList->setText(tr("<b>Ładuję...</b>"));
 	QApplication::processEvents();
 
+	// zapamietujemy sciezke do katalogu z plikami (dla wygody uzytkowania - pozniej gdy klikamy wybor plikow albo folderow domyslnie otwiera sie ostatni katalog)
+	lastPath = dir;
 	// zapamietujemy katalog zrodlowy - potrzebne gdy wybrana opcja saveOrgSubfolders
 	srcFolder = dir;
 	// szukamy plikow w podkatalogach
@@ -697,6 +716,7 @@ void MainWindow::serializeSettings( void )
 	ser << ui->createOutputSubfolders->isChecked();
 	ser << ui->subfoldersNameTemplate->text();
 	ser << ui->saveOrgSubfolders->isChecked();
+	ser << lastPath;
 
 	f.close();
 }
@@ -770,6 +790,8 @@ void MainWindow::deserializeSettings( QByteArray* def )
 	*ser >> tb;
 	ui->saveOrgSubfolders->setChecked(tb);
 
+	*ser >> lastPath;
+
 	if( ser != nullptr )
 		delete ser;
 	if( f != nullptr )
@@ -792,6 +814,7 @@ void MainWindow::createDefaultSettings( void )
 	def << ui->createOutputSubfolders->isChecked();
 	def << ui->subfoldersNameTemplate->text();
 	def << ui->saveOrgSubfolders->isChecked();
+	def << QDir::currentPath();	// lastPath
 }
 
 void MainWindow::restoreDefaultSettings( void )
@@ -842,6 +865,37 @@ void MainWindow::updateFileSizeLabel( QLabel* label, qint64 size )
 	qint64 sKB = (size%1000000)/1000;
 	label->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB" );
 }
+
+void MainWindow::actionSetupUpdateSlot( void )
+{
+	ui->createOutputFiles->setChecked(false);
+	ui->changeOutputFileName->setChecked(false);
+}
+
+void MainWindow::actionSetupOrgNewSlot( void )
+{
+	ui->createOutputFiles->setChecked(true);
+	ui->saveOrgSubfolders->setChecked(true);
+	ui->createOutputSubfolders->setChecked(false);
+	ui->changeOutputFileName->setChecked(false);
+}
+
+void MainWindow::actionSetupNewDateSlot( void )
+{
+	ui->createOutputFiles->setChecked(true);
+	ui->saveOrgSubfolders->setChecked(false);
+	ui->createOutputSubfolders->setChecked(true);
+	ui->changeOutputFileName->setChecked(true);
+}
+
+void MainWindow::actionSetupOrgNewDateSlot( void )
+{
+	ui->createOutputFiles->setChecked(true);
+	ui->saveOrgSubfolders->setChecked(true);
+	ui->createOutputSubfolders->setChecked(true);
+	ui->changeOutputFileName->setChecked(true);
+}
+
 
 
 

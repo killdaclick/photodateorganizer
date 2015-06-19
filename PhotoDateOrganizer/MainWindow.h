@@ -6,13 +6,13 @@
 #define EXIV2_BIN               "bin\\exiv2.exe"
 #define EXIV2_DLL               "bin\\libexpat.dll"
 #define APP_CONFIG_FILE			"config.ini"
-#define APP_CONFIG_VERSION		2
+#define APP_CONFIG_VERSION		3
 #define APP_VERSION_ABOUT_STR	"<html><head/><body><p><span style=' font-size:12pt; font-weight:600;'>VER_REPLACE</span></p></body></html>"
 #define APP_VERSION_ABOUT_REPLACE_STR	"VER_REPLACE"
 #define APP_START_BUTTON_TXT	"Start"
 #define APP_STOP_BUTTON_TXT		"Stop"
 
-const int appVer = 0x010201;
+const int appVer = 0x010300;
 
 #include <QMainWindow>
 
@@ -116,6 +116,10 @@ public slots:
 	void restoreDefaultSettings( void );
 	void aboutToQuit( void );
 	void aboutWindow( void );
+	void actionSetupUpdateSlot( void );
+	void actionSetupOrgNewSlot( void );
+	void actionSetupNewDateSlot( void );
+	void actionSetupOrgNewDateSlot( void );
 
 private:
 	Ui::MainWindow *ui;
@@ -130,6 +134,7 @@ private:
 	qint64 filesSize;
 	qint64 convFilesSize;
 	SizeSpeed* convFilesSizeTim;
+	QString lastPath;
 
 signals:
 	void progressBarSetValue( int val );

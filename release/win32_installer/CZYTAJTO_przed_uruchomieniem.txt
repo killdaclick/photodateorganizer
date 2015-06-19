@@ -1,0 +1,6 @@
+1. Przed uruchomienie BUILD_INSTALLER.bat nalezy ustawic poprawna wersje release ELF'a w pliku: .\ELF_version.inc
+2. Wszystkie pliki ktore maja sie znalezc w katalogu instalacyjnym znajduja sie w: .\ELF_INSTALL\
+3. Wszystkie pliki ktore maja sie znalezc w katalogu systemowy WINDOWS\SYSTEM(32) znajduja sie w: .\SHARED_FILES\
+4. Wszystkie pliki zwiazane z aplikacje FaultViewer, ktore maja znalezc sie w katalogu ELF\BIN\FaultViewer, znajduja sie w .\FAULTVIEWER_INSTALL
+5. Pliki rozne znajduja sie w .\CUSTOM_FILES; np. pliki ktore sa kopiowane w zaleznosci od wybranego jezyka (wymuszanie uruchomienia ELF'a w danym jezyku)
+6. Po uruchomieniu BUILD_INSTALLER.bat, plik wykonywalny instalatora bedzie znajdowal sie w: .\Output\ELFsetup.exe
