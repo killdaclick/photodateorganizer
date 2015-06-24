@@ -1022,6 +1022,7 @@ SizeSpeed::SizeSpeed( QLabel* qlabel, qint64* convFilesSize ) : label(qlabel), c
 	tim.setInterval(1000);
 	connect( &tim, SIGNAL(timeout()), this, SLOT(timeout()) );
 	tim.start();
+	et.start();
 }
 
 SizeSpeed::~SizeSpeed()
@@ -1032,19 +1033,14 @@ SizeSpeed::~SizeSpeed()
 
 void SizeSpeed::timeout( void )
 {	
-	sizeSpeedSteps.push_back(*convFilesSize - lastSize);
+	auto delta = *convFilesSize - lastSize;
+	if( delta < 0 )
+		delta *= -1;
+	sizeSpeedSteps.push_back(delta);
 
-	// liczymy srednia za ostatnie 10 sekund
-	auto s = sizeSpeedSteps.size();
-	int nLast = 10;
-	if( s < nLast )
-		nLast = s;
-	qint64 speed = 0;
-	for( int i = s - nLast; i<s; i++ )
-		speed += sizeSpeedSteps[i];
-
-	qint64 sMB = speed/nLast/1000000;
-	qint64 sKB = ((speed/nLast)%1000000)/1000;
+	qint64 speed = ((*convFilesSize) / (et.elapsed()/1000));
+	qint64 sMB = speed/ /*nLast/*/ 1000000;
+	qint64 sKB = ((speed /*/nLast*/ )%1000000)/1000;
 
 	label->setText( QString::number(sMB) + "." + QString::number(sKB) + " MB/s" );
 	lastSize = *convFilesSize;

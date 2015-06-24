@@ -12,7 +12,7 @@
 #define APP_START_BUTTON_TXT	"Start"
 #define APP_STOP_BUTTON_TXT		"Stop"
 
-const int appVer = 0x010300;
+const int appVer = 0x010301;
 
 #include <QMainWindow>
 
@@ -27,6 +27,7 @@ const int appVer = 0x010300;
 #include <QMessageBox>
 #include <QTimer>
 #include <QVector>
+#include <QElapsedTimer>
 
 #include <windows.h>
 
@@ -48,6 +49,7 @@ public slots:
 
 private:
 	QTimer tim;
+	QElapsedTimer et;
 	QLabel* label;
 	qint64 lastSize;
 	qint64* convFilesSize;
