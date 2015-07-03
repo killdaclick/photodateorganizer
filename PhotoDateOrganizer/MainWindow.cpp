@@ -174,8 +174,24 @@ void MainWindow::selectFiles( void )
 			}
 		}
 
-		// podliczamy rozmiar plikow
 		QFileInfo fInfo(f);
+
+		// wybieramy pliki spelniajace filtr daty/czasu
+		if( ui->filterDate->isChecked() )
+		{
+			if( ui->useExifDate->isChecked() )
+			{
+				QDateTime* dt = getExifImgDateTime(f);
+				if( !(*dt > ui->dateFrom->dateTime() && *dt < ui->dateTo->dateTime()) )
+					continue;
+			}
+			else if( ui->useModificationDate->isChecked() )
+			{
+				// TODO
+			}
+		}
+
+		// podliczamy rozmiar plikow
 		filesSize += fInfo.size();
 
 		// zapamietujemy sciezke do katalogu z plikami (dla wygody uzytkowania - pozniej gdy klikamy wybor plikow albo folderow domyslnie otwiera sie ostatni katalog)
@@ -278,8 +294,24 @@ void MainWindow::selectFolder( void )
 			}
 		}
 
-		// podliczamy rozmiar plikow
 		QFileInfo fInfo(fName);
+
+		// wybieramy pliki spelniajace filtr daty/czasu
+		if( ui->filterDate->isChecked() )
+		{
+			if( ui->useExifDate->isChecked() )
+			{
+				QDateTime* dt = getExifImgDateTime(fName);
+				if( !(*dt > ui->dateFrom->dateTime() && *dt < ui->dateTo->dateTime()) )
+					continue;
+			}
+			else if( ui->useModificationDate->isChecked() )
+			{
+				// TODO
+			}
+		}
+
+		// podliczamy rozmiar plikow
 		filesSize += fInfo.size();
 
 		QString fNrStr = "<b>[" + QString::number(fNr) + " \\ " + QString::number(fCnt) + "] </b>";
