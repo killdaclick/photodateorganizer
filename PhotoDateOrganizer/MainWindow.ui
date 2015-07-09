@@ -862,7 +862,7 @@
       <item>
        <widget class="QLabel" name="label_15">
         <property name="toolTip">
-         <string>Przetworzony rozmiar plików wynikowych</string>
+         <string>Rozmiar przetworzonych plików wynikowych</string>
         </property>
         <property name="text">
          <string>Rozmiar:</string>
@@ -881,7 +881,7 @@
          </size>
         </property>
         <property name="toolTip">
-         <string>Przetworzony rozmiar plików wynikowych</string>
+         <string>Rozmiar przetworzonych plików wynikowych</string>
         </property>
         <property name="text">
          <string>0 MB</string>
@@ -1010,6 +1010,7 @@
      <string>Program</string>
     </property>
     <addaction name="actionRestoreDefaults"/>
+    <addaction name="actionLang"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuPomoc">
@@ -1104,6 +1105,15 @@
    </property>
    <property name="text">
     <string>Twórz nowe pliki z oryginalną strukturą oraz nazwą i podkatalogami z datą</string>
+   </property>
+  </action>
+  <action name="actionLang">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/flags/icons/flags/Acidrums4-Betelgeuse-Categories-applications-education-language.ico</normaloff>:/icons/flags/icons/flags/Acidrums4-Betelgeuse-Categories-applications-education-language.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Zmień język</string>
    </property>
   </action>
  </widget>

@@ -3,6 +3,7 @@
 
 #include "Utility.h"
 #include "AboutWindow.h"
+#include "Preferences.h"
 #include <QStyleFactory>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -11,7 +12,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	started(false),
 	cancel(false),
 	timToF(nullptr),
-	convFilesSizeTim(nullptr)
+	convFilesSizeTim(nullptr),
+	language(LANGUAGES::POLISH),
+	langTrans(nullptr)
 {
 	QStyle* fusion = QStyleFactory::create("fusion");
 	qApp->setStyle(fusion);
@@ -30,6 +33,17 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	createDefaultSettings();
 	deserializeSettings();
+	
+	// apply langauge settings
+	langTrans = new QTranslator();
+	if( language == LANGUAGES::ENGLISH )
+		langTrans->load(":/translations/photodateorganizer_en.qm");
+	else if( language == LANGUAGES::POLISH )
+	{
+		// do nothing - default
+	}
+	qApp->installTranslator(langTrans);
+	
 	enableSignals(true);
 }
 
@@ -90,6 +104,7 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->actionSetupUpdate, SIGNAL(triggered()), this, SLOT(actionSetupUpdateSlot()) );
 		t = connect( ui->actionSetupOrgNew, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewSlot()) );
 		t = connect( ui->actionSetupOrgNewDate, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewDateSlot()) );
+		t = connect( ui->actionLang, SIGNAL(triggered()), this, SLOT(actionChangeLang()) );
 	}
 	else
 	{
@@ -108,6 +123,7 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( ui->actionSetupUpdate, SIGNAL(triggered()), this, SLOT(actionSetupUpdateSlot()) );
 		disconnect( ui->actionSetupOrgNew, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewSlot()) );
 		disconnect( ui->actionSetupOrgNewDate, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewDateSlot()) );
+		disconnect( ui->actionLang, SIGNAL(trigerred()), this, SLOT(actionChangeLang()) );
 	}
 }
 
@@ -749,6 +765,7 @@ void MainWindow::serializeSettings( void )
 	ser << ui->subfoldersNameTemplate->text();
 	ser << ui->saveOrgSubfolders->isChecked();
 	ser << lastPath;
+	ser << language;
 
 	f.close();
 }
@@ -793,6 +810,7 @@ void MainWindow::deserializeSettings( QByteArray* def )
 
 	bool tb;
 	QString ts;
+	int ti;
 
 	*ser >> tb;
 	ui->recursiveFoldersCheckbox->setChecked(tb);
@@ -824,6 +842,9 @@ void MainWindow::deserializeSettings( QByteArray* def )
 
 	*ser >> lastPath;
 
+	*ser >> ti;
+	language = (LANGUAGES)ti;
+
 	if( ser != nullptr )
 		delete ser;
 	if( f != nullptr )
@@ -847,6 +868,7 @@ void MainWindow::createDefaultSettings( void )
 	def << ui->subfoldersNameTemplate->text();
 	def << ui->saveOrgSubfolders->isChecked();
 	def << QDir::currentPath();	// lastPath
+	def << LANGUAGES::POLISH;
 }
 
 void MainWindow::restoreDefaultSettings( void )
@@ -926,6 +948,30 @@ void MainWindow::actionSetupOrgNewDateSlot( void )
 	ui->saveOrgSubfolders->setChecked(true);
 	ui->createOutputSubfolders->setChecked(true);
 	ui->changeOutputFileName->setChecked(true);
+}
+
+void MainWindow::actionChangeLang( void )
+{
+	ChangeLanguage* a = new ChangeLanguage(language, this);
+	a->setAttribute( Qt::WA_DeleteOnClose );
+	LANGUAGES l = (LANGUAGES)a->exec();
+	changeLanguage(l);
+}
+
+void MainWindow::changeLanguage( LANGUAGES lang )
+{
+	auto ret = QMessageBox::information( this, tr("Zmiana języka - restart"), tr("Aby zmienić język, aplikacja zostanie uruchomiona ponownie"), QMessageBox::Ok, QMessageBox::Cancel );
+	if( ret == QMessageBox::Cancel )
+		return;
+	language = lang;
+	serializeSettings();
+	restart();
+}
+
+void MainWindow::restart( void )
+{
+	qApp->quit();
+	QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 }
 
 

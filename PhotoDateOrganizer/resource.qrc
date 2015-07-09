@@ -15,4 +15,12 @@
     <file>icons/rubber-icons/hdd_USB.ico</file>
     <file>icons/rubber-icons/pictures_folder.ico</file>
   </qresource>
+  <qresource prefix="/icons/flags">
+	<file>icons/flags/Gosquared-Flag-Poland.ico</file>
+	<file>icons/flags/Gosquared-Flag-United-Kingdom.ico</file>
+	<file>icons/flags/Acidrums4-Betelgeuse-Categories-applications-education-language.ico</file>
+  </qresource>
+  <qresource prefix="/translations">
+    <file>photodateorganizer_en.qm</file>
+  </qresource>
 </RCC>
