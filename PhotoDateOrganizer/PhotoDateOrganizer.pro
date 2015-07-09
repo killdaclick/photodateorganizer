@@ -14,14 +14,21 @@ TEMPLATE = app
 SOURCES += main.cpp\
         MainWindow.cpp \
         AboutWindow.cpp \
-        Utility.cpp
+        Utility.cpp \
+        ChangeLanguage.cpp \
+        Preferences.cpp
 
 HEADERS  += MainWindow.h \
 			AboutWindow.h \
-			Utility.h
+			Utility.h \
+			ChangeLanguage.h \
+			Preferences.h
 
 FORMS    += MainWindow.ui \
-			AboutWindow.ui
+			AboutWindow.ui \
+			ChangeLanguage.ui
+			
+TRANSLATIONS = photodateorganizer_en.ts
 			
 RESOURCES     = resource.qrc
 

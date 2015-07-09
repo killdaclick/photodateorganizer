@@ -1,11 +1,22 @@
 #include "MainWindow.h"
 #include <QApplication>
+#include "Preferences.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+	while(1)
+	{
+		QApplication a(argc, argv);
+		auto& p = Preferences::Instance();
+		bool restoreDefaults = !p.deserializeSettings();
+		p.loadLanguage();
+		MainWindow w;
+		if( restoreDefaults )
+			w.restoreDefaultSettings();
+		w.show();
 
-    return a.exec();
+		int ret = a.exec();
+		if( ret != APP_RESTART_EXIT_CODE )
+			return ret;
+	}
 }
