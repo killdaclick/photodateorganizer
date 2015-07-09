@@ -819,7 +819,7 @@
          <string>Uruchomienie konwersji</string>
         </property>
         <property name="text">
-         <string>Start konwersji</string>
+         <string>Start</string>
         </property>
         <property name="icon">
          <iconset resource="resource.qrc">

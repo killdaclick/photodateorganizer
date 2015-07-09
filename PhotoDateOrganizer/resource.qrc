@@ -22,5 +22,7 @@
   </qresource>
   <qresource prefix="/translations">
     <file>photodateorganizer_en.qm</file>
+    <file>qt_pl.qm</file>
+    <file>qtbase_pl.qm</file>
   </qresource>
 </RCC>

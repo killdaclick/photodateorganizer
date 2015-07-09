@@ -3,9 +3,9 @@
 #include <QDataStream>
 #include <QDir>
 
-Preferences::Preferences()
+Preferences::Preferences() : langTrans(nullptr),
+	language(LANGUAGES::POLISH)
 {
-
 }
 
 Preferences::~Preferences()
@@ -32,7 +32,7 @@ bool Preferences::deserializeSettings( QByteArray* def )
 			if( f != nullptr )
 				delete f;
 			//ui->status->appendHtml(tr("Brak pliku konfiguracyjnego - przywracam ustawienia domyœlne<br><br>"));
-			restoreDefaultSettings();
+			//restoreDefaultSettings();
 			return false;
 		}
 		ser = new QDataStream(f);
@@ -49,7 +49,7 @@ bool Preferences::deserializeSettings( QByteArray* def )
 	if( app_config_version != APP_CONFIG_VERSION )
 	{
 		//ui->status->appendHtml(tr("<font color='red'>Plik konfiguracyjny w b³êdnej wersji - przywracam ustawienia domyœlne</font><br><br>"));
-		restoreDefaultSettings();
+		//restoreDefaultSettings();
 		if( ser != nullptr )
 			delete ser;
 		if( f != nullptr )
@@ -58,38 +58,22 @@ bool Preferences::deserializeSettings( QByteArray* def )
 	}
 
 	*ser >> recursiveFolders;
-	//ui->recursiveFoldersCheckbox->setChecked(tb);
-
 	*ser >> useExif;
-	//ui->useExifDate->setChecked(tb);
-	//ui->useModificationDate->setChecked(!tb);
-
 	*ser >> changeOutputFileName;
-	//ui->changeOutputFileName->setChecked(tb);
-
 	*ser >> newNameTemplate;
-	//ui->newNameTemplate->setText(ts);
-
 	*ser >> createOutputFiles;
-	//ui->createOutputFiles->setChecked(tb);
-
 	*ser >> outputFolder;
-	//ui->outputFolder->setText(ts);
-
 	*ser >> createOutputSubfolders;
-	//ui->createOutputSubfolders->setChecked(tb);
-
 	*ser >> subfoldersNameTemplate;
-	//ui->subfoldersNameTemplate->setText(ts);
-
 	*ser >> saveOrgSubfolders;
-	//ui->saveOrgSubfolders->setChecked(tb);
-
 	*ser >> lastPath;
 
-	int ti;
-	*ser >> ti;
-	language = (LANGUAGES)ti;
+	if( def == nullptr )
+	{
+		int ti;
+		*ser >> ti;
+		language = (LANGUAGES)ti;
+	}
 
 	if( ser != nullptr )
 		delete ser;
@@ -110,6 +94,9 @@ void Preferences::createDefaultSettings( Ui::MainWindow *ui )
 	def << ui->useExifDate->isChecked();
 	def << ui->changeOutputFileName->isChecked();
 	def << ui->newNameTemplate->text();
+
+	bool t1 = ui->createOutputFiles->isChecked();
+
 	def << ui->createOutputFiles->isChecked();
 	def << ui->outputFolder->text();
 	def << ui->createOutputSubfolders->isChecked();
@@ -132,21 +119,37 @@ bool Preferences::serializeSettings( void )
 	ser.setVersion( QDataStream::Qt_5_3 );
 
 	ser << APP_CONFIG_VERSION;
-	ser << ui->recursiveFoldersCheckbox->isChecked();
-	ser << ui->useExifDate->isChecked();
-	ser << ui->changeOutputFileName->isChecked();
-	ser << ui->newNameTemplate->text();
-	ser << ui->createOutputFiles->isChecked();
-	ser << ui->outputFolder->text();
-	ser << ui->createOutputSubfolders->isChecked();
-	ser << ui->subfoldersNameTemplate->text();
-	ser << ui->saveOrgSubfolders->isChecked();
+	ser << recursiveFolders;
+	ser << useExif;
+	ser << changeOutputFileName;
+	ser << newNameTemplate;
+	ser << createOutputFiles;
+	ser << outputFolder;
+	ser << createOutputSubfolders;
+	ser << subfoldersNameTemplate;
+	ser << saveOrgSubfolders;
 	ser << lastPath;
-	ser << language;
+	ser << (int)language;
 
 	f.close();
 
 	return true;
+}
+
+bool Preferences::serializeSettings( Ui::MainWindow *ui )
+{
+	recursiveFolders = ui->recursiveFoldersCheckbox->isChecked();
+	useExif = ui->useExifDate->isChecked();
+	changeOutputFileName = ui->changeOutputFileName->isChecked();
+	newNameTemplate = ui->newNameTemplate->text();
+	createOutputFiles = ui->createOutputFiles->isChecked();
+	outputFolder = ui->outputFolder->text();
+	createOutputSubfolders = ui->createOutputSubfolders->isChecked();
+	subfoldersNameTemplate = ui->subfoldersNameTemplate->text();
+	saveOrgSubfolders = ui->saveOrgSubfolders->isChecked();
+	lastPath = lastPath;
+
+	return serializeSettings();
 }
 
 void Preferences::loadSettings( Ui::MainWindow *ui )
@@ -171,8 +174,24 @@ void Preferences::loadSettings( Ui::MainWindow *ui )
 	ui->saveOrgSubfolders->setChecked(saveOrgSubfolders);
 }
 
-void Preferences::restoreDefaultSettings( void )
+void Preferences::restoreDefaultSettings( Ui::MainWindow *ui )
 {
 	deserializeSettings(&defaultSettings);
 	serializeSettings();
+	loadSettings(ui);
+}
+
+void Preferences::loadLanguage( void )
+{
+	// ustaw tlumaczenia
+	langTrans = new QTranslator();
+	if( language == LANGUAGES::ENGLISH )
+		langTrans->load(":/translations/photodateorganizer_en.qm");
+	else if( language == LANGUAGES::POLISH )
+	{
+		bool t1 = langTrans->load(":/translations/qt_pl.qm");
+		bool t2 = langTrans->load(":/translations/qtbase_pl.qm");
+		bool t3 = false;
+	}
+	qApp->installTranslator(langTrans);
 }

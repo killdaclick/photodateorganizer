@@ -4,6 +4,7 @@
 #include "ChangeLanguage.h"
 #include <QByteArray>
 #include "ui_MainWindow.h"
+#include <QTranslator>
 
 #define APP_CONFIG_VERSION		4
 #define APP_CONFIG_FILE			"config.ini"
@@ -17,10 +18,12 @@ public:
 	~Preferences();
 
 	bool deserializeSettings( QByteArray* def = nullptr );
-	void restoreDefaultSettings( void );
+	void restoreDefaultSettings( Ui::MainWindow *ui );
 	void createDefaultSettings( Ui::MainWindow *ui );
+	bool serializeSettings( Ui::MainWindow *ui );
 	bool serializeSettings( void );
 	void loadSettings( Ui::MainWindow *ui );
+	void loadLanguage( void );
 
 private:
 	Preferences();
@@ -38,6 +41,7 @@ private:
 	bool saveOrgSubfolders;
 	QString lastPath;
 	LANGUAGES language;
+	QTranslator* langTrans;
 };
 
 #endif // PREFERENCES_H

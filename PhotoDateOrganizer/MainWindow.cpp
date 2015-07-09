@@ -12,9 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	started(false),
 	cancel(false),
 	timToF(nullptr),
-	convFilesSizeTim(nullptr),
-	language(LANGUAGES::POLISH),
-	langTrans(nullptr)
+	convFilesSizeTim(nullptr)
 {
 	QStyle* fusion = QStyleFactory::create("fusion");
 	qApp->setStyle(fusion);
@@ -31,19 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	}
 
 	ui->setupUi(this);
-	createDefaultSettings();
-	deserializeSettings();
-	
-	// apply langauge settings
-	langTrans = new QTranslator();
-	if( language == LANGUAGES::ENGLISH )
-		langTrans->load(":/translations/photodateorganizer_en.qm");
-	else if( language == LANGUAGES::POLISH )
-	{
-		// do nothing - default
-	}
-	qApp->installTranslator(langTrans);
-	
+	auto& p = Preferences::Instance();
+	p.createDefaultSettings(ui);
+	p.loadSettings( ui );
 	enableSignals(true);
 }
 
@@ -742,144 +730,18 @@ void MainWindow::subfoldersNameTemplateChanged(const QString & text)
 	}
 }
 
-void MainWindow::serializeSettings( void )
-{
-	QFile f(APP_CONFIG_FILE);
-	if( !f.open( QIODevice::WriteOnly) )
-	{
-		ui->status->appendHtml(tr("<font color='red'>Błąd zapisu do pliku konfiguracyjnego: ") + APP_CONFIG_FILE + "</font><br><br>");
-		return;
-	}
-
-	QDataStream ser(&f);
-	ser.setVersion( QDataStream::Qt_5_3 );
-
-	ser << APP_CONFIG_VERSION;
-	ser << ui->recursiveFoldersCheckbox->isChecked();
-	ser << ui->useExifDate->isChecked();
-	ser << ui->changeOutputFileName->isChecked();
-	ser << ui->newNameTemplate->text();
-	ser << ui->createOutputFiles->isChecked();
-	ser << ui->outputFolder->text();
-	ser << ui->createOutputSubfolders->isChecked();
-	ser << ui->subfoldersNameTemplate->text();
-	ser << ui->saveOrgSubfolders->isChecked();
-	ser << lastPath;
-	ser << language;
-
-	f.close();
-}
-
-void MainWindow::deserializeSettings( QByteArray* def )
-{
-	QDataStream* ser = nullptr;
-	QFile* f = nullptr;;
-	if( def == nullptr )
-	{
-		// nie podano argumentu jako dane wejsciowe wiec czytamy z pliku
-		f = new QFile(APP_CONFIG_FILE);
-		if( !f->exists() || !f->open(QIODevice::ReadOnly) )
-		{
-			if( f != nullptr )
-				delete f;
-			ui->status->appendHtml(tr("Brak pliku konfiguracyjnego - przywracam ustawienia domyślne<br><br>"));
-			restoreDefaultSettings();
-			return;
-		}
-		ser = new QDataStream(f);
-	}
-	else
-	{
-		// czytamy serializacje z danych podanych w argumencie funkcji
-		ser = new QDataStream(*def);
-	}
-	ser->setVersion( QDataStream::Qt_5_3 );
-
-	int app_config_version;
-	(*ser) >> app_config_version;
-	if( app_config_version != APP_CONFIG_VERSION )
-	{
-		ui->status->appendHtml(tr("<font color='red'>Plik konfiguracyjny w błędnej wersji - przywracam ustawienia domyślne</font><br><br>"));
-		restoreDefaultSettings();
-		if( ser != nullptr )
-			delete ser;
-		if( f != nullptr )
-			delete f;
-		return;
-	}
-
-	bool tb;
-	QString ts;
-	int ti;
-
-	*ser >> tb;
-	ui->recursiveFoldersCheckbox->setChecked(tb);
-
-	*ser >> tb;
-	ui->useExifDate->setChecked(tb);
-	ui->useModificationDate->setChecked(!tb);
-
-	*ser >> tb;
-	ui->changeOutputFileName->setChecked(tb);
-
-	*ser >> ts;
-	ui->newNameTemplate->setText(ts);
-
-	*ser >> tb;
-	ui->createOutputFiles->setChecked(tb);
-
-	*ser >> ts;
-	ui->outputFolder->setText(ts);
-
-	*ser >> tb;
-	ui->createOutputSubfolders->setChecked(tb);
-
-	*ser >> ts;
-	ui->subfoldersNameTemplate->setText(ts);
-
-	*ser >> tb;
-	ui->saveOrgSubfolders->setChecked(tb);
-
-	*ser >> lastPath;
-
-	*ser >> ti;
-	language = (LANGUAGES)ti;
-
-	if( ser != nullptr )
-		delete ser;
-	if( f != nullptr )
-		delete f;
-}
-
-void MainWindow::createDefaultSettings( void )
-{
-	defaultSettings.clear();
-	QDataStream def(&defaultSettings, QIODevice::WriteOnly);
-	def.setVersion( QDataStream::Qt_5_3 );
-
-	def << APP_CONFIG_VERSION;
-	def << ui->recursiveFoldersCheckbox->isChecked();
-	def << ui->useExifDate->isChecked();
-	def << ui->changeOutputFileName->isChecked();
-	def << ui->newNameTemplate->text();
-	def << ui->createOutputFiles->isChecked();
-	def << ui->outputFolder->text();
-	def << ui->createOutputSubfolders->isChecked();
-	def << ui->subfoldersNameTemplate->text();
-	def << ui->saveOrgSubfolders->isChecked();
-	def << QDir::currentPath();	// lastPath
-	def << LANGUAGES::POLISH;
-}
-
 void MainWindow::restoreDefaultSettings( void )
 {
-	deserializeSettings(&defaultSettings);
-	serializeSettings();
+	Preferences::Instance().restoreDefaultSettings(ui);
+
+	/*auto p = Preferences::Instance();
+	p.deserializeSettings(&p.defaultSettings);
+	p.serializeSettings(ui);*/
 }
 
 void MainWindow::aboutToQuit( void )
 {
-	serializeSettings();
+	Preferences::Instance().serializeSettings(ui);
 }
 
 QString MainWindow::getVersionString( void )
@@ -952,26 +814,29 @@ void MainWindow::actionSetupOrgNewDateSlot( void )
 
 void MainWindow::actionChangeLang( void )
 {
-	ChangeLanguage* a = new ChangeLanguage(language, this);
+	ChangeLanguage* a = new ChangeLanguage(Preferences::Instance().language, this);
 	a->setAttribute( Qt::WA_DeleteOnClose );
-	LANGUAGES l = (LANGUAGES)a->exec();
-	changeLanguage(l);
+	int l = a->exec();
+	if( l == ChangeLanguage::Rejected )
+		return;
+	changeLanguage((LANGUAGES)l);
 }
 
 void MainWindow::changeLanguage( LANGUAGES lang )
 {
-	auto ret = QMessageBox::information( this, tr("Zmiana języka - restart"), tr("Aby zmienić język, aplikacja zostanie uruchomiona ponownie"), QMessageBox::Ok, QMessageBox::Cancel );
+	auto& p = Preferences::Instance();
+	p.language = lang;
+	auto ret = QMessageBox::information( this, tr("Zmiana języka - restart"), tr("Aby zmienić język wymagane jest ponowneuruchomienie aplikacji. Czy chcesz uruchomić aplikację ponownie?"), QMessageBox::Ok, QMessageBox::Cancel );
 	if( ret == QMessageBox::Cancel )
 		return;
-	language = lang;
-	serializeSettings();
+	//p.serializeSettings();
 	restart();
 }
 
 void MainWindow::restart( void )
 {
-	qApp->quit();
-	QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+	qApp->exit(APP_RESTART_EXIT_CODE);
+	//QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 }
 
 

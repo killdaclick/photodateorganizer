@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#define APP_RESTART_EXIT_CODE	10
 #define EXIV2_IMG_TIMESTAMP     "Image timestamp"
 #define EXIV2_IMG_SPLIT         ": "
 #define EXIV2_BIN               "bin\\exiv2.exe"
@@ -100,9 +101,6 @@ public:
 	bool isNewNameTemplateValid( void );
 	bool getSubfolderPath( const QString& filePath, QDateTime* fdt, QString& subPath );
 	void updateViews( void );
-	void createDefaultSettings( void );
-	void serializeSettings( void );
-	void deserializeSettings( QByteArray* def = nullptr );
 	QString getVersionString( void );
 	void updateFoundFilesCount( const QStringList& files );
 	void updateAvgTimeToFinish( int timeToF );
@@ -140,8 +138,6 @@ private:
 	qint64 convFilesSize;
 	SizeSpeed* convFilesSizeTim;
 	QString lastPath;
-	LANGUAGES language;
-	QTranslator* langTrans;
 
 signals:
 	void progressBarSetValue( int val );

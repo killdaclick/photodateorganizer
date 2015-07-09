@@ -6,7 +6,8 @@
 
 enum LANGUAGES
 {
-	POLISH = 1,
+	NONE = 0,
+	POLISH,
 	ENGLISH
 };
 
