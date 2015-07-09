@@ -4,6 +4,9 @@
 #include <QDialog>
 #include "ui_ChangeLanguage.h"
 
+#define LANG_OVERIDE_POLISH				"LANGOV_POL.ini"
+#define LANG_OVERIDE_ENGLISH			"LANGOV_ENG.ini"
+
 enum LANGUAGES
 {
 	NONE = 0,

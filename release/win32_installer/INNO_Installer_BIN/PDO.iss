@@ -5,6 +5,7 @@
 
 #define PDO_SRC_DIR "..\..\win32"
 #define SHARED_FILES "..\SHARED_FILES" 
+#define CUSTOM_FILES "..\CUSTOM_FILES"
 
 #define MyAppName "Photo Date Organizer"
 ;#define MyAppVersion "1.3.0"
@@ -52,6 +53,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "{#PDO_SRC_DIR}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs;
+Source: "{#CUSTOM_FILES}\LANGOV_POL.ini"; DestDir: "{app}"; Languages: polish
+Source: "{#CUSTOM_FILES}\LANGOV_ENG.ini"; DestDir: "{app}"; Languages: english
 ;Source: "{#SHARED_FILES}\*"; DestDir: "{sys}"; Flags: onlyifdoesntexist uninsneveruninstall;
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

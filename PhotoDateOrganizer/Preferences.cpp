@@ -183,15 +183,27 @@ void Preferences::restoreDefaultSettings( Ui::MainWindow *ui )
 
 void Preferences::loadLanguage( void )
 {
+	// sprawdzamy wymuszenie jezyka przez plik
+	if( QFile::exists( qApp->applicationDirPath() + "/" + LANG_OVERIDE_POLISH ) )
+	{
+		language = LANGUAGES::POLISH;
+		QFile::remove( qApp->applicationDirPath() + "/" + LANG_OVERIDE_POLISH );
+	}
+	if( QFile::exists( qApp->applicationDirPath() + "/" + LANG_OVERIDE_ENGLISH ) )
+	{
+		language = LANGUAGES::ENGLISH;
+		QFile::remove( qApp->applicationDirPath() + "/" + LANG_OVERIDE_ENGLISH );
+	}
+	
 	// ustaw tlumaczenia
 	langTrans = new QTranslator();
 	if( language == LANGUAGES::ENGLISH )
 		langTrans->load(":/translations/photodateorganizer_en.qm");
 	else if( language == LANGUAGES::POLISH )
 	{
-		bool t1 = langTrans->load(":/translations/qt_pl.qm");
-		bool t2 = langTrans->load(":/translations/qtbase_pl.qm");
-		bool t3 = false;
+		langTrans->load(":/translations/qt_pl.qm");
+		langTrans->load(":/translations/qtbase_pl.qm");
+		false;
 	}
 	qApp->installTranslator(langTrans);
 }
