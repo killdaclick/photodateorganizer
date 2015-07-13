@@ -34,12 +34,15 @@ MainWindow::MainWindow(QWidget *parent) :
 	}
 
 	ui->setupUi(this);
+	ui->inputFilesList->setModel(&inputFilesModel);
+	ui->inputFilesList->setItemDelegate(&htmlDelegate);
 	auto& p = Preferences::Instance();
 	p.createDefaultSettings(ui);
 	p.loadSettings( ui );
 	enableSignals(true);
 	ui->dateFrom->setDate( QDate::currentDate() );
 	ui->dateTo->setDate( QDate::currentDate() );
+	createExifTranslationTable();
 }
 
 MainWindow::~MainWindow()
@@ -100,6 +103,8 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->actionSetupOrgNew, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewSlot()) );
 		t = connect( ui->actionSetupOrgNewDate, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewDateSlot()) );
 		t = connect( ui->actionLang, SIGNAL(triggered()), this, SLOT(actionChangeLang()) );
+		t = connect( ui->inputFilesList, SIGNAL(currentChangedSignal(const QModelIndex&, const QModelIndex&)), this, SLOT(inputFileClicked(const QModelIndex&, const QModelIndex&)) );
+		t = false;
 	}
 	else
 	{
@@ -119,6 +124,7 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( ui->actionSetupOrgNew, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewSlot()) );
 		disconnect( ui->actionSetupOrgNewDate, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewDateSlot()) );
 		disconnect( ui->actionLang, SIGNAL(trigerred()), this, SLOT(actionChangeLang()) );
+		disconnect( ui->inputFilesList, SIGNAL(currentChangedSignal(const QModelIndex&, const QModelIndex&)), this, SLOT(inputFileClicked(const QModelIndex&, const QModelIndex&)) );
 	}
 }
 
@@ -143,7 +149,7 @@ void MainWindow::selectFiles( void )
 	inFileList.clear();
 	firstFileDate = FileExif();
 	ui->status->clear();
-	ui->inputFilesList->clear();
+	//ui->inputFilesList->clear();
 	ui->subfoldersNameTemplatePreview->setText("");
 	ui->newNameTemplatePreview->setText("");
 	filesSize = 0;
@@ -152,10 +158,12 @@ void MainWindow::selectFiles( void )
 	ui->totalSize->setText("0 MB");
 	updateAvgTimeToFinish(0);
 	emit progressBarSetValue(0);
-	ui->inputFilesList->setText(tr("<b>Ładuję...</b>"));
+	inputFilesModel.clear();
+	inputFilesModel.insertRow(0, new QStandardItem("<b>Ładuję...</b>"));
+	//ui->inputFilesList->setText(tr("<b>Ładuję...</b>"));
 	QApplication::processEvents();
 	
-	QString inF;
+	//QString inF;
 	int fNr = 1;
 	int fCnt = files.count();
 	for( ; fi != files.end(); ++fi )
@@ -209,18 +217,21 @@ void MainWindow::selectFiles( void )
 		lastPath = fInfo.absolutePath();
 
 		QString fNrStr = "<b>[" + QString::number(fNr) + " \\ " + QString::number(fCnt) + "] </b>";
-		inF.push_back( fNrStr + f );
-		inF.push_back("<br>");
+		inputFilesModel.insertRow(inputFilesModel.rowCount(), new QStandardItem(fNrStr + f));
+		//inF.push_back( fNrStr + f );
+		//inF.push_back("<br>");
 		fNr++;
 	}
-	if( inF.isEmpty() )
+	if( inputFilesModel.rowCount() <= 1 /*inF.isEmpty()*/ )
 	{
-		ui->inputFilesList->setText("");
+		inputFilesModel.clear();
+		//ui->inputFilesList->setText("");
 		return;
 	}
 
 	// printujemy wszystkie sciezki plikow
-	ui->inputFilesList->setText(inF);
+	inputFilesModel.removeRow(0);	// usuwamy element "Ładuję..."
+	//ui->inputFilesList->setText(inF);
 	// printujemy sumaryczny rozmiar plikow
 	updateFileSizeLabel( ui->filesSize, filesSize );
 	updateFileSizeLabel( ui->totalSize, filesSize );
@@ -252,7 +263,7 @@ void MainWindow::selectFolder( void )
 	inFileList.clear();
 	firstFileDate = FileExif();
 	ui->status->clear();
-	ui->inputFilesList->clear();
+	//ui->inputFilesList->clear();
 	ui->subfoldersNameTemplatePreview->setText("");
 	ui->newNameTemplatePreview->setText("");
 	filesSize = 0;
@@ -261,7 +272,9 @@ void MainWindow::selectFolder( void )
 	ui->totalSize->setText("0 MB");
 	updateAvgTimeToFinish(0);
 	emit progressBarSetValue(0);
-	ui->inputFilesList->setText(tr("<b>Ładuję...</b>"));
+	inputFilesModel.clear();
+	inputFilesModel.insertRow(0, new QStandardItem("<b>Ładuję...</b>"));
+	//ui->inputFilesList->setText(tr("<b>Ładuję...</b>"));
 	QApplication::processEvents();
 
 	// zapamietujemy sciezke do katalogu z plikami (dla wygody uzytkowania - pozniej gdy klikamy wybor plikow albo folderow domyslnie otwiera sie ostatni katalog)
@@ -273,7 +286,7 @@ void MainWindow::selectFolder( void )
 
 	updateFoundFilesCount(files);
 
-	QString inF;
+	//QString inF;
 	int fNr = 1;
 	int fCnt = files.count();
 	for( QStringList::iterator f = files.begin(); f != files.end(); ++f )
@@ -326,19 +339,22 @@ void MainWindow::selectFolder( void )
 		filesSize += fInfo.size();
 
 		QString fNrStr = "<b>[" + QString::number(fNr) + " \\ " + QString::number(fCnt) + "] </b>";
-		inF.push_back( fNrStr + *f );
-		inF.push_back("<br>");
+		inputFilesModel.insertRow(inputFilesModel.rowCount(), new QStandardItem(fNrStr + *f));
+		//inF.push_back( fNrStr + *f );
+		//inF.push_back("<br>");
 		fNr++;
 	}
 
-	if( inF.isEmpty() )
+	if( inputFilesModel.rowCount() <= 1 /*inF.isEmpty()*/ )
 	{
-		ui->inputFilesList->setText("");
+		inputFilesModel.clear();
+		//ui->inputFilesList->setText("");
 		return;
 	}
 
 	// printujemy wszystkie sciezki do plikow
-	ui->inputFilesList->setText(inF);
+	inputFilesModel.removeRow(0);	// usuwamy element "Ładuję..."
+	//ui->inputFilesList->setText(inF);
 	// printujemy sumaryczny rozmiar plikow
 	updateFileSizeLabel( ui->filesSize, filesSize );
 	updateFileSizeLabel( ui->totalSize, filesSize );
@@ -703,6 +719,24 @@ QDateTime* MainWindow::getExifImgDateTime( const QString& filePath )
 	return nullptr;
 }
 
+QString MainWindow::getExifOutput( const QString& filePath, LANGUAGES lang )
+{
+	if( filePath.isEmpty() || !QFile::exists(filePath) )
+		return "";
+
+	QProcess p;
+	QString startCmd = "\"" + QDir::currentPath().replace("/","\\") + "\\" + QString(EXIV2_BIN) + "\" \"" + filePath + "\"";
+	p.start( startCmd );
+	p.waitForFinished();
+	if( lang == LANGUAGES::ENGLISH )
+		return p.readAll();
+
+	QString out;
+	while( p.canReadLine() )
+		out.push_back( translateExif( QString(p.readLine()), lang ) );
+	return out;
+}
+
 void MainWindow::newNameTemplateChanged(const QString & text)
 {
 	if( inFileList.isEmpty() || firstFileDate.second.isNull() )
@@ -833,7 +867,7 @@ void MainWindow::changeLanguage( LANGUAGES lang )
 {
 	auto& p = Preferences::Instance();
 	p.language = lang;
-	auto ret = QMessageBox::information( this, tr("Zmiana języka - restart"), tr("Aby zmienić język wymagane jest ponowneuruchomienie aplikacji. Czy chcesz uruchomić aplikację ponownie?"), QMessageBox::Ok, QMessageBox::Cancel );
+	auto ret = QMessageBox::information( this, tr("Zmiana języka - restart"), tr("Aby zmienić język wymagane jest ponowne uruchomienie aplikacji. Czy chcesz uruchomić aplikację ponownie?"), QMessageBox::Ok, QMessageBox::Cancel );
 	if( ret == QMessageBox::Cancel )
 		return;
 	//p.serializeSettings();
@@ -844,6 +878,139 @@ void MainWindow::restart( void )
 {
 	qApp->exit(APP_RESTART_EXIT_CODE);
 	//QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+}
+
+void MainWindow::inputFileClicked( const QModelIndex& index, const QModelIndex& last )
+{
+	last;
+	if( !index.isValid() )
+		return;
+
+	ui->inputFilesList->scrollTo( index );
+	QString path = index.data().toString();
+	// wyciagamy sama sciezke
+	path = path.right( path.count() - path.indexOf("</b>") - 4 );
+	auto info = getExifOutput( path, Preferences::Instance().getLanguage() );
+	ui->exifInfo->setText( info );
+}
+
+void MainWindow::createExifTranslationTable( void )
+{
+	TranslationSet t;
+
+	t.eng = "File name";
+	t.pol = "Nazwa pliku";
+	exifTransTable.push_back(t);
+
+	t.eng = "File size";
+	t.pol = "Rozmiar pliku";
+	exifTransTable.push_back(t);
+
+	t.eng = "MIME type";
+	t.pol = "Typ MIME";
+	exifTransTable.push_back(t);
+
+	t.eng = "Image size";
+	t.pol = "Rozmiar obrazu";
+	exifTransTable.push_back(t);
+
+	t.eng = "Camera make";
+	t.pol = "Producent aparatu";
+	exifTransTable.push_back(t);
+
+	t.eng = "Camera model";
+	t.pol = "Model aparatu";
+	exifTransTable.push_back(t);
+
+	t.eng = "Image timestamp";
+	t.pol = "Data wykonania";
+	exifTransTable.push_back(t);
+
+	t.eng = "Image number";
+	t.pol = "Numer obrazu";
+	exifTransTable.push_back(t);
+
+	t.eng = "Czas ekspozycji";
+	t.pol = "Nazwa pliku";
+	exifTransTable.push_back(t);
+
+	t.eng = "Przesłona";
+	t.pol = "Nazwa pliku";
+	exifTransTable.push_back(t);
+
+	t.eng = "Exposure bias";
+	t.pol = "Korekta ekspozycji";
+	exifTransTable.push_back(t);
+
+	t.eng = "Flash bias";
+	t.pol = "Korekta flash";
+	exifTransTable.push_back(t);
+
+	t.eng = "Flash";
+	t.pol = "Flash";
+	exifTransTable.push_back(t);
+
+	t.eng = "Focal length";
+	t.pol = "Ogniskowa";
+	exifTransTable.push_back(t);
+
+	t.eng = "Subject distance";
+	t.pol = "Odległość od przedmiotu";
+	exifTransTable.push_back(t);
+
+	t.eng = "ISO speed";
+	t.pol = "Prędkość ISO";
+	exifTransTable.push_back(t);
+
+	t.eng = "Exposure mode";
+	t.pol = "Tryb ekspozycji";
+	exifTransTable.push_back(t);
+
+	t.eng = "Metering mode";
+	t.pol = "Tryb pomiaru";
+	exifTransTable.push_back(t);
+
+	t.eng = "Macro mode";
+	t.pol = "Tryb makro";
+	exifTransTable.push_back(t);
+
+	t.eng = "Image quality";
+	t.pol = "Jakość obrazu";
+	exifTransTable.push_back(t);
+
+	t.eng = "Exif Resolution";
+	t.pol = "Rozdzielczość Exif";
+	exifTransTable.push_back(t);
+
+	t.eng = "White balance";
+	t.pol = "Balans bieli";
+	exifTransTable.push_back(t);
+
+	t.eng = "Thumbnail";
+	t.pol = "Miniatura";
+	exifTransTable.push_back(t);
+
+	t.eng = "Copyright";
+	t.pol = "Prawa autorskie";
+	exifTransTable.push_back(t);
+
+	t.eng = "Exif comment";
+	t.pol = "Komentarz Exif";
+	exifTransTable.push_back(t);
+}
+
+QString MainWindow::translateExif( QString input, LANGUAGES lang )
+{
+	for( TranslationTable::iterator itr = exifTransTable.begin(); itr != exifTransTable.end(); ++itr )
+	{
+		if( input.contains( itr->eng ) )
+		{
+			if( lang == LANGUAGES::POLISH )
+				return input.replace( itr->eng, itr->pol, Qt::CaseInsensitive );
+		}
+	}
+
+	return "";
 }
 
 
@@ -996,3 +1163,81 @@ void SizeSpeed::timeout( void )
 	lastSize = *convFilesSize;
 }
 
+
+
+
+
+
+
+
+
+
+void HTMLDelegate::paint(QPainter* painter, const QStyleOptionViewItem & option, const QModelIndex &index) const
+{
+	QStyleOptionViewItemV4 options = option;
+	initStyleOption(&options, index);
+	
+	painter->save();
+	
+	QTextDocument doc;
+	doc.setHtml(options.text);
+	
+	options.text = "";
+	options.widget->style()->drawControl(QStyle::CE_ItemViewItem, &options, painter);
+	
+	// shift text right to make icon visible
+	QSize iconSize = options.icon.actualSize(options.rect.size());
+	painter->translate(options.rect.left()+iconSize.width(), options.rect.top());
+	QRect clip(0, 0, options.rect.width()+iconSize.width(), options.rect.height());
+	
+	//doc.drawContents(painter, clip);
+	
+	painter->setClipRect(clip);
+	QAbstractTextDocumentLayout::PaintContext ctx;
+	// set text color to red for selected item
+	if (option.state & QStyle::State_Selected)
+		ctx.palette.setColor(QPalette::Text, QColor("red"));
+	ctx.clip = clip;
+	doc.documentLayout()->draw(painter, ctx);
+	
+	painter->restore();
+}
+
+QSize HTMLDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+	QStyleOptionViewItemV4 options = option;
+	initStyleOption(&options, index);
+	
+	QTextDocument doc;
+	doc.setHtml(options.text);
+	doc.setTextWidth(options.rect.width());
+	return QSize(doc.idealWidth(), doc.size().height());
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+InputFilesView::InputFilesView(QWidget* parent) :  QListView(parent)
+{
+
+}
+
+InputFilesView::~InputFilesView()
+{
+
+}
+
+void InputFilesView::currentChanged(const QModelIndex & current, const QModelIndex & previous)
+{
+	emit currentChangedSignal(current, previous);
+}

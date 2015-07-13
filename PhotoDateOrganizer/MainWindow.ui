@@ -48,7 +48,7 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="5,0,2,0,0">
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="minimumSize">
@@ -225,30 +225,15 @@
           </widget>
          </item>
          <item>
-          <widget class="QTextEdit" name="inputFilesList">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>50</height>
-            </size>
+          <widget class="InputFilesView" name="inputFilesList">
+           <property name="autoScrollMargin">
+            <number>16</number>
            </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
            </property>
-           <property name="acceptDrops">
-            <bool>false</bool>
-           </property>
-           <property name="toolTip">
-            <string>Lista wybranych plików graficznych</string>
-           </property>
-           <property name="undoRedoEnabled">
-            <bool>false</bool>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
+           <property name="viewMode">
+            <enum>QListView::ListMode</enum>
            </property>
           </widget>
          </item>
@@ -349,7 +334,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tabs">
       <property name="toolTip">
        <string/>
       </property>
@@ -749,12 +734,42 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="infoTab">
+       <attribute name="icon">
+        <iconset resource="resource.qrc">
+         <normaloff>:/icons/rubber/icons/rubber-icons/system_monitor.ico</normaloff>:/icons/rubber/icons/rubber-icons/system_monitor.ico</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Informacje o obrazie</string>
+       </attribute>
+       <attribute name="toolTip">
+        <string>Rozszerzone informacje o obrazie</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_15" stretch="0">
+        <item>
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string>Metadane EXIF</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="QTextEdit" name="exifInfo">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <property name="topMargin">
-       <number>9</number>
+       <number>0</number>
       </property>
       <property name="bottomMargin">
        <number>0</number>
@@ -1118,6 +1133,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>InputFilesView</class>
+   <extends>QListView</extends>
+   <header>MainWindow.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resource.qrc"/>
  </resources>

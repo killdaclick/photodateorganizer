@@ -20,6 +20,7 @@
     <file>icons/rubber-icons/home.ico</file>
     <file>icons/rubber-icons/hdd_USB.ico</file>
     <file>icons/rubber-icons/pictures_folder.ico</file>
+    <file>icons/rubber-icons/system_monitor.ico</file>
   </qresource>
   <qresource prefix="/icons/flags">
 	<file>icons/flags/Gosquared-Flag-Poland.ico</file>

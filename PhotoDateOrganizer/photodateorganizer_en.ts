@@ -143,7 +143,6 @@
     </message>
     <message>
         <location filename="MainWindow.ui" line="205"/>
-        <location filename="MainWindow.ui" line="245"/>
         <source>Lista wybranych plików graficznych</source>
         <translation>List of selected files</translation>
     </message>
@@ -153,230 +152,247 @@
         <translation>Files:</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="278"/>
-        <location filename="MainWindow.ui" line="297"/>
+        <location filename="MainWindow.ui" line="263"/>
+        <location filename="MainWindow.ui" line="282"/>
         <source>Rozmiar wybranych plików</source>
         <translation>Selected files size</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="281"/>
-        <location filename="MainWindow.ui" line="868"/>
+        <location filename="MainWindow.ui" line="266"/>
+        <location filename="MainWindow.ui" line="883"/>
         <source>Rozmiar:</source>
         <translation>Size:</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="300"/>
-        <location filename="MainWindow.ui" line="887"/>
-        <location filename="MainWindow.ui" line="916"/>
+        <location filename="MainWindow.ui" line="285"/>
+        <location filename="MainWindow.ui" line="902"/>
+        <location filename="MainWindow.ui" line="931"/>
         <source>0 MB</source>
         <translation>0 MB</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="310"/>
-        <location filename="MainWindow.ui" line="926"/>
-        <location filename="MainWindow.ui" line="959"/>
+        <location filename="MainWindow.ui" line="295"/>
+        <location filename="MainWindow.ui" line="941"/>
+        <location filename="MainWindow.ui" line="974"/>
         <source> | </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="317"/>
-        <location filename="MainWindow.ui" line="336"/>
+        <location filename="MainWindow.ui" line="302"/>
+        <location filename="MainWindow.ui" line="321"/>
         <source>Liczba wybranych plików</source>
         <translation>Selected files count</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="320"/>
+        <location filename="MainWindow.ui" line="305"/>
         <source>Liczba plików: </source>
         <translation>Files count: </translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="339"/>
+        <location filename="MainWindow.ui" line="324"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="368"/>
+        <location filename="MainWindow.ui" line="353"/>
         <source>Opcje</source>
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="371"/>
+        <location filename="MainWindow.ui" line="356"/>
         <source>Opcje konwersji</source>
         <translation>Conversion options</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="385"/>
-        <location filename="MainWindow.ui" line="404"/>
+        <location filename="MainWindow.ui" line="370"/>
+        <location filename="MainWindow.ui" line="389"/>
         <source>Wybiera źródło pochodzenia daty: metadane EXIF lub data modyfikacji Windows</source>
         <translation>Choose date source: EXIF metadata or file&apos;s modification date</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="388"/>
+        <location filename="MainWindow.ui" line="373"/>
         <source>Użyj daty zrobienia zdjęcia (metadane EXIF)</source>
         <translation>Photo taken date (EXIF metadata)</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="407"/>
+        <location filename="MainWindow.ui" line="392"/>
         <source>Użyj daty modyfikacji pliku</source>
         <translation>File&apos;s modification date</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="426"/>
+        <location filename="MainWindow.ui" line="411"/>
         <source>Włącza tworzenie nowych plików (bez nadpisywania źródłowych)</source>
         <translation>Enable creating new files (without overwriting original one)</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="429"/>
+        <location filename="MainWindow.ui" line="414"/>
         <source>Utwórz nowe pliki</source>
         <translation>Create new files</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="446"/>
+        <location filename="MainWindow.ui" line="431"/>
         <source>Wybiera folder docelowy</source>
         <translation>Choose output folder</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="449"/>
+        <location filename="MainWindow.ui" line="434"/>
         <source>Folder</source>
         <translation>Folder</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="469"/>
+        <location filename="MainWindow.ui" line="454"/>
         <source>Ścieżka do katalogu docelowego</source>
         <translation>Path to output folder</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="481"/>
+        <location filename="MainWindow.ui" line="466"/>
         <source>Zachowuje oryginalną strukturę katalogów począwszy od katalogu wskazanego jako źródłowy</source>
         <translation>Preserves original folder structure into output folder</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="484"/>
+        <location filename="MainWindow.ui" line="469"/>
         <source>Zachowaj oryginalną strukturę podkatalogów</source>
         <translation>Preserve original folder structure</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="494"/>
+        <location filename="MainWindow.ui" line="479"/>
         <source>Włącza tworzenie podkatalogów według szablonu. Uwzględnia oryginalną strukturę podkatalogów jeżeli ta opcja jest włączona</source>
         <translation>Turn on creation of subfolders using template. It takes into account original folder structure if that option has been turned on</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="497"/>
+        <location filename="MainWindow.ui" line="482"/>
         <source>Twórz pliki w podfolderach według szablonu</source>
         <translation>Create files in subfolders using template</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="514"/>
-        <location filename="MainWindow.ui" line="524"/>
+        <location filename="MainWindow.ui" line="499"/>
+        <location filename="MainWindow.ui" line="509"/>
         <source>Szablon do konfiguracji nazw podkatalogów (PATRZ ŚCIĄGA)</source>
         <translation>Subfolders name template configuration (check GUIDE tab)</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="517"/>
+        <location filename="MainWindow.ui" line="502"/>
         <source>Szablon podfolderów</source>
         <translation>Subfolders template</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="527"/>
+        <location filename="MainWindow.ui" line="512"/>
         <source>%Y-%M%\%Y-%M-%D</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="541"/>
-        <location filename="MainWindow.ui" line="557"/>
+        <location filename="MainWindow.ui" line="526"/>
+        <location filename="MainWindow.ui" line="542"/>
         <source>Podgląd nazw tworzonych podkatalogów</source>
         <translation>Preview of created subfolders name</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="544"/>
+        <location filename="MainWindow.ui" line="529"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Podgląd nazw tworzonych podfolderów&lt;br/&gt;(w oparciu o pierwszy plik z listy):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Preview of created subfolders name&lt;br/&gt;(according to first file from list):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="575"/>
+        <location filename="MainWindow.ui" line="560"/>
         <source>Włącza zmienianie nazw plików docelowych</source>
         <translation>Turn on changing of destination files name</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="578"/>
+        <location filename="MainWindow.ui" line="563"/>
         <source>Zmień nazwę plików</source>
         <translation>Change files name</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="595"/>
-        <location filename="MainWindow.ui" line="605"/>
+        <location filename="MainWindow.ui" line="580"/>
+        <location filename="MainWindow.ui" line="590"/>
         <source>Szablon do konfiguracji nazw plików (PATRZ ŚCIĄGA)</source>
         <translation>Files name template configuration (check GUIDE tab)</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="598"/>
+        <location filename="MainWindow.ui" line="583"/>
         <source>Szablon nazwy pliku:</source>
         <translation>Files name template:</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="608"/>
+        <location filename="MainWindow.ui" line="593"/>
         <source>%Y%M%D-%h%m%s_%N</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="622"/>
-        <location filename="MainWindow.ui" line="638"/>
+        <location filename="MainWindow.ui" line="607"/>
+        <location filename="MainWindow.ui" line="623"/>
         <source>Podgląd nazw tworzonych plików</source>
         <translation>Preview of created files name</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="625"/>
+        <location filename="MainWindow.ui" line="610"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Podgląd nazw nowych plików&lt;br/&gt;(w oparciu o pierwszy plik z listy):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Preview of new files name&lt;br/&gt;(according to first file from list):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="662"/>
+        <location filename="MainWindow.ui" line="647"/>
         <source>Ściąga</source>
         <translation>Guide</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="665"/>
+        <location filename="MainWindow.ui" line="650"/>
         <source>Ściąga do tworzenia szablonów</source>
         <translation>Guide to templates</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="690"/>
+        <location filename="MainWindow.ui" line="675"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y&lt;/span&gt; - rok zrobienia zdjęcia; ---------- format: RRRR&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%M&lt;/span&gt; - miesiąc zrobienia zdjęcia; ----- format: MM&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%D&lt;/span&gt; - dzień zrobienia zdjęcia; -------- format: DD&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%N&lt;/span&gt; - oryginalna nazwa&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y&lt;/span&gt; - taken photo year; ---------- format: YYYY&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%M&lt;/span&gt; - taken pgoto month; ----- format: MM&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%D&lt;/span&gt; - taken photo day; -------- format: DD&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%N&lt;/span&gt; - original name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="700"/>
+        <location filename="MainWindow.ui" line="685"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%h&lt;/span&gt; - godzina zrobienia zdjęcia; -------- format: hhmmss&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%m&lt;/span&gt; - minuta zrobienia zdjęcia;  -------- format: mm&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%s&lt;/span&gt; - sekunda zrobienia zdjęcia: -------- format: ss&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%\&lt;/span&gt; - wykonanie kolejnego podfolderu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%h&lt;/span&gt; - taken photo hour; -------- format: hhmmss&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%m&lt;/span&gt; - taken photo minute;  -------- format: mm&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%s&lt;/span&gt; - taken photo second: -------- format: ss&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%\&lt;/span&gt; - creation of subfolder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="725"/>
+        <location filename="MainWindow.ui" line="710"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład tworzenia katalogów: &lt;/span&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y-%M%\%Y-%M-%D&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Umieści zdjęcia w podkatalogach według schematu: 2015-03 \ 2015-03-27&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład zmiany nazwy: &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%Y%M%D-%h%m%s&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;_&lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%N&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Zmieni nazwę według schematu: 20150327-145513_NazwaPliku&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Example of folders creation: &lt;/span&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y-%M%\%Y-%M-%D&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Saves photos in subfolders using this scheme: 2015-03 \ 2015-03-27&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Example of files name creation: &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%Y%M%D-%h%m%s&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;_&lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%N&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Changes files name using this scheme: 20150327-145513_FileName&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="765"/>
-        <location filename="MainWindow.ui" line="799"/>
+        <location filename="MainWindow.ui" line="743"/>
+        <source>Informacje o obrazie</source>
+        <oldsource>Informacje o zdjęciu</oldsource>
+        <translation>Image information</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="746"/>
+        <source>Rozszerzone informacje o obrazie</source>
+        <oldsource>Rozszerzone informacje o zdjęciu</oldsource>
+        <translation>Extended information about image</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="752"/>
+        <source>Metadane EXIF</source>
+        <translation>EXIF Metadata</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="780"/>
+        <location filename="MainWindow.ui" line="814"/>
         <source>Konsola z informacją o działaniu aplikacji</source>
         <translation>Application&apos;s information console</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="768"/>
+        <location filename="MainWindow.ui" line="783"/>
         <source>Info:</source>
         <translation>Info:</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="819"/>
+        <location filename="MainWindow.ui" line="834"/>
         <source>Uruchomienie konwersji</source>
         <translation>Starts conversion</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="822"/>
+        <location filename="MainWindow.ui" line="837"/>
         <source>Start</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1116"/>
+        <location filename="MainWindow.ui" line="1131"/>
         <source>Zmień język</source>
         <translation>Change language</translation>
     </message>
@@ -385,251 +401,253 @@
         <translation type="vanished">Start conversion</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="846"/>
+        <location filename="MainWindow.ui" line="861"/>
         <source>Pasek postępu prac</source>
         <translation>Conversion progress bar</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="858"/>
+        <location filename="MainWindow.ui" line="873"/>
         <source>%p%</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="865"/>
-        <location filename="MainWindow.ui" line="884"/>
+        <location filename="MainWindow.ui" line="880"/>
+        <location filename="MainWindow.ui" line="899"/>
         <source>Rozmiar przetworzonych plików wynikowych</source>
         <translation>Converted files size</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="897"/>
+        <location filename="MainWindow.ui" line="912"/>
         <source>/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="913"/>
+        <location filename="MainWindow.ui" line="928"/>
         <source>Całkowity rozmiar plików wynikowych</source>
         <translation>Total file&apos;s size</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="933"/>
+        <location filename="MainWindow.ui" line="948"/>
         <source>Prędkość:</source>
         <translation>Speed:</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="949"/>
+        <location filename="MainWindow.ui" line="964"/>
         <source>0 MB/s</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="966"/>
-        <location filename="MainWindow.ui" line="985"/>
+        <location filename="MainWindow.ui" line="981"/>
+        <location filename="MainWindow.ui" line="1000"/>
         <source>Przewidywany czas na ukończenie operacji konwersji</source>
         <translation>Expected time to finish conversion</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="969"/>
+        <location filename="MainWindow.ui" line="984"/>
         <source>Czas do ukończenia:</source>
         <translation>Time to finish:</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="988"/>
+        <location filename="MainWindow.ui" line="1003"/>
         <source>0m : 0s</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1010"/>
+        <location filename="MainWindow.ui" line="1025"/>
         <source>Program</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1018"/>
+        <location filename="MainWindow.ui" line="1033"/>
         <source>Pomoc</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1024"/>
+        <location filename="MainWindow.ui" line="1039"/>
         <source>Szybka konfiguracja</source>
         <translation>Preset configuration</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1041"/>
+        <location filename="MainWindow.ui" line="1056"/>
         <source>Wyjdź</source>
         <translation>Exit</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1050"/>
+        <location filename="MainWindow.ui" line="1065"/>
         <source>O programie</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1059"/>
+        <location filename="MainWindow.ui" line="1074"/>
         <source>Przywróc ustawienia domyślne</source>
         <translation>Restore default settings</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1071"/>
+        <location filename="MainWindow.ui" line="1086"/>
         <source>Aktualizuj istniejące pliki</source>
         <translation>Update original file&apos;s date</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1083"/>
+        <location filename="MainWindow.ui" line="1098"/>
         <source>Twórz nowe pliki z oryginalną strukturą podkatalogów</source>
         <translation>Create new files using original subfolders structure</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1095"/>
+        <location filename="MainWindow.ui" line="1110"/>
         <source>Twórz nowe pliki z nazwą i ze strukturą katalogów wykorzystującą datę</source>
         <translation>Create new files with date in file&apos;s name and folder&apos;s name</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1107"/>
+        <location filename="MainWindow.ui" line="1122"/>
         <source>Twórz nowe pliki z oryginalną strukturą oraz nazwą i podkatalogami z datą</source>
         <translation>Create new files with original subfolder structure and with date in file&apos;s name and folder&apos;s name</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="22"/>
         <location filename="MainWindow.cpp" line="27"/>
+        <location filename="MainWindow.cpp" line="32"/>
         <source>Brak pliku aplikacji</source>
         <translation>Application&apos;s binaries missing</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="22"/>
         <location filename="MainWindow.cpp" line="27"/>
+        <location filename="MainWindow.cpp" line="32"/>
         <source>Wykryto brak wymaganego pliku</source>
         <translation>Missing mandatory application&apos;s binary detected</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="125"/>
+        <location filename="MainWindow.cpp" line="138"/>
         <source>Wybierz pliki źródłowe</source>
         <translation>Choose source files</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="127"/>
+        <location filename="MainWindow.cpp" line="140"/>
         <source>Zdjęcia (*.jpg)</source>
         <translation>Photos (*.jpg)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="148"/>
-        <location filename="MainWindow.cpp" line="257"/>
         <source>&lt;b&gt;Ładuję...&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Loading...&lt;/b&gt;</translation>
+        <translation type="vanished">&lt;b&gt;Loading...&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="175"/>
-        <location filename="MainWindow.cpp" line="294"/>
+        <location filename="MainWindow.cpp" line="190"/>
+        <location filename="MainWindow.cpp" line="314"/>
         <source>&lt;font color=&apos;orange&apos;&gt;Błąd odczytu daty EXIF&lt;/font&gt; dla pliku: </source>
         <translation>&lt;font color=&apos;orange&apos;&gt;Error reading EXIF date&lt;/font&gt; for file: </translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="175"/>
-        <location filename="MainWindow.cpp" line="294"/>
+        <location filename="MainWindow.cpp" line="190"/>
+        <location filename="MainWindow.cpp" line="314"/>
         <source> - &lt;font color=&apos;orange&apos;&gt;sprawdzam następny plik...&lt;/font&gt;&lt;br&gt;</source>
         <translation> - &lt;font color=&apos;orange&apos;&gt;checking next file...&lt;/font&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="236"/>
+        <location filename="MainWindow.cpp" line="254"/>
         <source>Wybierz katalog z plikami źródłowymi</source>
         <translation>Choose source folder with files</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="289"/>
+        <location filename="MainWindow.cpp" line="309"/>
         <source>Odczyt daty EXIF do podglądu: &lt;font color=&apos;green&apos;&gt;OK&lt;/font&gt;&lt;br&gt;</source>
         <translation>EXIF date preview: &lt;font color=&apos;green&apos;&gt;OK&lt;/font&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="372"/>
+        <location filename="MainWindow.cpp" line="395"/>
         <source>Błąd</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="372"/>
+        <location filename="MainWindow.cpp" line="395"/>
         <source>Aby kontynuować musisz wybrać katalog docelowy!</source>
         <translation>To continue you must choose destination folder!</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="399"/>
+        <location filename="MainWindow.cpp" line="422"/>
         <source>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;orange&apos;&gt;Błąd odczytu daty EXIF (1)&lt;/font&gt;&lt;br&gt;</source>
         <translation>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;orange&apos;&gt;Error reading EXIF date (1)&lt;/font&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="423"/>
+        <location filename="MainWindow.cpp" line="446"/>
         <source>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;orange&apos;&gt;Błąd odczytu daty EXIF (2)&lt;/font&gt;&lt;br&gt;</source>
         <translation>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;orange&apos;&gt;Error reading EXIF date (2)&lt;/font&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="455"/>
+        <location filename="MainWindow.cpp" line="478"/>
         <source>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;orange&apos;&gt;Błąd odczytu daty EXIF (3)&lt;/font&gt;&lt;br&gt;</source>
         <translation>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;orange&apos;&gt;Error reading EXIF date (3)&lt;/font&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="476"/>
+        <location filename="MainWindow.cpp" line="499"/>
         <source>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;orange&apos;&gt;Plik docelowy o nazwie: </source>
         <translation>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;orange&apos;&gt;Destination file&apos;s name: </translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="476"/>
+        <location filename="MainWindow.cpp" line="499"/>
         <source> już istnieje, zamieniam nazwę na: &lt;/font&gt;</source>
         <translation> already exists, changing name to: &lt;/font&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="489"/>
+        <location filename="MainWindow.cpp" line="512"/>
         <source>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;red&apos;&gt;Błąd tworzenia ścieżki&lt;/font&gt;&lt;br&gt;</source>
         <translation>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;red&apos;&gt;Error creating path&lt;/font&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="492"/>
+        <location filename="MainWindow.cpp" line="515"/>
         <source>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;red&apos;&gt;Błąd kopiowania pliku&lt;/font&gt;&lt;br&gt;</source>
         <translation>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;red&apos;&gt;Error file copy&lt;/font&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="500"/>
+        <location filename="MainWindow.cpp" line="523"/>
         <source>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;green&apos;&gt;OK&lt;/font&gt;&lt;br&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="502"/>
+        <location filename="MainWindow.cpp" line="525"/>
         <source>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;red&apos;&gt;Błąd ustawiania daty&lt;/font&gt;&lt;br&gt;</source>
         <translation>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;font color=&apos;red&apos;&gt;Error setting date&lt;/font&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="518"/>
+        <location filename="MainWindow.cpp" line="541"/>
         <source>&lt;font color=&apos;red&apos;&gt;Przerwano pracę na życzenie użytkownika&lt;/font&gt;&lt;br&gt;</source>
         <translation>&lt;font color=&apos;red&apos;&gt;Conversion interrupted on demand&lt;/font&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="531"/>
+        <location filename="MainWindow.cpp" line="554"/>
         <source>&lt;b&gt;Przekonwertowano poprawnie </source>
         <translation>&lt;b&gt;Converted successfully </translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="531"/>
+        <location filename="MainWindow.cpp" line="554"/>
         <source> z &lt;font color=&apos;green&apos;&gt;</source>
         <translation> from &lt;font color=&apos;green&apos;&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="532"/>
+        <location filename="MainWindow.cpp" line="555"/>
         <source>&lt;/font&gt; plików w </source>
         <translation>&lt;/font&gt; files in </translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="532"/>
+        <location filename="MainWindow.cpp" line="555"/>
         <source> sekundy.&lt;/font&gt;&lt;/b&gt;&lt;br&gt;</source>
         <translation> seconds.&lt;/font&gt;&lt;/b&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="665"/>
+        <location filename="MainWindow.cpp" line="688"/>
         <source>Wybierz katalog docelowy</source>
         <translation>Choose destination folder</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="829"/>
+        <location filename="MainWindow.cpp" line="870"/>
         <source>Zmiana języka - restart</source>
         <translation>Language change - restart</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="829"/>
-        <source>Aby zmienić język wymagane jest ponowneuruchomienie aplikacji. Czy chcesz uruchomić aplikację ponownie?</source>
+        <location filename="MainWindow.cpp" line="870"/>
+        <source>Aby zmienić język wymagane jest ponowne uruchomienie aplikacji. Czy chcesz uruchomić aplikację ponownie?</source>
         <translation>In order to change langauge an application need to restart. Do you want to restart application now?</translation>
+    </message>
+    <message>
+        <source>Aby zmienić język wymagane jest ponowneuruchomienie aplikacji. Czy chcesz uruchomić aplikację ponownie?</source>
+        <translation type="vanished">In order to change langauge an application need to restart. Do you want to restart application now?</translation>
     </message>
     <message>
         <source>&lt;font color=&apos;red&apos;&gt;Błąd zapisu do pliku konfiguracyjnego: </source>
