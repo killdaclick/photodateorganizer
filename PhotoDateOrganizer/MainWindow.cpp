@@ -326,7 +326,7 @@ void MainWindow::selectFolder( void )
 			if( ui->useExifDate->isChecked() )
 			{
 				QDateTime* dt = getExifImgDateTime(fName);
-				if( !(*dt > ui->dateFrom->dateTime() && *dt < ui->dateTo->dateTime()) )
+				if( dt == nullptr || !(*dt > ui->dateFrom->dateTime() && *dt < ui->dateTo->dateTime()) )
 					continue;
 			}
 			else if( ui->useModificationDate->isChecked() )
@@ -884,14 +884,26 @@ void MainWindow::inputFileClicked( const QModelIndex& index, const QModelIndex& 
 {
 	last;
 	if( !index.isValid() )
+	{
+		ui->exifInfo->setText("");
+		ui->imgPreview->setPixmap(QPixmap());
+		ui->imgPreview->setText(tr("Podgląd"));
 		return;
+	}
 
+	// *infoTab*
 	ui->inputFilesList->scrollTo( index );
 	QString path = index.data().toString();
 	// wyciagamy sama sciezke
 	path = path.right( path.count() - path.indexOf("</b>") - 4 );
 	auto info = getExifOutput( path, Preferences::Instance().getLanguage() );
 	ui->exifInfo->setText( info );
+
+	// *previewTab*
+	QPixmap px(path);
+	auto s = ui->imgPreview->geometry().bottomRight().x() - ui->imgPreview->geometry().bottomLeft().x();
+	px = px.scaledToWidth( s );
+	ui->imgPreview->setPixmap(px);
 }
 
 void MainWindow::createExifTranslationTable( void )

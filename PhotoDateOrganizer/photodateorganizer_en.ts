@@ -159,21 +159,21 @@
     </message>
     <message>
         <location filename="MainWindow.ui" line="266"/>
-        <location filename="MainWindow.ui" line="883"/>
+        <location filename="MainWindow.ui" line="935"/>
         <source>Rozmiar:</source>
         <translation>Size:</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="285"/>
-        <location filename="MainWindow.ui" line="902"/>
-        <location filename="MainWindow.ui" line="931"/>
+        <location filename="MainWindow.ui" line="954"/>
+        <location filename="MainWindow.ui" line="983"/>
         <source>0 MB</source>
         <translation>0 MB</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="295"/>
-        <location filename="MainWindow.ui" line="941"/>
-        <location filename="MainWindow.ui" line="974"/>
+        <location filename="MainWindow.ui" line="993"/>
+        <location filename="MainWindow.ui" line="1026"/>
         <source> | </source>
         <translation></translation>
     </message>
@@ -371,28 +371,39 @@
         <translation>EXIF Metadata</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="780"/>
-        <location filename="MainWindow.ui" line="814"/>
+        <location filename="MainWindow.ui" line="773"/>
+        <source>Podgląd obrazu</source>
+        <translation>Image preview</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="806"/>
+        <location filename="MainWindow.cpp" line="890"/>
+        <source>Podgląd</source>
+        <translation>Preview</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="832"/>
+        <location filename="MainWindow.ui" line="866"/>
         <source>Konsola z informacją o działaniu aplikacji</source>
         <translation>Application&apos;s information console</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="783"/>
+        <location filename="MainWindow.ui" line="835"/>
         <source>Info:</source>
         <translation>Info:</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="834"/>
+        <location filename="MainWindow.ui" line="886"/>
         <source>Uruchomienie konwersji</source>
         <translation>Starts conversion</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="837"/>
+        <location filename="MainWindow.ui" line="889"/>
         <source>Start</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1131"/>
+        <location filename="MainWindow.ui" line="1183"/>
         <source>Zmień język</source>
         <translation>Change language</translation>
     </message>
@@ -401,104 +412,104 @@
         <translation type="vanished">Start conversion</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="861"/>
+        <location filename="MainWindow.ui" line="913"/>
         <source>Pasek postępu prac</source>
         <translation>Conversion progress bar</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="873"/>
+        <location filename="MainWindow.ui" line="925"/>
         <source>%p%</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="880"/>
-        <location filename="MainWindow.ui" line="899"/>
+        <location filename="MainWindow.ui" line="932"/>
+        <location filename="MainWindow.ui" line="951"/>
         <source>Rozmiar przetworzonych plików wynikowych</source>
         <translation>Converted files size</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="912"/>
+        <location filename="MainWindow.ui" line="964"/>
         <source>/</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="928"/>
+        <location filename="MainWindow.ui" line="980"/>
         <source>Całkowity rozmiar plików wynikowych</source>
         <translation>Total file&apos;s size</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="948"/>
+        <location filename="MainWindow.ui" line="1000"/>
         <source>Prędkość:</source>
         <translation>Speed:</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="964"/>
+        <location filename="MainWindow.ui" line="1016"/>
         <source>0 MB/s</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="981"/>
-        <location filename="MainWindow.ui" line="1000"/>
+        <location filename="MainWindow.ui" line="1033"/>
+        <location filename="MainWindow.ui" line="1052"/>
         <source>Przewidywany czas na ukończenie operacji konwersji</source>
         <translation>Expected time to finish conversion</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="984"/>
+        <location filename="MainWindow.ui" line="1036"/>
         <source>Czas do ukończenia:</source>
         <translation>Time to finish:</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1003"/>
+        <location filename="MainWindow.ui" line="1055"/>
         <source>0m : 0s</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1025"/>
+        <location filename="MainWindow.ui" line="1077"/>
         <source>Program</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1033"/>
+        <location filename="MainWindow.ui" line="1085"/>
         <source>Pomoc</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1039"/>
+        <location filename="MainWindow.ui" line="1091"/>
         <source>Szybka konfiguracja</source>
         <translation>Preset configuration</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1056"/>
+        <location filename="MainWindow.ui" line="1108"/>
         <source>Wyjdź</source>
         <translation>Exit</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1065"/>
+        <location filename="MainWindow.ui" line="1117"/>
         <source>O programie</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1074"/>
+        <location filename="MainWindow.ui" line="1126"/>
         <source>Przywróc ustawienia domyślne</source>
         <translation>Restore default settings</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1086"/>
+        <location filename="MainWindow.ui" line="1138"/>
         <source>Aktualizuj istniejące pliki</source>
         <translation>Update original file&apos;s date</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1098"/>
+        <location filename="MainWindow.ui" line="1150"/>
         <source>Twórz nowe pliki z oryginalną strukturą podkatalogów</source>
         <translation>Create new files using original subfolders structure</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1110"/>
+        <location filename="MainWindow.ui" line="1162"/>
         <source>Twórz nowe pliki z nazwą i ze strukturą katalogów wykorzystującą datę</source>
         <translation>Create new files with date in file&apos;s name and folder&apos;s name</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="1122"/>
+        <location filename="MainWindow.ui" line="1174"/>
         <source>Twórz nowe pliki z oryginalną strukturą oraz nazwą i podkatalogami z datą</source>
         <translation>Create new files with original subfolder structure and with date in file&apos;s name and folder&apos;s name</translation>
     </message>
