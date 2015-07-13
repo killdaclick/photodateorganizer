@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>381</width>
-    <height>183</height>
+    <width>396</width>
+    <height>225</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,8 +27,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>381</width>
-    <height>183</height>
+    <width>666666</width>
+    <height>66666</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -86,7 +86,7 @@
    <property name="geometry">
     <rect>
      <x>21</x>
-     <y>147</y>
+     <y>187</y>
      <width>131</width>
      <height>31</height>
     </rect>
@@ -105,7 +105,7 @@
    <property name="geometry">
     <rect>
      <x>288</x>
-     <y>150</y>
+     <y>190</y>
      <width>81</width>
      <height>23</height>
     </rect>
@@ -133,8 +133,33 @@
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QPushButton" name="donateBtn">
+   <property name="geometry">
+    <rect>
+     <x>105</x>
+     <y>110</y>
+     <width>181</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/paypal/icons/paypal/paypal_donate_pl.gif</normaloff>:/paypal/icons/paypal/paypal_donate_pl.gif</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>168</width>
+     <height>47</height>
+    </size>
+   </property>
+  </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>closeButton</sender>

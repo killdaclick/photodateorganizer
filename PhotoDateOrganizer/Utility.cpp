@@ -1,6 +1,5 @@
 #include "Utility.h"
 
-
 Utility::Utility(void)
 {
 }

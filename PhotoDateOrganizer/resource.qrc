@@ -2,6 +2,12 @@
   <qresource prefix="/app">
     <file>icons/app/ImageCapture-icon.ico</file>
   </qresource>
+  <qresource prefix="paypal">
+    <file>icons/paypal/paypal_donate_pl.gif</file>
+    <file>icons/paypal/paypal_donate_en.gif</file>
+    <file>icons/paypal/paypal_donate_pl.htm</file>
+    <file>icons/paypal/paypal_donate_en.htm</file>
+  </qresource>
   <qresource prefix="/icons/rubber">
     <file>icons/rubber-icons/disc_CD.ico</file>
     <file>icons/rubber-icons/internet.ico</file>

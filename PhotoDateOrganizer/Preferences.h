@@ -24,6 +24,7 @@ public:
 	bool serializeSettings( void );
 	void loadSettings( Ui::MainWindow *ui );
 	void loadLanguage( void );
+	LANGUAGES getLanguage( void );
 
 private:
 	Preferences();

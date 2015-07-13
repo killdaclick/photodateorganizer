@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "ui_AboutWindow.h"
+#include <QTemporaryDir>
 
 class AboutWindow : public QDialog
 {
@@ -16,6 +17,10 @@ public:
 
 private:
 	Ui::AboutWindow ui;
+	QTemporaryDir* donateTmpDir;
+
+public slots:
+	void donateClicked( void );
 };
 
 #endif // ABOUTWINDOW_H

@@ -94,9 +94,6 @@ void Preferences::createDefaultSettings( Ui::MainWindow *ui )
 	def << ui->useExifDate->isChecked();
 	def << ui->changeOutputFileName->isChecked();
 	def << ui->newNameTemplate->text();
-
-	bool t1 = ui->createOutputFiles->isChecked();
-
 	def << ui->createOutputFiles->isChecked();
 	def << ui->outputFolder->text();
 	def << ui->createOutputSubfolders->isChecked();
@@ -206,4 +203,9 @@ void Preferences::loadLanguage( void )
 		false;
 	}
 	qApp->installTranslator(langTrans);
+}
+
+LANGUAGES Preferences::getLanguage( void )
+{
+	return language;
 }

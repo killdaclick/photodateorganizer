@@ -6,6 +6,8 @@
 #include "Preferences.h"
 #include <QStyleFactory>
 
+extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
@@ -14,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	timToF(nullptr),
 	convFilesSizeTim(nullptr)
 {
+	// turn on NTFS permission handling
+	qt_ntfs_permission_lookup++;
+	
 	QStyle* fusion = QStyleFactory::create("fusion");
 	qApp->setStyle(fusion);
 	
@@ -33,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	p.createDefaultSettings(ui);
 	p.loadSettings( ui );
 	enableSignals(true);
+	ui->dateFrom->setDate( QDate::currentDate() );
+	ui->dateTo->setDate( QDate::currentDate() );
 }
 
 MainWindow::~MainWindow()
