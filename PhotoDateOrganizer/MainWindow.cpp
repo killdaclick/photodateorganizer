@@ -5,6 +5,7 @@
 #include "AboutWindow.h"
 #include "Preferences.h"
 #include <QStyleFactory>
+#include <QTransform>
 
 extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
 
@@ -14,7 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	started(false),
 	cancel(false),
 	timToF(nullptr),
-	convFilesSizeTim(nullptr)
+	convFilesSizeTim(nullptr),
+	selFilePath("")
 {
 	// turn on NTFS permission handling
 	qt_ntfs_permission_lookup++;
@@ -32,10 +34,17 @@ MainWindow::MainWindow(QWidget *parent) :
 		QMessageBox::warning(this, tr("Brak pliku aplikacji"), tr("Wykryto brak wymaganego pliku") + " " + QString(EXIV2_DLL), QMessageBox::Abort );
 		QTimer::singleShot(0, this, SLOT(close()));
 	}
+	// TODO
+	/*if( !QFile::exists(QDir::currentPath() + "/" + EXIV2_DLL) )
+	{
+		QMessageBox::warning(this, tr("Brak pliku aplikacji"), tr("Wykryto brak wymaganego pliku") + " " + QString(JPEGTRAN_BIN), QMessageBox::Abort );
+		QTimer::singleShot(0, this, SLOT(close()));
+	}*/
 
 	ui->setupUi(this);
 	ui->inputFilesList->setModel(&inputFilesModel);
 	ui->inputFilesList->setItemDelegate(&htmlDelegate);
+	ui->imgPreview->setContextMenuPolicy( Qt::CustomContextMenu );
 	auto& p = Preferences::Instance();
 	p.createDefaultSettings(ui);
 	p.loadSettings( ui );
@@ -104,6 +113,8 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->actionSetupOrgNewDate, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewDateSlot()) );
 		t = connect( ui->actionLang, SIGNAL(triggered()), this, SLOT(actionChangeLang()) );
 		t = connect( ui->inputFilesList, SIGNAL(currentChangedSignal(const QModelIndex&, const QModelIndex&)), this, SLOT(inputFileClicked(const QModelIndex&, const QModelIndex&)) );
+		t = connect( ui->imgPreview, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(imgPreviewMenuRequested(QPoint)) );
+		t = connect( ui->exifExtendedInfo, SIGNAL(stateChanged(int)), this, SLOT( exifExtendedInfoStateChanged(int) ) );
 		t = false;
 	}
 	else
@@ -125,6 +136,8 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( ui->actionSetupOrgNewDate, SIGNAL(triggered()), this, SLOT(actionSetupOrgNewDateSlot()) );
 		disconnect( ui->actionLang, SIGNAL(trigerred()), this, SLOT(actionChangeLang()) );
 		disconnect( ui->inputFilesList, SIGNAL(currentChangedSignal(const QModelIndex&, const QModelIndex&)), this, SLOT(inputFileClicked(const QModelIndex&, const QModelIndex&)) );
+		disconnect( ui->imgPreview, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(imgPreviewMenuRequested(QPoint)) );
+		disconnect( ui->exifExtendedInfo, SIGNAL(stateChanged(int)), this, SLOT( exifExtendedInfoStateChanged(int) ) );
 	}
 }
 
@@ -719,22 +732,56 @@ QDateTime* MainWindow::getExifImgDateTime( const QString& filePath )
 	return nullptr;
 }
 
-QString MainWindow::getExifOutput( const QString& filePath, LANGUAGES lang )
+QString MainWindow::getExifOutput( const QString& filePath, LANGUAGES lang, bool extendedInfo )
 {
 	if( filePath.isEmpty() || !QFile::exists(filePath) )
 		return "";
 
 	QProcess p;
-	QString startCmd = "\"" + QDir::currentPath().replace("/","\\") + "\\" + QString(EXIV2_BIN) + "\" \"" + filePath + "\"";
+	QString extendedInfoStr = "";
+	if( ui->exifExtendedInfo->isChecked() || extendedInfo )
+		extendedInfoStr = EXIV2_EXTENDED_INFO;
+	QString startCmd = "\"" + QDir::currentPath().replace("/","\\") + "\\" + QString(EXIV2_BIN) + "\" " + extendedInfoStr + " \"" + filePath + "\"";
 	p.start( startCmd );
 	p.waitForFinished();
-	if( lang == LANGUAGES::ENGLISH )
+	if( lang == LANGUAGES::ENGLISH || ui->exifExtendedInfo->isChecked() || extendedInfo )
 		return p.readAll();
 
 	QString out;
 	while( p.canReadLine() )
 		out.push_back( translateExif( QString(p.readLine()), lang ) );
 	return out;
+}
+
+ExifOrientation MainWindow::getExifOrientation( const QString& filePath )
+{
+	// TODO
+	
+	if( filePath.isEmpty() || !QFile::exists(filePath) )
+		return EO_ERROR;
+
+	QProcess p;
+	QString extendedInfoStr = "";
+	QString startCmd = "\"" + qApp->applicationDirPath().replace("/","\\") + "\\" + QString(EXIV2_BIN) + "\" " + EXIV2_GET_ORIENTATION + " \"" + filePath + "\"";
+	p.start( startCmd );
+	p.waitForFinished();
+
+	QString out = "";
+	while( p.canReadLine() )
+	{
+		QString r = p.readLine();
+		if( r.contains(EXIV2_ORIENTATION_STR) )
+		{
+			out = r;
+			break;
+		}
+	}
+
+	ExifOrientation orient = EO_ERROR;
+	//if( out == "" )
+
+
+	return orient;
 }
 
 void MainWindow::newNameTemplateChanged(const QString & text)
@@ -888,12 +935,14 @@ void MainWindow::inputFileClicked( const QModelIndex& index, const QModelIndex& 
 		ui->exifInfo->setText("");
 		ui->imgPreview->setPixmap(QPixmap());
 		ui->imgPreview->setText(tr("Podgląd"));
+		selFilePath = "";
 		return;
 	}
 
 	// *infoTab*
 	ui->inputFilesList->scrollTo( index );
 	QString path = index.data().toString();
+	selFilePath = path;
 	// wyciagamy sama sciezke
 	path = path.right( path.count() - path.indexOf("</b>") - 4 );
 	auto info = getExifOutput( path, Preferences::Instance().getLanguage() );
@@ -901,8 +950,13 @@ void MainWindow::inputFileClicked( const QModelIndex& index, const QModelIndex& 
 
 	// *previewTab*
 	QPixmap px(path);
-	auto s = ui->imgPreview->geometry().bottomRight().x() - ui->imgPreview->geometry().bottomLeft().x();
-	px = px.scaledToWidth( s );
+
+	//auto s = ui->imgPreview->geometry().bottomRight().x() - ui->imgPreview->geometry().bottomLeft().x();
+	//px = px.scaledToWidth( s );
+
+	auto s = ui->imgPreview->geometry().bottomRight().y() - ui->imgPreview->geometry().topRight().y();
+	px = px.scaledToHeight( s );
+
 	ui->imgPreview->setPixmap(px);
 }
 
@@ -1023,6 +1077,97 @@ QString MainWindow::translateExif( QString input, LANGUAGES lang )
 	}
 
 	return "";
+}
+
+void MainWindow::imgPreviewMenuRequested( QPoint p )
+{
+	if( ui->imgPreview->pixmap() == 0 )
+		return;
+	imgPreviewMenu = new QMenu(this);
+	imgPreviewMenu->addAction(tr("Obróć w lewo"), this, SLOT(imgRotateLeft()));
+	imgPreviewMenu->addAction(tr("Obróć w prawo"), this, SLOT(imgRotateRight()));
+	//imgPreviewMenu->addSeparator();
+	//imgPreviewMenu->addAction(tr("Automatyczny obrót"), this, SLOT(imgRotateAuto()));
+	connect( imgPreviewMenu, SIGNAL(aboutToHide()), imgPreviewMenu, SLOT(deleteLater()) );
+	imgPreviewMenu->exec( ui->imgPreview->mapToGlobal(p) );
+}
+
+void MainWindow::imgRotateLeft( void )
+{
+	imgRotate(90);
+}
+
+void MainWindow::imgRotateRight( void )
+{
+	imgRotate(-90);
+}
+
+void MainWindow::imgRotate( int direction )
+{
+	QTransform trans;
+	trans = trans.rotate(direction);
+	auto px = ui->imgPreview->pixmap();
+	QPixmap pxnew = px->transformed(trans);
+	//QPixmap* pxnew = new QPixmap(px->transformed(trans));
+	//auto s = ui->imgPreview->geometry().bottomRight().x() - ui->imgPreview->geometry().bottomLeft().x();
+	//*pxnew = pxnew->scaledToWidth( s );
+	ui->imgPreview->setPixmap(pxnew);
+}
+
+void MainWindow::imgRotateAuto()
+{
+	if( selFilePath == "" )
+		return;
+	//getExifOrientation
+	//ui->imgPreview->pixmap()->fi
+}
+
+void MainWindow::exifExtendedInfoStateChanged( int state )
+{
+	auto inx = ui->inputFilesList->currentIndex();
+	if( !inx.isValid() )
+		return;
+	QString path = inx.data().toString();
+	// wyciagamy sama sciezke
+	path = path.right( path.count() - path.indexOf("</b>") - 4 );
+	QString info;
+	
+	if( state == Qt::Checked )	// extended info
+		info = getExifOutput( path, Preferences::Instance().getLanguage(), true );
+	else if( state == Qt::Unchecked )
+		info = getExifOutput( path, Preferences::Instance().getLanguage(), false );
+	else
+		return;
+
+	ui->exifInfo->setText( info );
+}
+
+bool MainWindow::jpegtrans_loselessRotate( const QString& inFilePath, const QString& outFilePath, int rotate, bool& perfectRotNotPossible, bool perfect )
+{
+	if( inFilePath.isEmpty() || !QFile::exists(inFilePath) )
+		return "";
+
+	QProcess p;
+	perfectRotNotPossible = false;
+	QString perf = "";
+	if( perfect )
+		perf = JPEGTRAN_LOSELESS_PERFECT;
+	QString startCmd = "\"" + qApp->applicationDirPath().replace("/","\\") + "\\" + QString(JPEGTRAN_BIN) + "\" " + perfect + " " + JPEGTRAN_LOSELESS_ROT + 
+		QString::number(rotate) + " \"" + inFilePath + "\"" + " \"" + outFilePath + "\"";
+	p.start( startCmd );
+	p.waitForFinished();
+	auto ret = p.readAll();
+	if( ret.contains(JPEGTRAN_LOSELESS_NOTPERFECT) )
+	{
+		perfectRotNotPossible = true;
+		return false;
+	}
+	else if( ret.contains(JPEGTRAN_HELLO_STR) )
+		return false;
+	else if( QString::fromLatin1(ret) == "\r\n" )
+		return true;
+
+	return false;
 }
 
 

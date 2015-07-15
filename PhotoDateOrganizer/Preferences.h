@@ -6,7 +6,7 @@
 #include "ui_MainWindow.h"
 #include <QTranslator>
 
-#define APP_CONFIG_VERSION		4
+#define APP_CONFIG_VERSION		5
 #define APP_CONFIG_FILE			"config.ini"
 
 class Preferences
@@ -43,6 +43,7 @@ private:
 	QString lastPath;
 	LANGUAGES language;
 	QTranslator* langTrans;
+	bool exifExtendedInfo;
 };
 
 #endif // PREFERENCES_H

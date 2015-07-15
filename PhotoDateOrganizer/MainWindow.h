@@ -6,12 +6,20 @@
 #define EXIV2_IMG_SPLIT         ": "
 #define EXIV2_BIN               "bin\\exiv2.exe"
 #define EXIV2_DLL               "bin\\libexpat.dll"
+#define EXIV2_EXTENDED_INFO		"-pt"
+#define EXIV2_GET_ORIENTATION	"-g Orientation"
+#define EXIV2_ORIENTATION_STR	"Exif.Image.Orientation"
+#define JPEGTRAN_BIN			"bin\\jpegtran.exe"
+#define JPEGTRAN_LOSELESS_ROT	"-copy all -rotate "
+#define JPEGTRAN_LOSELESS_PERFECT	"-perfect"
+#define JPEGTRAN_LOSELESS_NOTPERFECT	"transformation is not perfect"
+#define JPEGTRAN_HELLO_STR		"jpegtran: must name one input and one output file"
 #define APP_VERSION_ABOUT_STR	"<html><head/><body><p><span style=' font-size:12pt; font-weight:600;'>VER_REPLACE</span></p></body></html>"
 #define APP_VERSION_ABOUT_REPLACE_STR	"VER_REPLACE"
 #define APP_START_BUTTON_TXT	"Start"
 #define APP_STOP_BUTTON_TXT		"Stop"
 
-const int appVer = 0x010402;
+const int appVer = 0x010500;
 
 #include <QMainWindow>
 
@@ -54,6 +62,31 @@ enum mainTabs
 	TAB_GUIDE,
 	TAB_INFO,
 	TAB_COUNT
+};
+
+enum ExifOrientation
+{
+	EO_TOP_LEFT = 1,
+	EO_TOP_RIGHT,
+	EO_BOTTOM_RIGHT,
+	EO_BOTTOM_LEFT,
+	EO_LEFT_TOP,
+	EO_RIGHT_TOP,
+	EO_RIGHT_BOTTOM,
+	EO_LEFT_BOTTOM,
+	EO_ERROR
+};
+
+enum ExifOrientationRotateToNormal
+{
+	EORN_NORMAL = 1,
+	EORN_FLIP_HORIZONTAL,
+	EORN_ROT_180,
+	EORN_FLIP_VERTICAL,
+	EORN_TRANSPOSE,
+	EORN_ROT_90,
+	EORN_TRANSVERSE,
+	EORN_ROT_270
 };
 
 class HTMLDelegate : public QStyledItemDelegate
@@ -136,7 +169,8 @@ public:
 
 	bool changeFileTime( const QString& filePath, const QDateTime& t );
 	QDateTime* getExifImgDateTime( const QString& filePath );
-	QString getExifOutput( const QString& filePath, LANGUAGES lang );
+	QString getExifOutput( const QString& filePath, LANGUAGES lang, bool extendedInfo = false );
+	ExifOrientation getExifOrientation( const QString& filePath );
 	void enableSignals( bool enable );
 	bool changeFileName( const QString& filePath, QDateTime* fdt );
 	bool getChangedFileName( const QString& filePath, QDateTime* fdt, QString& newName );
@@ -150,6 +184,7 @@ public:
 	void changeLanguage( LANGUAGES lang );
 	void restart( void );
 	QString translateExif( QString input, LANGUAGES lang );
+	bool jpegtrans_loselessRotate( const QString& inFilePath, const QString& outFilePath, int rotate, bool& perfectRotNotPossible, bool perfect = true );
 
 public slots:
 	void selectFiles( void );
@@ -167,6 +202,12 @@ public slots:
 	void actionSetupOrgNewDateSlot( void );
 	void actionChangeLang( void );
 	void inputFileClicked( const QModelIndex& index, const QModelIndex& last );
+	void imgPreviewMenuRequested( QPoint p );
+	void imgRotateLeft( void );
+	void imgRotateRight( void );
+	void imgRotate( int direction );
+	void imgRotateAuto();
+	void exifExtendedInfoStateChanged( int state );
 
 private:
 	Ui::MainWindow *ui;
@@ -185,6 +226,8 @@ private:
 	QStandardItemModel inputFilesModel;
 	HTMLDelegate htmlDelegate;
 	TranslationTable exifTransTable;
+	QMenu* imgPreviewMenu;
+	QString selFilePath;
 
 	void createExifTranslationTable( void );
 

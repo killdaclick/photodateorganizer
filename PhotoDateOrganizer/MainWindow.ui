@@ -753,6 +753,13 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
+            <widget class="QCheckBox" name="exifExtendedInfo">
+             <property name="text">
+              <string>Wyświetl zaawansowane informacje</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QTextEdit" name="exifInfo">
              <property name="readOnly">
               <bool>true</bool>

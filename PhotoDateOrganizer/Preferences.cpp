@@ -67,13 +67,13 @@ bool Preferences::deserializeSettings( QByteArray* def )
 	*ser >> subfoldersNameTemplate;
 	*ser >> saveOrgSubfolders;
 	*ser >> lastPath;
-
 	if( def == nullptr )
 	{
 		int ti;
 		*ser >> ti;
 		language = (LANGUAGES)ti;
 	}
+	*ser >> exifExtendedInfo;
 
 	if( ser != nullptr )
 		delete ser;
@@ -101,6 +101,7 @@ void Preferences::createDefaultSettings( Ui::MainWindow *ui )
 	def << ui->saveOrgSubfolders->isChecked();
 	def << QDir::currentPath();	// lastPath
 	def << LANGUAGES::POLISH;
+	def << ui->exifExtendedInfo->isChecked();
 }
 
 bool Preferences::serializeSettings( void )
@@ -127,6 +128,7 @@ bool Preferences::serializeSettings( void )
 	ser << saveOrgSubfolders;
 	ser << lastPath;
 	ser << (int)language;
+	ser << exifExtendedInfo;
 
 	f.close();
 
@@ -145,6 +147,7 @@ bool Preferences::serializeSettings( Ui::MainWindow *ui )
 	subfoldersNameTemplate = ui->subfoldersNameTemplate->text();
 	saveOrgSubfolders = ui->saveOrgSubfolders->isChecked();
 	lastPath = lastPath;
+	exifExtendedInfo = ui->exifExtendedInfo->isChecked();
 
 	return serializeSettings();
 }
@@ -169,6 +172,8 @@ void Preferences::loadSettings( Ui::MainWindow *ui )
 	ui->subfoldersNameTemplate->setText(subfoldersNameTemplate);
 
 	ui->saveOrgSubfolders->setChecked(saveOrgSubfolders);
+
+	ui->exifExtendedInfo->setChecked(exifExtendedInfo);
 }
 
 void Preferences::restoreDefaultSettings( Ui::MainWindow *ui )
