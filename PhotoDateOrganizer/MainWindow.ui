@@ -10,13 +10,13 @@
     <x>0</x>
     <y>0</y>
     <width>670</width>
-    <height>816</height>
+    <height>830</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>610</width>
-    <height>816</height>
+    <height>830</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -461,6 +461,42 @@
             </layout>
            </item>
            <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_16">
+             <property name="spacing">
+              <number>6</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QCheckBox" name="copyAdditionalFiles">
+               <property name="toolTip">
+                <string>Podczas tworzenia nowych plików JPG, kopiowane są również inne pliki o takich samych nazwach i podanych rozszerzeniach. Przydatne gdy np. posiadamy w tym samym katalogu pliki graficzne w innym formacie (np. RAW, czy CR2), które chcemy aby znalazły się w folderze docelowym</string>
+               </property>
+               <property name="text">
+                <string>Kopiuj dodatkowo pliki o takich samych nazwach i następujących rozszerzeniach:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="addFilesExt">
+               <property name="toolTip">
+                <string>Podczas tworzenia nowych plików JPG, kopiowane są również inne pliki o takich samych nazwach i podanych rozszerzeniach. Przydatne gdy np. posiadamy w tym samym katalogu pliki graficzne w innym formacie (np. RAW, czy CR2), które chcemy aby znalazły się w folderze docelowym</string>
+               </property>
+               <property name="placeholderText">
+                <string>e.g.: png, RAW, tiff, CR2</string>
+               </property>
+               <property name="clearButtonEnabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
             <widget class="QCheckBox" name="saveOrgSubfolders">
              <property name="toolTip">
               <string>Zachowuje oryginalną strukturę katalogów począwszy od katalogu wskazanego jako źródłowy</string>
@@ -510,6 +546,9 @@
                   </property>
                   <property name="text">
                    <string>%Y-%M%\%Y-%M-%D</string>
+                  </property>
+                  <property name="placeholderText">
+                   <string>e.g.: %Y-%M%\%Y-%M-%D</string>
                   </property>
                  </widget>
                 </item>
@@ -591,6 +630,9 @@
                </property>
                <property name="text">
                 <string>%Y%M%D-%h%m%s_%N</string>
+               </property>
+               <property name="placeholderText">
+                <string>e.g.: %Y%M%D-%h%m%s_%N</string>
                </property>
               </widget>
              </item>
@@ -803,7 +845,7 @@
              <x>0</x>
              <y>0</y>
              <width>638</width>
-             <height>333</height>
+             <height>361</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">

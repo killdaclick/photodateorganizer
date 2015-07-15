@@ -19,7 +19,7 @@
 #define APP_START_BUTTON_TXT	"Start"
 #define APP_STOP_BUTTON_TXT		"Stop"
 
-const int appVer = 0x010500;
+const int appVer = 0x010501;
 
 #include <QMainWindow>
 
@@ -185,6 +185,7 @@ public:
 	void restart( void );
 	QString translateExif( QString input, LANGUAGES lang );
 	bool jpegtrans_loselessRotate( const QString& inFilePath, const QString& outFilePath, int rotate, bool& perfectRotNotPossible, bool perfect = true );
+	void addAdditionalFilesToCopy( const QString& filePath, QStringList& addFilesList );
 
 public slots:
 	void selectFiles( void );

@@ -414,6 +414,7 @@ void MainWindow::start( void )
 	if( timToF != nullptr )
 		delete timToF;
 	convFilesSize = 0;
+	QStringList addFilesList;	// TODO
 	qint64 totFsize = filesSize;	// calkowity rozmiar plikow do przetworzenia ktory moze sie zmniejszac ze wzgledu na pliki ktorych nie mozna byly przekonwertowac
 	timToF = new TimeToFinish( 100, fCnt );
 	convFilesSizeTim = new SizeSpeed( ui->sizeTime, &convFilesSize );
@@ -542,6 +543,12 @@ void MainWindow::start( void )
 		convFilesSize += fi.size();
 		updateFileSizeLabel( ui->sizeToFinish, convFilesSize );
 
+		// TODO
+		// dodajemy do listy pliki dodatkowe do kopiowania o ustalonych rozszerzeniach (jezeli istnieja)
+		if( ui->copyAdditionalFiles->isChecked() && ui->addFilesExt->text() != "" )
+			addAdditionalFilesToCopy( *i, addFilesList );
+		// \TODO
+
 		delete dt;
 
 		fNr++;
@@ -566,6 +573,19 @@ void MainWindow::start( void )
 		allOk = "<font color='green'>";
 	ui->status->appendHtml(tr("<b>Przekonwertowano poprawnie ") + allOk + QString::number(fNr-1-errCnt) + "</font>" + tr(" z <font color='green'>") + QString::number(fCnt) +
 		tr("</font> plików w ") + QString::number(elapsed/1000) + "." + QString::number(elapsed%1000) + tr(" sekundy.</font></b><br>"));
+
+	// TODO
+	if( ui->copyAdditionalFiles->isChecked() && ui->addFilesExt->text() != "" )
+	{
+		auto ret = QMessageBox::question( this, tr("Kopiowanie plików dodatkowych"), tr("Zakończono konwertowanie plików, czy rozpocząć kopiowanie plików dodatkowych o wybranych rozszerzeniach: ") + 
+			ui->addFilesExt->text() + " ?", QMessageBox::Ok, QMessageBox::Cancel );
+		if( ret == QMessageBox::Ok )
+		{
+
+		}
+	}
+	// \TODO
+
 	cancel = false;
 	started = false;
 	ui->startBtn->setText(APP_START_BUTTON_TXT);
@@ -1168,6 +1188,12 @@ bool MainWindow::jpegtrans_loselessRotate( const QString& inFilePath, const QStr
 		return true;
 
 	return false;
+}
+
+// TODO
+void MainWindow::addAdditionalFilesToCopy( const QString& filePath, QStringList& addFilesList )
+{
+
 }
 
 
