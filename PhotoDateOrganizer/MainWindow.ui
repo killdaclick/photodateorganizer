@@ -10,13 +10,13 @@
     <x>0</x>
     <y>0</y>
     <width>670</width>
-    <height>816</height>
+    <height>993</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>610</width>
-    <height>816</height>
+    <height>830</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -356,11 +356,30 @@
         <string>Opcje konwersji</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_9">
           <property name="topMargin">
            <number>0</number>
           </property>
+          <item>
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>Źródło daty i czasu:</string>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QRadioButton" name="useExifDate">
             <property name="enabled">
@@ -370,7 +389,7 @@
              <string>Wybiera źródło pochodzenia daty: metadane EXIF lub data modyfikacji Windows</string>
             </property>
             <property name="text">
-             <string>Użyj daty zrobienia zdjęcia (metadane EXIF)</string>
+             <string>Data zrobienia zdjęcia (metadane EXIF)</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -389,7 +408,7 @@
              <string>Wybiera źródło pochodzenia daty: metadane EXIF lub data modyfikacji Windows</string>
             </property>
             <property name="text">
-             <string>Użyj daty modyfikacji pliku</string>
+             <string>Data modyfikacji pliku</string>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">buttonGroup</string>
@@ -399,10 +418,34 @@
          </layout>
         </item>
         <item>
-         <widget class="Line" name="line_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>Aktualizuj datę modyfikacji pliku</string>
           </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_16">
+           <property name="leftMargin">
+            <number>6</number>
+           </property>
+           <property name="topMargin">
+            <number>6</number>
+           </property>
+           <property name="rightMargin">
+            <number>6</number>
+           </property>
+           <property name="bottomMargin">
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QCheckBox" name="checkBox">
+             <property name="text">
+              <string>CheckBox</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
         <item>
@@ -420,6 +463,18 @@
            <bool>true</bool>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
+           <property name="leftMargin">
+            <number>6</number>
+           </property>
+           <property name="topMargin">
+            <number>6</number>
+           </property>
+           <property name="rightMargin">
+            <number>6</number>
+           </property>
+           <property name="bottomMargin">
+            <number>6</number>
+           </property>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <property name="topMargin">
@@ -461,6 +516,16 @@
             </layout>
            </item>
            <item>
+            <widget class="QCheckBox" name="copyAdditionalFiles">
+             <property name="toolTip">
+              <string>Podczas tworzenia nowych plików JPG, kopiowane są również inne pliki o takich samych nazwach i podanych rozszerzeniach. Przydatne gdy np. posiadamy w tym samym katalogu pliki graficzne w innym formacie (np. RAW, czy CR2), które chcemy aby znalazły się w folderze docelowym</string>
+             </property>
+             <property name="text">
+              <string>Kopiuj dodatkowo pliki o takich samych nazwach i następujących rozszerzeniach:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QCheckBox" name="saveOrgSubfolders">
              <property name="toolTip">
               <string>Zachowuje oryginalną strukturę katalogów począwszy od katalogu wskazanego jako źródłowy</string>
@@ -488,6 +553,18 @@
               <bool>true</bool>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_6">
+              <property name="leftMargin">
+               <number>6</number>
+              </property>
+              <property name="topMargin">
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_3">
                 <property name="topMargin">
@@ -510,6 +587,9 @@
                   </property>
                   <property name="text">
                    <string>%Y-%M%\%Y-%M-%D</string>
+                  </property>
+                  <property name="placeholderText">
+                   <string>e.g.: %Y-%M%\%Y-%M-%D</string>
                   </property>
                  </widget>
                 </item>
@@ -569,6 +649,18 @@
            <bool>true</bool>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
+           <property name="leftMargin">
+            <number>6</number>
+           </property>
+           <property name="topMargin">
+            <number>6</number>
+           </property>
+           <property name="rightMargin">
+            <number>6</number>
+           </property>
+           <property name="bottomMargin">
+            <number>6</number>
+           </property>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <property name="topMargin">
@@ -591,6 +683,9 @@
                </property>
                <property name="text">
                 <string>%Y%M%D-%h%m%s_%N</string>
+               </property>
+               <property name="placeholderText">
+                <string>e.g.: %Y%M%D-%h%m%s_%N</string>
                </property>
               </widget>
              </item>
@@ -635,8 +730,8 @@
        </layout>
        <zorder></zorder>
        <zorder>changeOutputFileName</zorder>
-       <zorder>line_2</zorder>
        <zorder>createOutputFiles</zorder>
+       <zorder>groupBox_2</zorder>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="icon">
@@ -650,6 +745,18 @@
         <string>Ściąga do tworzenia szablonów</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_10">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_9">
           <property name="topMargin">
@@ -746,12 +853,36 @@
         <string>Rozszerzone informacje o obrazie</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_15" stretch="0">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
            <string>Metadane EXIF</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_7">
+           <property name="leftMargin">
+            <number>6</number>
+           </property>
+           <property name="topMargin">
+            <number>6</number>
+           </property>
+           <property name="rightMargin">
+            <number>6</number>
+           </property>
+           <property name="bottomMargin">
+            <number>6</number>
+           </property>
            <item>
             <widget class="QCheckBox" name="exifExtendedInfo">
              <property name="text">
@@ -803,7 +934,7 @@
              <x>0</x>
              <y>0</y>
              <width>638</width>
-             <height>333</height>
+             <height>373</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
