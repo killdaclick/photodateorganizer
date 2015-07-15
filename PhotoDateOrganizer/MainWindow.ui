@@ -755,7 +755,7 @@
            <item>
             <widget class="QCheckBox" name="exifExtendedInfo">
              <property name="text">
-              <string>Wyświetl zaawansowane informacje</string>
+              <string>Wyświetl rozszerzone informacje</string>
              </property>
             </widget>
            </item>
