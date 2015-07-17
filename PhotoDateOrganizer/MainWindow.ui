@@ -10,13 +10,13 @@
     <x>0</x>
     <y>0</y>
     <width>670</width>
-    <height>993</height>
+    <height>850</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>610</width>
-    <height>830</height>
+    <height>850</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -163,6 +163,9 @@
                 <day>1</day>
                </datetime>
               </property>
+              <property name="displayFormat">
+               <string>yyyy-MM-dd HH:mm:ss</string>
+              </property>
               <property name="calendarPopup">
                <bool>true</bool>
               </property>
@@ -186,6 +189,9 @@
                 <month>1</month>
                 <day>1</day>
                </datetime>
+              </property>
+              <property name="displayFormat">
+               <string>yyyy-MM-dd HH:mm:ss</string>
               </property>
               <property name="calendarPopup">
                <bool>true</bool>
@@ -369,63 +375,26 @@
          <number>6</number>
         </property>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_9">
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="label_21">
-            <property name="text">
-             <string>Źródło daty i czasu:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="useExifDate">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="toolTip">
-             <string>Wybiera źródło pochodzenia daty: metadane EXIF lub data modyfikacji Windows</string>
-            </property>
-            <property name="text">
-             <string>Data zrobienia zdjęcia (metadane EXIF)</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup</string>
-            </attribute>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="useModificationDate">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="toolTip">
-             <string>Wybiera źródło pochodzenia daty: metadane EXIF lub data modyfikacji Windows</string>
-            </property>
-            <property name="text">
-             <string>Data modyfikacji pliku</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup</string>
-            </attribute>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
          <widget class="QGroupBox" name="groupBox_2">
+          <property name="toolTip">
+           <string>Konfiguruje sposób modyfikacji daty i czasu metadanych EXIF oraz &quot;daty modyfikacji&quot; pliku</string>
+          </property>
+          <property name="statusTip">
+           <string/>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
           <property name="title">
-           <string>Aktualizuj datę modyfikacji pliku</string>
+           <string>Popraw datę i czas</string>
           </property>
           <property name="checkable">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_16">
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <property name="spacing">
+            <number>6</number>
+           </property>
            <property name="leftMargin">
             <number>6</number>
            </property>
@@ -439,11 +408,216 @@
             <number>6</number>
            </property>
            <item>
-            <widget class="QCheckBox" name="checkBox">
-             <property name="text">
-              <string>CheckBox</string>
+            <layout class="QHBoxLayout" name="horizontalLayout_17">
+             <property name="topMargin">
+              <number>0</number>
              </property>
-            </widget>
+             <item>
+              <widget class="QGroupBox" name="groupBox_4">
+               <property name="toolTip">
+                <string>Modyfikacja dotycząca metadanych EXIF</string>
+               </property>
+               <property name="title">
+                <string>Metadanych EXIF</string>
+               </property>
+               <property name="checkable">
+                <bool>false</bool>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_13">
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <property name="leftMargin">
+                 <number>6</number>
+                </property>
+                <property name="topMargin">
+                 <number>6</number>
+                </property>
+                <property name="rightMargin">
+                 <number>6</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>6</number>
+                </property>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_16">
+                  <item>
+                   <widget class="QLabel" name="label_22">
+                    <property name="toolTip">
+                     <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
+                    </property>
+                    <property name="text">
+                     <string>Przesuń:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="shiftExifDate">
+                    <property name="toolTip">
+                     <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
+                    </property>
+                    <property name="placeholderText">
+                     <string>np.: %Y+3 %M-2 %D+1 %h-2 %m+15 %s-30 </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_19">
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QCheckBox" name="setExifDateTo">
+                    <property name="toolTip">
+                     <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
+                    </property>
+                    <property name="text">
+                     <string>Ustaw:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QDateTimeEdit" name="setExifDateToDT">
+                    <property name="toolTip">
+                     <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
+                    </property>
+                    <property name="date">
+                     <date>
+                      <year>2015</year>
+                      <month>1</month>
+                      <day>1</day>
+                     </date>
+                    </property>
+                    <property name="displayFormat">
+                     <string>yyyy-MM-dd HH:mm:ss</string>
+                    </property>
+                    <property name="calendarPopup">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="setExifToModificationDT">
+                  <property name="toolTip">
+                   <string>Pobiera datę i czas z atrybutu &quot;daty modyfikacji&quot; pliku i kopiuje ją do metadanych EXIF, przed przesunięciem (o ile opcja przesunięcia została wybrana)</string>
+                  </property>
+                  <property name="text">
+                   <string>Pobierz datę z &quot;daty modyfikacji&quot;</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_5">
+               <property name="toolTip">
+                <string>Modyfikacja dotycząca atrybutu &quot;daty modyfikacji&quot; pliku</string>
+               </property>
+               <property name="title">
+                <string>Daty modyfikacji pliku</string>
+               </property>
+               <property name="checkable">
+                <bool>false</bool>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_12">
+                <property name="spacing">
+                 <number>3</number>
+                </property>
+                <property name="leftMargin">
+                 <number>6</number>
+                </property>
+                <property name="topMargin">
+                 <number>6</number>
+                </property>
+                <property name="rightMargin">
+                 <number>6</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>6</number>
+                </property>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_18">
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QLabel" name="label_23">
+                    <property name="toolTip">
+                     <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
+                    </property>
+                    <property name="text">
+                     <string>Przesuń:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="shiftModificationDate">
+                    <property name="toolTip">
+                     <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
+                    </property>
+                    <property name="placeholderText">
+                     <string>np.: %Y+3 %M-2 %D+1 %h-2 %m+15 %s-30 </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_20">
+                  <item>
+                   <widget class="QCheckBox" name="setModificationDateTo">
+                    <property name="toolTip">
+                     <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
+                    </property>
+                    <property name="text">
+                     <string>Ustaw:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QDateTimeEdit" name="setModificationDateToDT">
+                    <property name="toolTip">
+                     <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
+                    </property>
+                    <property name="date">
+                     <date>
+                      <year>2015</year>
+                      <month>1</month>
+                      <day>1</day>
+                     </date>
+                    </property>
+                    <property name="displayFormat">
+                     <string>yyyy-MM-dd HH:mm:ss</string>
+                    </property>
+                    <property name="calendarPopup">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="setModificationToExifDT">
+                  <property name="toolTip">
+                   <string>Pobiera datę i czas z metadanych EXIF i kopiuje ją do atrybutu &quot;daty modyfikacji&quot; pliku, przed przesunięciem (o ile opcja przesunięcia została wybrana)</string>
+                  </property>
+                  <property name="text">
+                   <string>Pobierz datę z EXIF</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>
@@ -518,10 +692,10 @@
            <item>
             <widget class="QCheckBox" name="copyAdditionalFiles">
              <property name="toolTip">
-              <string>Podczas tworzenia nowych plików JPG, kopiowane są również inne pliki o takich samych nazwach i podanych rozszerzeniach. Przydatne gdy np. posiadamy w tym samym katalogu pliki graficzne w innym formacie (np. RAW, czy CR2), które chcemy aby znalazły się w folderze docelowym</string>
+              <string>Podczas tworzenia nowych plików JPG, kopiowane są również inne pliki o takich samych nazwach i różnych rozszerzeniach. Przydatne gdy np. posiadamy w tym samym katalogu pliki graficzne w innym formacie (np. RAW, czy CR2), które chcemy aby znalazły się w folderze docelowym</string>
              </property>
              <property name="text">
-              <string>Kopiuj dodatkowo pliki o takich samych nazwach i następujących rozszerzeniach:</string>
+              <string>Kopiuj dodatkowo pliki o innych rozszerzeniach (np. *.CR2, *.RAW) i takich samych nazwach</string>
              </property>
             </widget>
            </item>
@@ -728,7 +902,6 @@
          </widget>
         </item>
        </layout>
-       <zorder></zorder>
        <zorder>changeOutputFileName</zorder>
        <zorder>createOutputFiles</zorder>
        <zorder>groupBox_2</zorder>
@@ -814,13 +987,16 @@
              <number>1</number>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład tworzenia katalogów: &lt;/span&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y-%M%\%Y-%M-%D&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Umieści zdjęcia w podkatalogach według schematu: 2015-03 \ 2015-03-27&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład zmiany nazwy: &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%Y%M%D-%h%m%s&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;_&lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%N&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Zmieni nazwę według schematu: 20150327-145513_NazwaPliku&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład tworzenia katalogów: &lt;/span&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y-%M%\%Y-%M-%D&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Umieści zdjęcia w podkatalogach według schematu: 2015-03 \ 2015-03-27&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład zmiany nazwy: &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%Y%M%D-%h%m%s&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;_&lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%N&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Zmieni nazwę według schematu: 20150327-145513_NazwaPliku&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład przesuwania daty i czasu: &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%Y+3 %M-2 %D+1 %h-2 %m+15 %s-30&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Do roku dodaje wartość 3, od miesiąca odejmuje 2, do dni dodaje 1, od godziny odejmuje 2, do minut dodaje 15, od sekund odejmuje 30. Dla przykładowej daty 2015-06-04 i czasu 15:35:45 efektem przesunięcia będzie data i czas: 2018-04-05 13:50:15.&lt;br/&gt;Poszczególne wartości mogą być w dowolnej kolejności oraz muszą być oddzielone spacją. Dopuszczalne znaki przesunięcia to '+' oraz '-'.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="textFormat">
              <enum>Qt::RichText</enum>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -934,7 +1110,7 @@
              <x>0</x>
              <y>0</y>
              <width>638</width>
-             <height>373</height>
+             <height>433</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">

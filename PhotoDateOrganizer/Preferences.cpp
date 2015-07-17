@@ -93,7 +93,7 @@ void Preferences::createDefaultSettings( Ui::MainWindow *ui )
 
 	def << APP_CONFIG_VERSION;
 	def << ui->recursiveFoldersCheckbox->isChecked();
-	def << ui->useExifDate->isChecked();
+	//def << ui->useExifDate->isChecked();
 	def << ui->changeOutputFileName->isChecked();
 	def << ui->newNameTemplate->text();
 	def << ui->createOutputFiles->isChecked();
@@ -105,7 +105,7 @@ void Preferences::createDefaultSettings( Ui::MainWindow *ui )
 	def << LANGUAGES::POLISH;
 	def << ui->exifExtendedInfo->isChecked();
 	def << ui->copyAdditionalFiles->isChecked();
-	def << ui->addFilesExt->text();
+	//def << ui->addFilesExt->text();
 }
 
 bool Preferences::serializeSettings( void )
@@ -144,7 +144,7 @@ bool Preferences::serializeSettings( void )
 bool Preferences::serializeSettings( Ui::MainWindow *ui )
 {
 	recursiveFolders = ui->recursiveFoldersCheckbox->isChecked();
-	useExif = ui->useExifDate->isChecked();
+	//useExif = ui->useExifDate->isChecked();
 	changeOutputFileName = ui->changeOutputFileName->isChecked();
 	newNameTemplate = ui->newNameTemplate->text();
 	createOutputFiles = ui->createOutputFiles->isChecked();
@@ -155,7 +155,7 @@ bool Preferences::serializeSettings( Ui::MainWindow *ui )
 	lastPath = lastPath;
 	exifExtendedInfo = ui->exifExtendedInfo->isChecked();
 	copyAdditionalFiles = ui->copyAdditionalFiles->isChecked();
-	addFilesExt = ui->addFilesExt->text();
+	//addFilesExt = ui->addFilesExt->text();
 
 	return serializeSettings();
 }
@@ -164,8 +164,8 @@ void Preferences::loadSettings( Ui::MainWindow *ui )
 {
 	ui->recursiveFoldersCheckbox->setChecked(recursiveFolders);
 
-	ui->useExifDate->setChecked(useExif);
-	ui->useModificationDate->setChecked(!useExif);
+	//ui->useExifDate->setChecked(useExif);
+	//ui->useModificationDate->setChecked(!useExif);
 
 	ui->changeOutputFileName->setChecked(changeOutputFileName);
 
@@ -184,7 +184,7 @@ void Preferences::loadSettings( Ui::MainWindow *ui )
 	ui->exifExtendedInfo->setChecked(exifExtendedInfo);
 
 	ui->copyAdditionalFiles->setChecked(copyAdditionalFiles);
-	ui->addFilesExt->setText(addFilesExt);
+	//ui->addFilesExt->setText(addFilesExt);
 }
 
 void Preferences::restoreDefaultSettings( Ui::MainWindow *ui )

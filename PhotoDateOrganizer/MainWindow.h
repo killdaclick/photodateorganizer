@@ -186,6 +186,7 @@ public:
 	QString translateExif( QString input, LANGUAGES lang );
 	bool jpegtrans_loselessRotate( const QString& inFilePath, const QString& outFilePath, int rotate, bool& perfectRotNotPossible, bool perfect = true );
 	void addAdditionalFilesToCopy( const QString& filePath, QStringList& addFilesList );
+	bool getShiftedDateTime( const QString& templ, QDateTime* dt );
 
 public slots:
 	void selectFiles( void );
@@ -209,6 +210,8 @@ public slots:
 	void imgRotate( int direction );
 	void imgRotateAuto();
 	void exifExtendedInfoStateChanged( int state );
+	void setExifToModificationDTchanged( int state );
+	void setModificationToExifDTchanged( int state );
 
 private:
 	Ui::MainWindow *ui;

@@ -115,6 +115,8 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->inputFilesList, SIGNAL(currentChangedSignal(const QModelIndex&, const QModelIndex&)), this, SLOT(inputFileClicked(const QModelIndex&, const QModelIndex&)) );
 		t = connect( ui->imgPreview, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(imgPreviewMenuRequested(QPoint)) );
 		t = connect( ui->exifExtendedInfo, SIGNAL(stateChanged(int)), this, SLOT( exifExtendedInfoStateChanged(int) ) );
+		t = connect( ui->setExifToModificationDT, SIGNAL(stateChanged(int)), this, SLOT(setExifToModificationDTchanged(int)) );
+		t = connect( ui->setModificationToExifDT, SIGNAL(stateChanged(int)), this, SLOT(setModificationToExifDTchanged(int)) );
 		t = false;
 	}
 	else
@@ -184,7 +186,7 @@ void MainWindow::selectFiles( void )
 		auto f = (*fi).replace("/","\\");
 		inFileList.push_back( f );
 		
-		if( fi == files.begin() && ui->useExifDate->isChecked() )
+		if( fi == files.begin() /*TODO && ui->useExifDate->isChecked()*/ )
 		{
 			// szukamy pierwszego pliku z poprawna data EXIF
 			auto fiTmp = fi;
@@ -211,16 +213,16 @@ void MainWindow::selectFiles( void )
 		// wybieramy pliki spelniajace filtr daty/czasu
 		if( ui->filterDate->isChecked() )
 		{
-			if( ui->useExifDate->isChecked() )
+			if( true /*TODO ui->useExifDate->isChecked()*/ )
 			{
 				QDateTime* dt = getExifImgDateTime(f);
 				if( !(*dt > ui->dateFrom->dateTime() && *dt < ui->dateTo->dateTime()) )
 					continue;
 			}
-			else if( ui->useModificationDate->isChecked() )
+			/*else if( ui->useModificationDate->isChecked() )
 			{
 				// TODO
-			}
+			}*/
 		}
 
 		// podliczamy rozmiar plikow
@@ -307,7 +309,7 @@ void MainWindow::selectFolder( void )
 		auto fName = f->replace("/","\\");
 		inFileList.push_back( *f );
 		
-		if( f == files.begin() && ui->useExifDate->isChecked() )
+		if( f == files.begin() /* TODO && ui->useExifDate->isChecked()*/ )
 		{
 			// szukamy pierwszego pliku z poprawna data EXIF
 			auto fiTmp = f;
@@ -336,16 +338,16 @@ void MainWindow::selectFolder( void )
 		// wybieramy pliki spelniajace filtr daty/czasu
 		if( ui->filterDate->isChecked() )
 		{
-			if( ui->useExifDate->isChecked() )
+			if( true /* TODO ui->useExifDate->isChecked()*/ )
 			{
 				QDateTime* dt = getExifImgDateTime(fName);
 				if( dt == nullptr || !(*dt > ui->dateFrom->dateTime() && *dt < ui->dateTo->dateTime()) )
 					continue;
 			}
-			else if( ui->useModificationDate->isChecked() )
+			/*else if( ui->useModificationDate->isChecked() )
 			{
 				// TODO
-			}
+			}*/
 		}
 
 		// podliczamy rozmiar plikow
@@ -378,6 +380,30 @@ void MainWindow::selectFolder( void )
 
 void MainWindow::start( void )
 {
+	QDateTime dt = QDateTime::currentDateTime();
+	bool t1 = getShiftedDateTime( ui->shiftExifDate->text(), &dt );
+	QString t2 = dt.toString("yyyy-MM-dd hh:mm:ss");
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	return;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	if( inFileList.count() == 0 )
 		return;
 
@@ -567,8 +593,8 @@ void MainWindow::start( void )
 
 		// TODO
 		// dodajemy do listy pliki dodatkowe do kopiowania o ustalonych rozszerzeniach (jezeli istnieja)
-		if( ui->copyAdditionalFiles->isChecked() && ui->addFilesExt->text() != "" )
-			addAdditionalFilesToCopy( *i, addFilesList );
+		//if( ui->copyAdditionalFiles->isChecked() && ui->addFilesExt->text() != "" )
+		//	addAdditionalFilesToCopy( *i, addFilesList );
 		// \TODO
 
 		delete dt;
@@ -597,7 +623,7 @@ void MainWindow::start( void )
 		tr("</font> plików w ") + QString::number(elapsed/1000) + "." + QString::number(elapsed%1000) + tr(" sekundy.</font></b><br>"));
 
 	// TODO
-	if( ui->copyAdditionalFiles->isChecked() && ui->addFilesExt->text() != "" )
+	/*if( ui->copyAdditionalFiles->isChecked() && ui->addFilesExt->text() != "" )
 	{
 		auto ret = QMessageBox::question( this, tr("Kopiowanie plików dodatkowych"), tr("Zakończono konwertowanie plików, czy rozpocząć kopiowanie plików dodatkowych o wybranych rozszerzeniach: ") + 
 			ui->addFilesExt->text() + " ?", QMessageBox::Ok, QMessageBox::Cancel );
@@ -605,7 +631,7 @@ void MainWindow::start( void )
 		{
 
 		}
-	}
+	}*/
 	// \TODO
 
 	cancel = false;
@@ -763,7 +789,6 @@ QDateTime* MainWindow::getExifImgDateTime( const QString& filePath )
 		if( !l.contains(EXIV2_IMG_TIMESTAMP))
 			continue;
 		auto s = l.split(EXIV2_IMG_SPLIT, QString::SkipEmptyParts);
-		auto t1 = s[1].replace("\r\n","");
 		auto dttmp = QDateTime::fromString(s[1].replace("\r\n",""), "yyyy:MM:dd hh:mm:ss");
 		if( !dttmp.isNull() )
 			return new QDateTime(dttmp);
@@ -1211,6 +1236,100 @@ bool MainWindow::jpegtrans_loselessRotate( const QString& inFilePath, const QStr
 
 	return false;
 }
+
+void MainWindow::setExifToModificationDTchanged( int state )
+{
+	// grupa checkbox: setExifToModificationDT oraz setModificationToExifDT
+	// dopuszczamy mozliwosc ekskluzywnego wyboru checkboxow albo brak jakiegokolwiek wyboru
+	if( state == Qt::Checked )
+		ui->setModificationToExifDT->setChecked( false );
+}
+
+void MainWindow::setModificationToExifDTchanged( int state )
+{
+	// grupa checkbox: setExifToModificationDT oraz setModificationToExifDT
+	// dopuszczamy mozliwosc ekskluzywnego wyboru checkboxow albo brak jakiegokolwiek wyboru
+	if( state == Qt::Checked )
+		ui->setExifToModificationDT->setChecked( false );
+}
+
+bool MainWindow::getShiftedDateTime( const QString& templ, QDateTime* dt )
+{
+	if( templ == "" || dt == nullptr )
+		return false;
+
+	// rozdzielamy elementy
+	QString tmp = templ.simplified();
+	QStringList elems = tmp.split(" ", QString::SkipEmptyParts);
+	for( QStringList::iterator elem = elems.begin(); elem != elems.end(); ++elem )
+	{
+		for( QString::iterator c = elem->begin(); c < elem->end(); ++c )
+		{
+			if( *c == '%' )
+			{
+				// najpierw sprawdzamy czy mamy poprawne oznaczenie daty i czasu
+				++c;
+				if( c == elem->end() )
+					break;
+				QChar symb = *c;
+				if( !(symb == 'Y' || symb == 'M' || symb == 'D' || symb == 'h' || symb == 'm' || symb == 's') )
+					return false;
+				
+				// sprawdzamy czy dodajemy czy odejmujemy
+				++c;
+				if( c == elem->end() )
+					break;
+				int plusMinus;
+				if( *c == '+' )
+					plusMinus = 1;
+				else if( *c == '-' )
+					plusMinus = -1;
+				else
+					return false;
+
+				// wyciagamy cala liczbe po znaku dodawania lub odejmowania
+				++c;
+				if( c == elem->end() )
+					break;
+				QString shiftStr = "";
+				for( ; c != elem->end(); ++c )
+					shiftStr += *c;
+				bool ok;
+				int shift = shiftStr.toInt(&ok);
+				if( !ok )
+					return false;
+
+				switch( symb.toLatin1() )
+				{
+				case 'Y':
+					*dt = dt->addYears( shift * plusMinus );
+					break;
+				case 'M':
+					*dt = dt->addMonths( shift * plusMinus );
+					break;
+				case 'D':
+					*dt = dt->addDays( shift * plusMinus );
+					break;
+				case 'h':
+					*dt = dt->addSecs( shift * plusMinus * 60 * 60 );
+					break;
+				case 'm':
+					*dt = dt->addSecs( shift * plusMinus * 60 );
+					break;
+				case 's':
+					*dt = dt->addSecs( shift * plusMinus );
+					break;
+				default:
+					return false;
+				}
+			}
+			else
+				return false;
+		}
+	}
+	return true;
+}
+
 
 // TODO
 void MainWindow::addAdditionalFilesToCopy( const QString& filePath, QStringList& addFilesList )
