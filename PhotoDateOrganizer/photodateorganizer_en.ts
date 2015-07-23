@@ -409,9 +409,16 @@
         <translation></translation>
     </message>
     <message>
+<<<<<<< Updated upstream
         <location filename="MainWindow.ui" line="1190"/>
         <source>Zmień język</source>
         <translation>Change language</translation>
+=======
+        <location filename="MainWindow.ui" line="1116"/>
+        <source>Zmień język / Change language</source>
+        <oldsource>Zmień język</oldsource>
+        <translation>Change language / Zmień język</translation>
+>>>>>>> Stashed changes
     </message>
     <message>
         <source>Start konwersji</source>

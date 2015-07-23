@@ -1494,7 +1494,7 @@
      <normaloff>:/icons/flags/icons/flags/Acidrums4-Betelgeuse-Categories-applications-education-language.ico</normaloff>:/icons/flags/icons/flags/Acidrums4-Betelgeuse-Categories-applications-education-language.ico</iconset>
    </property>
    <property name="text">
-    <string>Zmień język</string>
+    <string>Zmień język / Change language</string>
    </property>
   </action>
  </widget>
