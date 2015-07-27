@@ -18,6 +18,7 @@
 #define APP_VERSION_ABOUT_REPLACE_STR	"VER_REPLACE"
 #define APP_START_BUTTON_TXT	"Start"
 #define APP_STOP_BUTTON_TXT		"Stop"
+#define APP_UPDATE_FILE_CFG		"update.srv"
 
 const int appVer = 0x010501;
 
@@ -43,6 +44,7 @@ const int appVer = 0x010501;
 #include <windows.h>
 
 #include "ChangeLanguage.h"
+#include "FileDownloader.h"
 
 struct TranslationSet
 {
@@ -87,6 +89,24 @@ enum ExifOrientationRotateToNormal
 	EORN_ROT_90,
 	EORN_TRANSVERSE,
 	EORN_ROT_270
+};
+
+class Update : public QWidget
+{
+	Q_OBJECT
+
+public:
+	Update(QWidget* parent = 0);
+	~Update();
+
+	void checkUpdate( void );
+
+public slots:
+	void updateDownloaded( QByteArray data );
+
+private:
+	FileDownloader fdUpdate;
+	QUrl updateUrl;
 };
 
 class HTMLDelegate : public QStyledItemDelegate
@@ -232,6 +252,7 @@ private:
 	TranslationTable exifTransTable;
 	QMenu* imgPreviewMenu;
 	QString selFilePath;
+	Update update;
 
 	void createExifTranslationTable( void );
 

@@ -52,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->dateFrom->setDate( QDate::currentDate() );
 	ui->dateTo->setDate( QDate::currentDate() );
 	createExifTranslationTable();
+
+	update.checkUpdate();
 }
 
 MainWindow::~MainWindow()
@@ -1551,6 +1553,14 @@ QSize HTMLDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModel
 
 
 
+
+
+
+
+
+
+
+
 InputFilesView::InputFilesView(QWidget* parent) :  QListView(parent)
 {
 
@@ -1565,3 +1575,52 @@ void InputFilesView::currentChanged(const QModelIndex & current, const QModelInd
 {
 	emit currentChangedSignal(current, previous);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Update::Update(QWidget* parent) : QWidget(parent)
+{
+	connect(&fdUpdate, SIGNAL(downloaded(QByteArray)), this, SLOT(updateDownloaded(QByteArray)));
+
+	QString path = QDir::currentPath() + "/" + APP_UPDATE_FILE_CFG;
+	QFile f( path );
+	if( f.open( QIODevice::ReadOnly | QIODevice::Text ) )
+	{
+		QByteArray data = f.readLine();
+		QUrl u(data);
+		if( u.isValid() )
+			updateUrl = u;
+	}
+	f.close();
+}
+
+Update::~Update()
+{
+
+}
+
+void Update::updateDownloaded( QByteArray data )
+{
+	// parse data
+	QString ver = data;
+	bool brk = true;
+}
+
+void Update::checkUpdate( void )
+{
+	if( updateUrl.isValid() )
+		fdUpdate.download(updateUrl);
+}
+
+
