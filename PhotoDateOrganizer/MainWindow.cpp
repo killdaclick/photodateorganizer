@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->dateTo->setDate( QDate::currentDate() );
 	createExifTranslationTable();
 
-	update.checkUpdate();
+	//update.checkUpdate();
 }
 
 MainWindow::~MainWindow()
@@ -207,6 +207,7 @@ void MainWindow::selectFiles( void )
 					ui->status->appendHtml(tr("<font color='orange'>Błąd odczytu daty EXIF</font> dla pliku: ") + firstFileDate.first + tr(" - <font color='orange'>sprawdzam następny plik...</font><br>"));
 					QApplication::processEvents();
 				}
+				++fiTmp;
 			}
 		}
 
@@ -382,9 +383,7 @@ void MainWindow::selectFolder( void )
 
 void MainWindow::start( void )
 {
-	QDateTime dt = QDateTime::currentDateTime();
-	bool t1 = getShiftedDateTime( ui->shiftExifDate->text(), &dt );
-	QString t2 = dt.toString("yyyy-MM-dd hh:mm:ss");
+	getExifOrientation( *inFileList.begin() );
 	
 	
 	
@@ -824,33 +823,30 @@ QString MainWindow::getExifOutput( const QString& filePath, LANGUAGES lang, bool
 
 ExifOrientation MainWindow::getExifOrientation( const QString& filePath )
 {
-	// TODO
-	
 	if( filePath.isEmpty() || !QFile::exists(filePath) )
 		return EO_ERROR;
 
 	QProcess p;
 	QString extendedInfoStr = "";
-	QString startCmd = "\"" + qApp->applicationDirPath().replace("/","\\") + "\\" + QString(EXIV2_BIN) + "\" " + EXIV2_GET_ORIENTATION + " \"" + filePath + "\"";
+	QString startCmd = "\"" + qApp->applicationDirPath().replace("/","\\") + "\\" + QString(EXIV2_BIN) + "\" " + EXIV2_GET_ORIENTATION_VAL + " \"" + filePath + "\"";
 	p.start( startCmd );
 	p.waitForFinished();
 
-	QString out = "";
+	unsigned int orient = 0;
 	while( p.canReadLine() )
 	{
-		QString r = p.readLine();
-		if( r.contains(EXIV2_ORIENTATION_STR) )
+		QString r = p.readLine().replace("\r\n","");
+		if( r.size() == 1 )
 		{
-			out = r;
-			break;
+			orient = r.toUInt();
+			if( orient > 0 && orient < 9 )
+				break;
+			else
+				return EO_ERROR;
 		}
 	}
-
-	ExifOrientation orient = EO_ERROR;
-	//if( out == "" )
-
-
-	return orient;
+	
+	return (ExifOrientation)orient;
 }
 
 void MainWindow::newNameTemplateChanged(const QString & text)
@@ -1018,7 +1014,10 @@ void MainWindow::inputFileClicked( const QModelIndex& index, const QModelIndex& 
 	ui->exifInfo->setText( info );
 
 	// *previewTab*
+	//QPixmap px(path);
+	// robimy automatyczny obrot
 	QPixmap px(path);
+	px = autoRotateImgExifOrientation(path);
 
 	//auto s = ui->imgPreview->geometry().bottomRight().x() - ui->imgPreview->geometry().bottomLeft().x();
 	//px = px.scaledToWidth( s );
@@ -1153,10 +1152,10 @@ void MainWindow::imgPreviewMenuRequested( QPoint p )
 	if( ui->imgPreview->pixmap() == 0 )
 		return;
 	imgPreviewMenu = new QMenu(this);
+	imgPreviewMenu->addAction(tr("Automatyczny obrót"), this, SLOT(imgRotateAuto()));
+	imgPreviewMenu->addSeparator();
 	imgPreviewMenu->addAction(tr("Obróć w lewo"), this, SLOT(imgRotateLeft()));
 	imgPreviewMenu->addAction(tr("Obróć w prawo"), this, SLOT(imgRotateRight()));
-	//imgPreviewMenu->addSeparator();
-	//imgPreviewMenu->addAction(tr("Automatyczny obrót"), this, SLOT(imgRotateAuto()));
 	connect( imgPreviewMenu, SIGNAL(aboutToHide()), imgPreviewMenu, SLOT(deleteLater()) );
 	imgPreviewMenu->exec( ui->imgPreview->mapToGlobal(p) );
 }
@@ -1183,12 +1182,69 @@ void MainWindow::imgRotate( int direction )
 	ui->imgPreview->setPixmap(pxnew);
 }
 
-void MainWindow::imgRotateAuto()
+QPixmap MainWindow::autoRotateImgExifOrientation( const QString& path )
 {
-	if( selFilePath == "" )
+	QTransform trans;
+	ExifOrientation ot = getExifOrientation(path);
+	int rot = getExifRotateToNormalDegree(ot);
+	QPixmap px(path);
+	if( rot == 0 )
+		return px;
+	trans = trans.rotate(rot);
+	QPixmap pxnew = px.transformed(trans);
+	return pxnew;
+}
+
+void MainWindow::imgRotateAuto( void )
+{
+	auto index = ui->inputFilesList->currentIndex();
+	if( !index.isValid() )
 		return;
-	//getExifOrientation
-	//ui->imgPreview->pixmap()->fi
+
+	QString path = index.data().toString();
+	path = path.right( path.count() - path.indexOf("</b>") - 4 );
+	QPixmap px = autoRotateImgExifOrientation(path);
+	if( !px.isNull() )
+	{
+		auto s = ui->imgPreview->geometry().bottomRight().y() - ui->imgPreview->geometry().topRight().y();
+		px = px.scaledToHeight( s );
+		ui->imgPreview->setPixmap(px);
+	}
+}
+
+int MainWindow::getExifRotateToNormalDegree( ExifOrientation orientTag )
+{
+	ExifOrientationRotateToNormal rtn = (ExifOrientationRotateToNormal)orientTag;
+	int rot = 0;
+	switch(rtn)
+	{
+	case EORN_NORMAL:
+		rot = 0;
+		break;
+	case EORN_FLIP_HORIZONTAL:
+		rot = 0;			// NA RAZIE NIE OBSLUGUJEMY
+		break;
+	case EORN_ROT_180:
+		rot = 180;
+		break;
+	case EORN_FLIP_VERTICAL:
+		rot = 0;			// NA RAZIE NIE OBSLUGUJEMY
+		break;
+	case EORN_TRANSPOSE:
+		rot = 0;			// NA RAZIE NIE OBSLUGUJEMY
+		break;
+	case EORN_ROT_90:
+		rot = 90;
+		break;
+	case EORN_TRANSVERSE:
+		rot = 0;			// NA RAZIE NIE OBSLUGUJEMY
+		break;
+	case EORN_ROT_270:
+		rot = 270;
+		break;
+	}
+
+	return rot;
 }
 
 void MainWindow::exifExtendedInfoStateChanged( int state )

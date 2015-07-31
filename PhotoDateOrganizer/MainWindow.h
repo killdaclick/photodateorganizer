@@ -9,6 +9,7 @@
 #define EXIV2_EXTENDED_INFO		"-pt"
 #define EXIV2_GET_ORIENTATION	"-g Orientation"
 #define EXIV2_ORIENTATION_STR	"Exif.Image.Orientation"
+#define EXIV2_GET_ORIENTATION_VAL "-Pv -g Orientation"
 #define JPEGTRAN_BIN			"bin\\jpegtran.exe"
 #define JPEGTRAN_LOSELESS_ROT	"-copy all -rotate "
 #define JPEGTRAN_LOSELESS_PERFECT	"-perfect"
@@ -207,6 +208,8 @@ public:
 	bool jpegtrans_loselessRotate( const QString& inFilePath, const QString& outFilePath, int rotate, bool& perfectRotNotPossible, bool perfect = true );
 	void addAdditionalFilesToCopy( const QString& filePath, QStringList& addFilesList );
 	bool getShiftedDateTime( const QString& templ, QDateTime* dt );
+	QPixmap autoRotateImgExifOrientation( const QString& path );
+	int getExifRotateToNormalDegree( ExifOrientation orientTag );
 
 public slots:
 	void selectFiles( void );

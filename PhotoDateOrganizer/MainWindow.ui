@@ -10,13 +10,13 @@
     <x>0</x>
     <y>0</y>
     <width>670</width>
-    <height>850</height>
+    <height>910</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>610</width>
-    <height>850</height>
+    <height>910</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -692,10 +692,10 @@
            <item>
             <widget class="QCheckBox" name="copyAdditionalFiles">
              <property name="toolTip">
-              <string>Podczas tworzenia nowych plików JPG, kopiowane są również inne pliki o takich samych nazwach i różnych rozszerzeniach. Przydatne gdy np. posiadamy w tym samym katalogu pliki graficzne w innym formacie (np. RAW, czy CR2), które chcemy aby znalazły się w folderze docelowym</string>
+              <string>Podczas tworzenia nowych plików JPG, kopiowane są pliki o różnych rozszerzeniach. Przydatne gdy np. posiadamy w tym samym katalogu pliki graficzne w innym formacie (np. RAW, czy CR2) lub filmy, które chcemy aby znalazły się w folderze docelowym. Dla kopiowanych dodatkowych plików wykorzystywana jest data modyfikacji pliku</string>
              </property>
              <property name="text">
-              <string>Kopiuj dodatkowo pliki o innych rozszerzeniach (np. *.CR2, *.RAW) i takich samych nazwach</string>
+              <string>Kopiuj dodatkowo pliki o innych rozszerzeniach (np. *.CR2, *.RAW)</string>
              </property>
             </widget>
            </item>
@@ -1510,7 +1510,4 @@
   <include location="resource.qrc"/>
  </resources>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup"/>
- </buttongroups>
 </ui>
