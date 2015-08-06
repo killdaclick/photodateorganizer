@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->dateTo->setDate( QDate::currentDate() );
 	createExifTranslationTable();
 
-	//update.checkUpdate();
+	update.checkUpdate();
 }
 
 MainWindow::~MainWindow()
@@ -1645,7 +1645,7 @@ void InputFilesView::currentChanged(const QModelIndex & current, const QModelInd
 
 
 
-Update::Update(QWidget* parent) : QWidget(parent)
+Update::Update(QWidget* parent) : QObject(parent)
 {
 	connect(&fdUpdate, SIGNAL(downloaded(QByteArray)), this, SLOT(updateDownloaded(QByteArray)));
 
@@ -1671,6 +1671,8 @@ void Update::updateDownloaded( QByteArray data )
 	// parse data
 	QString ver = data;
 	bool brk = true;
+
+	QMessageBox::information(0, "test", "wersja: " + ver, QMessageBox::Ok);
 }
 
 void Update::checkUpdate( void )

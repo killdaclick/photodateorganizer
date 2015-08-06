@@ -92,7 +92,7 @@ enum ExifOrientationRotateToNormal
 	EORN_ROT_270
 };
 
-class Update : public QWidget
+class Update : public QObject
 {
 	Q_OBJECT
 

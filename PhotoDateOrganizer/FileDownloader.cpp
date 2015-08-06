@@ -20,7 +20,7 @@ FileDownloader::~FileDownloader()
 void FileDownloader::fileDownloaded(QNetworkReply* pReply) {
  m_DownloadedData = pReply->readAll();
  int statusCode = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
- QString errStr = pReply->errorString();
+ //QString errStr = pReply->errorString();
  //emit a signal
  pReply->deleteLater();
  emit downloaded(this->downloadedData());
