@@ -4,7 +4,8 @@
 #include <QDir>
 
 Preferences::Preferences() : langTrans(nullptr),
-	language(LANGUAGES::POLISH)
+	language(LANGUAGES::POLISH),
+	dontCheckVerNr(appVer)
 {
 }
 
@@ -75,7 +76,8 @@ bool Preferences::deserializeSettings( QByteArray* def )
 	}
 	*ser >> exifExtendedInfo;
 	*ser >> copyAdditionalFiles;
-	*ser >> addFilesExt;
+	//*ser >> addFilesExt;
+	*ser >> dontCheckVerNr;
 
 	if( ser != nullptr )
 		delete ser;
@@ -106,6 +108,7 @@ void Preferences::createDefaultSettings( Ui::MainWindow *ui )
 	def << ui->exifExtendedInfo->isChecked();
 	def << ui->copyAdditionalFiles->isChecked();
 	//def << ui->addFilesExt->text();
+	def << dontCheckVerNr;
 }
 
 bool Preferences::serializeSettings( void )
@@ -134,7 +137,8 @@ bool Preferences::serializeSettings( void )
 	ser << (int)language;
 	ser << exifExtendedInfo;
 	ser << copyAdditionalFiles;
-	ser << addFilesExt;
+	//ser << addFilesExt;
+	ser << dontCheckVerNr;
 
 	f.close();
 
@@ -156,6 +160,7 @@ bool Preferences::serializeSettings( Ui::MainWindow *ui )
 	exifExtendedInfo = ui->exifExtendedInfo->isChecked();
 	copyAdditionalFiles = ui->copyAdditionalFiles->isChecked();
 	//addFilesExt = ui->addFilesExt->text();
+	dontCheckVerNr;
 
 	return serializeSettings();
 }

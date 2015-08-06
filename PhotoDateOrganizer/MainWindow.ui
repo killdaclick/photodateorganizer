@@ -1392,6 +1392,7 @@
     </property>
     <addaction name="actionRestoreDefaults"/>
     <addaction name="actionLang"/>
+    <addaction name="actionCheckUpdate"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuPomoc">
@@ -1495,6 +1496,15 @@
    </property>
    <property name="text">
     <string>Zmień język / Change language</string>
+   </property>
+  </action>
+  <action name="actionCheckUpdate">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/rubber/icons/rubber-icons/disc_CD.ico</normaloff>:/icons/rubber/icons/rubber-icons/disc_CD.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Sprawdź aktualizację</string>
    </property>
   </action>
  </widget>

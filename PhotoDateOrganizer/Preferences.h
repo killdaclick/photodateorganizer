@@ -6,7 +6,7 @@
 #include "ui_MainWindow.h"
 #include <QTranslator>
 
-#define APP_CONFIG_VERSION		6
+#define APP_CONFIG_VERSION		7
 #define APP_CONFIG_FILE			"config.ini"
 
 class Preferences
@@ -25,6 +25,8 @@ public:
 	void loadSettings( Ui::MainWindow *ui );
 	void loadLanguage( void );
 	LANGUAGES getLanguage( void );
+	void setDontCheckVersion( unsigned int ver ) { dontCheckVerNr = ver; }
+	unsigned int getDontCheckVersion( void ) { return dontCheckVerNr; }
 
 private:
 	Preferences();
@@ -45,7 +47,8 @@ private:
 	QTranslator* langTrans;
 	bool exifExtendedInfo;
 	bool copyAdditionalFiles;
-	QString addFilesExt;
+	//QString addFilesExt;
+	unsigned int dontCheckVerNr;
 };
 
 #endif // PREFERENCES_H

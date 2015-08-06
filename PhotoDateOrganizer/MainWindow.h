@@ -21,8 +21,6 @@
 #define APP_STOP_BUTTON_TXT		"Stop"
 #define APP_UPDATE_FILE_CFG		"update.srv"
 
-const int appVer = 0x010501;
-
 #include <QMainWindow>
 
 #include <stdio.h>
@@ -46,6 +44,9 @@ const int appVer = 0x010501;
 
 #include "ChangeLanguage.h"
 #include "FileDownloader.h"
+
+const unsigned int appVer = 0x010501;
+const QString appWWW = "http://photodateorganizer.sourceforge.net/";
 
 struct TranslationSet
 {
@@ -92,22 +93,22 @@ enum ExifOrientationRotateToNormal
 	EORN_ROT_270
 };
 
-class Update : public QObject
+class Update : public QWidget
 {
 	Q_OBJECT
 
 public:
-	Update(QWidget* parent = 0);
+	Update( MainWindow* mainWin);
 	~Update();
-
-	void checkUpdate( void );
 
 public slots:
 	void updateDownloaded( QByteArray data );
+	void checkUpdate( void );
 
 private:
 	FileDownloader fdUpdate;
 	QUrl updateUrl;
+	MainWindow* mainWin;
 };
 
 class HTMLDelegate : public QStyledItemDelegate
@@ -184,6 +185,8 @@ class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
+	friend class Update;
+
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
@@ -198,7 +201,8 @@ public:
 	bool isNewNameTemplateValid( void );
 	bool getSubfolderPath( const QString& filePath, QDateTime* fdt, QString& subPath );
 	void updateViews( void );
-	QString getVersionString( void );
+	static QString getVersionString( unsigned int ver );
+	//int getVersionInt( QString verStr );
 	void updateFoundFilesCount( const QStringList& files );
 	void updateAvgTimeToFinish( int timeToF );
 	void updateFileSizeLabel( QLabel* label, qint64 size );
@@ -210,6 +214,7 @@ public:
 	bool getShiftedDateTime( const QString& templ, QDateTime* dt );
 	QPixmap autoRotateImgExifOrientation( const QString& path );
 	int getExifRotateToNormalDegree( ExifOrientation orientTag );
+	void dontCheckVersion( unsigned int ver );
 
 public slots:
 	void selectFiles( void );
@@ -235,6 +240,7 @@ public slots:
 	void exifExtendedInfoStateChanged( int state );
 	void setExifToModificationDTchanged( int state );
 	void setModificationToExifDTchanged( int state );
+	void checkUpdate( void );
 
 private:
 	Ui::MainWindow *ui;
@@ -255,7 +261,8 @@ private:
 	TranslationTable exifTransTable;
 	QMenu* imgPreviewMenu;
 	QString selFilePath;
-	Update update;
+	Update* update;
+	bool forceCheckUpdate;
 
 	void createExifTranslationTable( void );
 

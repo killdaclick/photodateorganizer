@@ -6,6 +6,7 @@
 #include "Preferences.h"
 #include <QStyleFactory>
 #include <QTransform>
+#include <QDesktopServices>
 
 extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
 
@@ -16,7 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	cancel(false),
 	timToF(nullptr),
 	convFilesSizeTim(nullptr),
-	selFilePath("")
+	selFilePath(""),
+	forceCheckUpdate(false)
 {
 	// turn on NTFS permission handling
 	qt_ntfs_permission_lookup++;
@@ -48,12 +50,13 @@ MainWindow::MainWindow(QWidget *parent) :
 	auto& p = Preferences::Instance();
 	p.createDefaultSettings(ui);
 	p.loadSettings( ui );
+	update = new Update(this);
 	enableSignals(true);
 	ui->dateFrom->setDate( QDate::currentDate() );
 	ui->dateTo->setDate( QDate::currentDate() );
 	createExifTranslationTable();
 
-	update.checkUpdate();
+	//update->checkUpdate();
 }
 
 MainWindow::~MainWindow()
@@ -119,7 +122,8 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->exifExtendedInfo, SIGNAL(stateChanged(int)), this, SLOT( exifExtendedInfoStateChanged(int) ) );
 		t = connect( ui->setExifToModificationDT, SIGNAL(stateChanged(int)), this, SLOT(setExifToModificationDTchanged(int)) );
 		t = connect( ui->setModificationToExifDT, SIGNAL(stateChanged(int)), this, SLOT(setModificationToExifDTchanged(int)) );
-		t = false;
+		t = connect( ui->actionCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()) );
+		t = false; 
 	}
 	else
 	{
@@ -142,6 +146,7 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( ui->inputFilesList, SIGNAL(currentChangedSignal(const QModelIndex&, const QModelIndex&)), this, SLOT(inputFileClicked(const QModelIndex&, const QModelIndex&)) );
 		disconnect( ui->imgPreview, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(imgPreviewMenuRequested(QPoint)) );
 		disconnect( ui->exifExtendedInfo, SIGNAL(stateChanged(int)), this, SLOT( exifExtendedInfoStateChanged(int) ) );
+		disconnect( ui->actionCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()) );
 	}
 }
 
@@ -897,16 +902,16 @@ void MainWindow::aboutToQuit( void )
 	Preferences::Instance().serializeSettings(ui);
 }
 
-QString MainWindow::getVersionString( void )
+QString MainWindow::getVersionString( unsigned int ver )
 {
-	return QString("v" + QString::number((appVer&0xFF0000)>>16) + "." + QString::number((appVer&0x00FF00)>>8) + "." + QString::number(appVer&0x0000FF));
+	return QString("v" + QString::number((ver&0xFF0000)>>16) + "." + QString::number((ver&0x00FF00)>>8) + "." + QString::number(ver&0x0000FF));
 }
 
 void MainWindow::aboutWindow( void )
 {
 	AboutWindow* a = new AboutWindow(this);
 	a->setAttribute( Qt::WA_DeleteOnClose );
-	a->ui.version->setText( a->ui.version->text().replace(APP_VERSION_ABOUT_REPLACE_STR, getVersionString()) );
+	a->ui.version->setText( a->ui.version->text().replace(APP_VERSION_ABOUT_REPLACE_STR, getVersionString(appVer)) );
 	a->exec();
 }
 
@@ -1388,11 +1393,28 @@ bool MainWindow::getShiftedDateTime( const QString& templ, QDateTime* dt )
 	return true;
 }
 
+/*
+int MainWindow::getVersionInt( QString verStr )
+{
+	for( QString::iterator itr = verStr.begin(); itr != verStr.end(); ++itr )
+	{
+		if( itr->toLower() == 'v' )
+			continue;
+
+	}
+}*/
+
 
 // TODO
 void MainWindow::addAdditionalFilesToCopy( const QString& filePath, QStringList& addFilesList )
 {
 
+}
+
+void MainWindow::checkUpdate( void )
+{
+	forceCheckUpdate = true;
+	update->checkUpdate();
 }
 
 
@@ -1645,8 +1667,10 @@ void InputFilesView::currentChanged(const QModelIndex & current, const QModelInd
 
 
 
-Update::Update(QWidget* parent) : QObject(parent)
+Update::Update(MainWindow* mainWin) : QWidget(mainWin)
 {
+	this->mainWin = mainWin;
+	
 	connect(&fdUpdate, SIGNAL(downloaded(QByteArray)), this, SLOT(updateDownloaded(QByteArray)));
 
 	QString path = QDir::currentPath() + "/" + APP_UPDATE_FILE_CFG;
@@ -1669,10 +1693,28 @@ Update::~Update()
 void Update::updateDownloaded( QByteArray data )
 {
 	// parse data
-	QString ver = data;
-	bool brk = true;
+	bool ok;
+	auto& p = Preferences::Instance();
+	unsigned int ver = QString(data).toUInt(&ok, 0);
+	int ret = 2;
+	if( ver > appVer && (ver > p.getDontCheckVersion() || mainWin->forceCheckUpdate) )
+	{
+		ret = QMessageBox::information(0, tr("Aktualizacja aplikacji"), tr("Dostępna jest nowa wersja aplikacji: ") +
+			MainWindow::getVersionString(ver), tr("Pobierz aktualizację"), tr("Nie przypominaj dla tej wersji"), tr("Zamknij"), 0, 2 );
+		if( mainWin->forceCheckUpdate )
+			mainWin->forceCheckUpdate = false;
+	}
 
-	QMessageBox::information(0, "test", "wersja: " + ver, QMessageBox::Ok);
+	switch(ret)
+	{
+	case 0:
+		QDesktopServices::openUrl(appWWW);
+		break;
+	case 1:
+		p.setDontCheckVersion( ver );
+		p.serializeSettings(mainWin->ui);
+		break;
+	}
 }
 
 void Update::checkUpdate( void )
@@ -1680,5 +1722,7 @@ void Update::checkUpdate( void )
 	if( updateUrl.isValid() )
 		fdUpdate.download(updateUrl);
 }
+
+
 
 
