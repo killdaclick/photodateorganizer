@@ -9,14 +9,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>670</width>
-    <height>910</height>
+    <width>700</width>
+    <height>923</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>610</width>
-    <height>910</height>
+    <width>576</width>
+    <height>427</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -48,7 +48,7 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="5,0,2,0,0">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="5,100,2,0,0">
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="minimumSize">
@@ -340,447 +340,643 @@
      </widget>
     </item>
     <item>
-     <widget class="QTabWidget" name="tabs">
-      <property name="toolTip">
-       <string/>
+     <widget class="QScrollArea" name="scrollArea_2">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
       </property>
-      <property name="tabPosition">
-       <enum>QTabWidget::North</enum>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
       </property>
-      <property name="currentIndex">
+      <property name="lineWidth">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab">
-       <attribute name="icon">
-        <iconset resource="resource.qrc">
-         <normaloff>:/icons/rubber/icons/rubber-icons/development_tools.ico</normaloff>:/icons/rubber/icons/rubber-icons/development_tools.ico</iconset>
-       </attribute>
-       <attribute name="title">
-        <string>Opcje</string>
-       </attribute>
-       <attribute name="toolTip">
-        <string>Opcje konwersji</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>6</number>
-        </property>
-        <property name="rightMargin">
-         <number>6</number>
-        </property>
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>682</width>
+         <height>546</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_14">
         <item>
-         <widget class="QGroupBox" name="groupBox_2">
+         <widget class="QTabWidget" name="tabs">
           <property name="toolTip">
-           <string>Konfiguruje sposób modyfikacji daty i czasu metadanych EXIF oraz &quot;daty modyfikacji&quot; pliku</string>
-          </property>
-          <property name="statusTip">
            <string/>
           </property>
-          <property name="whatsThis">
-           <string/>
+          <property name="tabPosition">
+           <enum>QTabWidget::North</enum>
           </property>
-          <property name="title">
-           <string>Popraw datę i czas</string>
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-          <property name="checkable">
-           <bool>false</bool>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_11">
-           <property name="spacing">
-            <number>6</number>
-           </property>
-           <property name="leftMargin">
-            <number>6</number>
-           </property>
-           <property name="topMargin">
-            <number>6</number>
-           </property>
-           <property name="rightMargin">
-            <number>6</number>
-           </property>
-           <property name="bottomMargin">
-            <number>6</number>
-           </property>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_17">
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QGroupBox" name="groupBox_4">
-               <property name="toolTip">
-                <string>Modyfikacja dotycząca metadanych EXIF</string>
-               </property>
-               <property name="title">
-                <string>Metadanych EXIF</string>
-               </property>
-               <property name="checkable">
-                <bool>false</bool>
-               </property>
-               <layout class="QVBoxLayout" name="verticalLayout_13">
-                <property name="spacing">
-                 <number>6</number>
-                </property>
-                <property name="leftMargin">
-                 <number>6</number>
-                </property>
-                <property name="topMargin">
-                 <number>6</number>
-                </property>
-                <property name="rightMargin">
-                 <number>6</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>6</number>
-                </property>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_16">
-                  <item>
-                   <widget class="QLabel" name="label_22">
-                    <property name="toolTip">
-                     <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
-                    </property>
-                    <property name="text">
-                     <string>Przesuń:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="shiftExifDate">
-                    <property name="toolTip">
-                     <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
-                    </property>
-                    <property name="placeholderText">
-                     <string>np.: %Y+3 %M-2 %D+1 %h-2 %m+15 %s-30 </string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_19">
-                  <property name="topMargin">
-                   <number>0</number>
-                  </property>
-                  <item>
-                   <widget class="QCheckBox" name="setExifDateTo">
-                    <property name="toolTip">
-                     <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
-                    </property>
-                    <property name="text">
-                     <string>Ustaw:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QDateTimeEdit" name="setExifDateToDT">
-                    <property name="toolTip">
-                     <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
-                    </property>
-                    <property name="date">
-                     <date>
-                      <year>2015</year>
-                      <month>1</month>
-                      <day>1</day>
-                     </date>
-                    </property>
-                    <property name="displayFormat">
-                     <string>yyyy-MM-dd HH:mm:ss</string>
-                    </property>
-                    <property name="calendarPopup">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="setExifToModificationDT">
-                  <property name="toolTip">
-                   <string>Pobiera datę i czas z atrybutu &quot;daty modyfikacji&quot; pliku i kopiuje ją do metadanych EXIF, przed przesunięciem (o ile opcja przesunięcia została wybrana)</string>
-                  </property>
-                  <property name="text">
-                   <string>Pobierz datę z &quot;daty modyfikacji&quot;</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QGroupBox" name="groupBox_5">
-               <property name="toolTip">
-                <string>Modyfikacja dotycząca atrybutu &quot;daty modyfikacji&quot; pliku</string>
-               </property>
-               <property name="title">
-                <string>Daty modyfikacji pliku</string>
-               </property>
-               <property name="checkable">
-                <bool>false</bool>
-               </property>
-               <layout class="QVBoxLayout" name="verticalLayout_12">
-                <property name="spacing">
-                 <number>3</number>
-                </property>
-                <property name="leftMargin">
-                 <number>6</number>
-                </property>
-                <property name="topMargin">
-                 <number>6</number>
-                </property>
-                <property name="rightMargin">
-                 <number>6</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>6</number>
-                </property>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_18">
-                  <property name="topMargin">
-                   <number>0</number>
-                  </property>
-                  <item>
-                   <widget class="QLabel" name="label_23">
-                    <property name="toolTip">
-                     <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
-                    </property>
-                    <property name="text">
-                     <string>Przesuń:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="shiftModificationDate">
-                    <property name="toolTip">
-                     <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
-                    </property>
-                    <property name="placeholderText">
-                     <string>np.: %Y+3 %M-2 %D+1 %h-2 %m+15 %s-30 </string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_20">
-                  <item>
-                   <widget class="QCheckBox" name="setModificationDateTo">
-                    <property name="toolTip">
-                     <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
-                    </property>
-                    <property name="text">
-                     <string>Ustaw:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QDateTimeEdit" name="setModificationDateToDT">
-                    <property name="toolTip">
-                     <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
-                    </property>
-                    <property name="date">
-                     <date>
-                      <year>2015</year>
-                      <month>1</month>
-                      <day>1</day>
-                     </date>
-                    </property>
-                    <property name="displayFormat">
-                     <string>yyyy-MM-dd HH:mm:ss</string>
-                    </property>
-                    <property name="calendarPopup">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="setModificationToExifDT">
-                  <property name="toolTip">
-                   <string>Pobiera datę i czas z metadanych EXIF i kopiuje ją do atrybutu &quot;daty modyfikacji&quot; pliku, przed przesunięciem (o ile opcja przesunięcia została wybrana)</string>
-                  </property>
-                  <property name="text">
-                   <string>Pobierz datę z EXIF</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="createOutputFiles">
-          <property name="toolTip">
-           <string>Włącza tworzenie nowych plików (bez nadpisywania źródłowych)</string>
-          </property>
-          <property name="title">
-           <string>Utwórz nowe pliki</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_5">
-           <property name="leftMargin">
-            <number>6</number>
-           </property>
-           <property name="topMargin">
-            <number>6</number>
-           </property>
-           <property name="rightMargin">
-            <number>6</number>
-           </property>
-           <property name="bottomMargin">
-            <number>6</number>
-           </property>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QPushButton" name="outputFolderBtn">
-               <property name="toolTip">
-                <string>Wybiera folder docelowy</string>
-               </property>
-               <property name="text">
-                <string>Folder</string>
-               </property>
-               <property name="icon">
-                <iconset resource="resource.qrc">
-                 <normaloff>:/icons/rubber/icons/rubber-icons/hdd_USB.ico</normaloff>:/icons/rubber/icons/rubber-icons/hdd_USB.ico</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="outputFolder">
-               <property name="acceptDrops">
-                <bool>false</bool>
-               </property>
-               <property name="toolTip">
-                <string>Ścieżka do katalogu docelowego</string>
-               </property>
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="copyAdditionalFiles">
-             <property name="toolTip">
-              <string>Podczas tworzenia nowych plików JPG, kopiowane są pliki o różnych rozszerzeniach. Przydatne gdy np. posiadamy w tym samym katalogu pliki graficzne w innym formacie (np. RAW, czy CR2) lub filmy, które chcemy aby znalazły się w folderze docelowym. Dla kopiowanych dodatkowych plików wykorzystywana jest data modyfikacji pliku</string>
-             </property>
-             <property name="text">
-              <string>Kopiuj dodatkowo pliki o innych rozszerzeniach (np. *.CR2, *.RAW)</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="saveOrgSubfolders">
-             <property name="toolTip">
-              <string>Zachowuje oryginalną strukturę katalogów począwszy od katalogu wskazanego jako źródłowy</string>
-             </property>
-             <property name="text">
-              <string>Zachowaj oryginalną strukturę podkatalogów</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="createOutputSubfolders">
-             <property name="toolTip">
-              <string>Włącza tworzenie podkatalogów według szablonu. Uwzględnia oryginalną strukturę podkatalogów jeżeli ta opcja jest włączona</string>
-             </property>
-             <property name="title">
-              <string>Twórz pliki w podfolderach według szablonu</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_6">
-              <property name="leftMargin">
-               <number>6</number>
+          <widget class="QWidget" name="tab">
+           <attribute name="icon">
+            <iconset resource="resource.qrc">
+             <normaloff>:/icons/rubber/icons/rubber-icons/development_tools.ico</normaloff>:/icons/rubber/icons/rubber-icons/development_tools.ico</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Opcje</string>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Opcje konwersji</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <property name="leftMargin">
+             <number>6</number>
+            </property>
+            <property name="topMargin">
+             <number>6</number>
+            </property>
+            <property name="rightMargin">
+             <number>6</number>
+            </property>
+            <property name="bottomMargin">
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="toolTip">
+               <string>Konfiguruje sposób modyfikacji daty i czasu metadanych EXIF oraz &quot;daty modyfikacji&quot; pliku</string>
               </property>
+              <property name="statusTip">
+               <string/>
+              </property>
+              <property name="whatsThis">
+               <string/>
+              </property>
+              <property name="title">
+               <string>Popraw datę i czas</string>
+              </property>
+              <property name="checkable">
+               <bool>false</bool>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_11">
+               <property name="spacing">
+                <number>6</number>
+               </property>
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_17">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QGroupBox" name="groupBox_4">
+                   <property name="toolTip">
+                    <string>Modyfikacja dotycząca metadanych EXIF</string>
+                   </property>
+                   <property name="title">
+                    <string>Metadanych EXIF</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>false</bool>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_13">
+                    <property name="spacing">
+                     <number>6</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>6</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>6</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>6</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>6</number>
+                    </property>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_16">
+                      <item>
+                       <widget class="QLabel" name="label_22">
+                        <property name="toolTip">
+                         <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
+                        </property>
+                        <property name="text">
+                         <string>Przesuń:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="shiftExifDate">
+                        <property name="toolTip">
+                         <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
+                        </property>
+                        <property name="placeholderText">
+                         <string>np.: %Y+3 %M-2 %D+1 %h-2 %m+15 %s-30 </string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_19">
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QCheckBox" name="setExifDateTo">
+                        <property name="toolTip">
+                         <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
+                        </property>
+                        <property name="text">
+                         <string>Ustaw:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QDateTimeEdit" name="setExifDateToDT">
+                        <property name="toolTip">
+                         <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
+                        </property>
+                        <property name="date">
+                         <date>
+                          <year>2015</year>
+                          <month>1</month>
+                          <day>1</day>
+                         </date>
+                        </property>
+                        <property name="displayFormat">
+                         <string>yyyy-MM-dd HH:mm:ss</string>
+                        </property>
+                        <property name="calendarPopup">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <widget class="QCheckBox" name="setExifToModificationDT">
+                      <property name="toolTip">
+                       <string>Pobiera datę i czas z atrybutu &quot;daty modyfikacji&quot; pliku i kopiuje ją do metadanych EXIF, przed przesunięciem (o ile opcja przesunięcia została wybrana)</string>
+                      </property>
+                      <property name="text">
+                       <string>Pobierz datę z &quot;daty modyfikacji&quot;</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="groupBox_5">
+                   <property name="toolTip">
+                    <string>Modyfikacja dotycząca atrybutu &quot;daty modyfikacji&quot; pliku</string>
+                   </property>
+                   <property name="title">
+                    <string>Daty modyfikacji pliku</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>false</bool>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_12">
+                    <property name="spacing">
+                     <number>3</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>6</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>6</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>6</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>6</number>
+                    </property>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_18">
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QLabel" name="label_23">
+                        <property name="toolTip">
+                         <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
+                        </property>
+                        <property name="text">
+                         <string>Przesuń:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="shiftModificationDate">
+                        <property name="toolTip">
+                         <string>Przesuwa datę i czas o wyznaczone wartości (PATRZ ŚCIĄGA)</string>
+                        </property>
+                        <property name="placeholderText">
+                         <string>np.: %Y+3 %M-2 %D+1 %h-2 %m+15 %s-30 </string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_20">
+                      <item>
+                       <widget class="QCheckBox" name="setModificationDateTo">
+                        <property name="toolTip">
+                         <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
+                        </property>
+                        <property name="text">
+                         <string>Ustaw:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QDateTimeEdit" name="setModificationDateToDT">
+                        <property name="toolTip">
+                         <string>Włącza ustawianie daty i czasu na wskazaną wartość</string>
+                        </property>
+                        <property name="date">
+                         <date>
+                          <year>2015</year>
+                          <month>1</month>
+                          <day>1</day>
+                         </date>
+                        </property>
+                        <property name="displayFormat">
+                         <string>yyyy-MM-dd HH:mm:ss</string>
+                        </property>
+                        <property name="calendarPopup">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <widget class="QCheckBox" name="setModificationToExifDT">
+                      <property name="toolTip">
+                       <string>Pobiera datę i czas z metadanych EXIF i kopiuje ją do atrybutu &quot;daty modyfikacji&quot; pliku, przed przesunięciem (o ile opcja przesunięcia została wybrana)</string>
+                      </property>
+                      <property name="text">
+                       <string>Pobierz datę z EXIF</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="createOutputFiles">
+              <property name="toolTip">
+               <string>Włącza tworzenie nowych plików (bez nadpisywania źródłowych)</string>
+              </property>
+              <property name="title">
+               <string>Utwórz nowe pliki</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QPushButton" name="outputFolderBtn">
+                   <property name="toolTip">
+                    <string>Wybiera folder docelowy</string>
+                   </property>
+                   <property name="text">
+                    <string>Folder</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="resource.qrc">
+                     <normaloff>:/icons/rubber/icons/rubber-icons/hdd_USB.ico</normaloff>:/icons/rubber/icons/rubber-icons/hdd_USB.ico</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="outputFolder">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                   <property name="toolTip">
+                    <string>Ścieżka do katalogu docelowego</string>
+                   </property>
+                   <property name="readOnly">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="copyAdditionalFiles">
+                 <property name="toolTip">
+                  <string>Podczas tworzenia nowych plików JPG, kopiowane są pliki o różnych rozszerzeniach. Przydatne gdy np. posiadamy w tym samym katalogu pliki graficzne w innym formacie (np. RAW, czy CR2) lub filmy, które chcemy aby znalazły się w folderze docelowym. Dla kopiowanych dodatkowych plików wykorzystywana jest data modyfikacji pliku</string>
+                 </property>
+                 <property name="text">
+                  <string>Kopiuj dodatkowo pliki o innych rozszerzeniach (np. *.CR2, *.RAW)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="saveOrgSubfolders">
+                 <property name="toolTip">
+                  <string>Zachowuje oryginalną strukturę katalogów począwszy od katalogu wskazanego jako źródłowy</string>
+                 </property>
+                 <property name="text">
+                  <string>Zachowaj oryginalną strukturę podkatalogów</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="createOutputSubfolders">
+                 <property name="toolTip">
+                  <string>Włącza tworzenie podkatalogów według szablonu. Uwzględnia oryginalną strukturę podkatalogów jeżeli ta opcja jest włączona</string>
+                 </property>
+                 <property name="title">
+                  <string>Twórz pliki w podfolderach według szablonu</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_6">
+                  <property name="leftMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>6</number>
+                  </property>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_3">
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="label_4">
+                      <property name="toolTip">
+                       <string>Szablon do konfiguracji nazw podkatalogów (PATRZ ŚCIĄGA)</string>
+                      </property>
+                      <property name="text">
+                       <string>Szablon podfolderów</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="subfoldersNameTemplate">
+                      <property name="toolTip">
+                       <string>Szablon do konfiguracji nazw podkatalogów (PATRZ ŚCIĄGA)</string>
+                      </property>
+                      <property name="text">
+                       <string>%Y-%M%\%Y-%M-%D</string>
+                      </property>
+                      <property name="placeholderText">
+                       <string>e.g.: %Y-%M%\%Y-%M-%D</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_8">
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="label_8">
+                      <property name="toolTip">
+                       <string>Podgląd nazw tworzonych podkatalogów</string>
+                      </property>
+                      <property name="text">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Podgląd nazw tworzonych podfolderów&lt;br/&gt;(w oparciu o pierwszy plik z listy):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="textFormat">
+                       <enum>Qt::RichText</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="subfoldersNameTemplatePreview">
+                      <property name="acceptDrops">
+                       <bool>false</bool>
+                      </property>
+                      <property name="toolTip">
+                       <string>Podgląd nazw tworzonych podkatalogów</string>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="changeOutputFileName">
+              <property name="toolTip">
+               <string>Włącza zmienianie nazw plików docelowych</string>
+              </property>
+              <property name="title">
+               <string>Zmień nazwę plików</string>
+              </property>
+              <property name="flat">
+               <bool>false</bool>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="label">
+                   <property name="toolTip">
+                    <string>Szablon do konfiguracji nazw plików (PATRZ ŚCIĄGA)</string>
+                   </property>
+                   <property name="text">
+                    <string>Szablon nazwy pliku:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="newNameTemplate">
+                   <property name="toolTip">
+                    <string>Szablon do konfiguracji nazw plików (PATRZ ŚCIĄGA)</string>
+                   </property>
+                   <property name="text">
+                    <string>%Y%M%D-%h%m%s_%N</string>
+                   </property>
+                   <property name="placeholderText">
+                    <string>e.g.: %Y%M%D-%h%m%s_%N</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="label_6">
+                   <property name="toolTip">
+                    <string>Podgląd nazw tworzonych plików</string>
+                   </property>
+                   <property name="text">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Podgląd nazw nowych plików&lt;br/&gt;(w oparciu o pierwszy plik z listy):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="textFormat">
+                    <enum>Qt::RichText</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="newNameTemplatePreview">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                   <property name="toolTip">
+                    <string>Podgląd nazw tworzonych plików</string>
+                   </property>
+                   <property name="readOnly">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+           <zorder>changeOutputFileName</zorder>
+           <zorder>createOutputFiles</zorder>
+           <zorder>groupBox_2</zorder>
+          </widget>
+          <widget class="QWidget" name="tab_2">
+           <attribute name="icon">
+            <iconset resource="resource.qrc">
+             <normaloff>:/icons/rubber/icons/rubber-icons/home.ico</normaloff>:/icons/rubber/icons/rubber-icons/home.ico</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Ściąga</string>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Ściąga do tworzenia szablonów</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <property name="leftMargin">
+             <number>6</number>
+            </property>
+            <property name="topMargin">
+             <number>6</number>
+            </property>
+            <property name="rightMargin">
+             <number>6</number>
+            </property>
+            <property name="bottomMargin">
+             <number>6</number>
+            </property>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_9">
               <property name="topMargin">
-               <number>6</number>
-              </property>
-              <property name="rightMargin">
-               <number>6</number>
+               <number>9</number>
               </property>
               <property name="bottomMargin">
-               <number>6</number>
+               <number>9</number>
               </property>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <layout class="QHBoxLayout" name="horizontalLayout_11">
+                <property name="spacing">
+                 <number>6</number>
+                </property>
                 <property name="topMargin">
                  <number>0</number>
                 </property>
-                <item>
-                 <widget class="QLabel" name="label_4">
-                  <property name="toolTip">
-                   <string>Szablon do konfiguracji nazw podkatalogów (PATRZ ŚCIĄGA)</string>
-                  </property>
-                  <property name="text">
-                   <string>Szablon podfolderów</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="subfoldersNameTemplate">
-                  <property name="toolTip">
-                   <string>Szablon do konfiguracji nazw podkatalogów (PATRZ ŚCIĄGA)</string>
-                  </property>
-                  <property name="text">
-                   <string>%Y-%M%\%Y-%M-%D</string>
-                  </property>
-                  <property name="placeholderText">
-                   <string>e.g.: %Y-%M%\%Y-%M-%D</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_8">
-                <property name="topMargin">
-                 <number>0</number>
+                <property name="bottomMargin">
+                 <number>15</number>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_8">
-                  <property name="toolTip">
-                   <string>Podgląd nazw tworzonych podkatalogów</string>
-                  </property>
+                 <widget class="QLabel" name="label_10">
                   <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Podgląd nazw tworzonych podfolderów&lt;br/&gt;(w oparciu o pierwszy plik z listy):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y&lt;/span&gt; - rok zrobienia zdjęcia; ---------- format: RRRR&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%M&lt;/span&gt; - miesiąc zrobienia zdjęcia; ----- format: MM&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%D&lt;/span&gt; - dzień zrobienia zdjęcia; -------- format: DD&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%N&lt;/span&gt; - oryginalna nazwa&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="textFormat">
                    <enum>Qt::RichText</enum>
@@ -788,340 +984,178 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="subfoldersNameTemplatePreview">
-                  <property name="acceptDrops">
-                   <bool>false</bool>
+                 <widget class="QLabel" name="label_11">
+                  <property name="text">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%h&lt;/span&gt; - godzina zrobienia zdjęcia; -------- format: hhmmss&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%m&lt;/span&gt; - minuta zrobienia zdjęcia;  -------- format: mm&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%s&lt;/span&gt; - sekunda zrobienia zdjęcia: -------- format: ss&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%\&lt;/span&gt; - wykonanie kolejnego podfolderu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
-                  <property name="toolTip">
-                   <string>Podgląd nazw tworzonych podkatalogów</string>
+                  <property name="textFormat">
+                   <enum>Qt::RichText</enum>
                   </property>
-                  <property name="readOnly">
-                   <bool>true</bool>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                   </property>
                  </widget>
                 </item>
                </layout>
               </item>
+              <item>
+               <widget class="Line" name="line">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_12">
+                <property name="lineWidth">
+                 <number>1</number>
+                </property>
+                <property name="text">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład tworzenia katalogów: &lt;/span&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y-%M%\%Y-%M-%D&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Umieści zdjęcia w podkatalogach według schematu: 2015-03 \ 2015-03-27&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład zmiany nazwy: &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%Y%M%D-%h%m%s&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;_&lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%N&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Zmieni nazwę według schematu: 20150327-145513_NazwaPliku&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład przesuwania daty i czasu: &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%Y+3 %M-2 %D+1 %h-2 %m+15 %s-30&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Do roku dodaje wartość 3, od miesiąca odejmuje 2, do dni dodaje 1, od godziny odejmuje 2, do minut dodaje 15, od sekund odejmuje 30. Dla przykładowej daty 2015-06-04 i czasu 15:35:45 efektem przesunięcia będzie data i czas: 2018-04-05 13:50:15.&lt;br/&gt;Poszczególne wartości mogą być w dowolnej kolejności oraz muszą być oddzielone spacją. Dopuszczalne znaki przesunięcia to '+' oraz '-'.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="textFormat">
+                 <enum>Qt::RichText</enum>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
              </layout>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="changeOutputFileName">
-          <property name="toolTip">
-           <string>Włącza zmienianie nazw plików docelowych</string>
-          </property>
-          <property name="title">
-           <string>Zmień nazwę plików</string>
-          </property>
-          <property name="flat">
-           <bool>false</bool>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
-           <property name="leftMargin">
-            <number>6</number>
-           </property>
-           <property name="topMargin">
-            <number>6</number>
-           </property>
-           <property name="rightMargin">
-            <number>6</number>
-           </property>
-           <property name="bottomMargin">
-            <number>6</number>
-           </property>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="label">
-               <property name="toolTip">
-                <string>Szablon do konfiguracji nazw plików (PATRZ ŚCIĄGA)</string>
-               </property>
-               <property name="text">
-                <string>Szablon nazwy pliku:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="newNameTemplate">
-               <property name="toolTip">
-                <string>Szablon do konfiguracji nazw plików (PATRZ ŚCIĄGA)</string>
-               </property>
-               <property name="text">
-                <string>%Y%M%D-%h%m%s_%N</string>
-               </property>
-               <property name="placeholderText">
-                <string>e.g.: %Y%M%D-%h%m%s_%N</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="label_6">
-               <property name="toolTip">
-                <string>Podgląd nazw tworzonych plików</string>
-               </property>
-               <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Podgląd nazw nowych plików&lt;br/&gt;(w oparciu o pierwszy plik z listy):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::RichText</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="newNameTemplatePreview">
-               <property name="acceptDrops">
-                <bool>false</bool>
-               </property>
-               <property name="toolTip">
-                <string>Podgląd nazw tworzonych plików</string>
-               </property>
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-       <zorder>changeOutputFileName</zorder>
-       <zorder>createOutputFiles</zorder>
-       <zorder>groupBox_2</zorder>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="icon">
-        <iconset resource="resource.qrc">
-         <normaloff>:/icons/rubber/icons/rubber-icons/home.ico</normaloff>:/icons/rubber/icons/rubber-icons/home.ico</iconset>
-       </attribute>
-       <attribute name="title">
-        <string>Ściąga</string>
-       </attribute>
-       <attribute name="toolTip">
-        <string>Ściąga do tworzenia szablonów</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_10">
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>6</number>
-        </property>
-        <property name="rightMargin">
-         <number>6</number>
-        </property>
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_9">
-          <property name="topMargin">
-           <number>9</number>
-          </property>
-          <property name="bottomMargin">
-           <number>9</number>
-          </property>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_11">
-            <property name="spacing">
+            </item>
+            <item>
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>114</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="infoTab">
+           <attribute name="icon">
+            <iconset resource="resource.qrc">
+             <normaloff>:/icons/rubber/icons/rubber-icons/system_monitor.ico</normaloff>:/icons/rubber/icons/rubber-icons/system_monitor.ico</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Informacje o obrazie</string>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Rozszerzone informacje o obrazie</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_15" stretch="0">
+            <property name="leftMargin">
              <number>6</number>
             </property>
             <property name="topMargin">
-             <number>0</number>
+             <number>6</number>
+            </property>
+            <property name="rightMargin">
+             <number>6</number>
             </property>
             <property name="bottomMargin">
-             <number>15</number>
+             <number>6</number>
             </property>
             <item>
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y&lt;/span&gt; - rok zrobienia zdjęcia; ---------- format: RRRR&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%M&lt;/span&gt; - miesiąc zrobienia zdjęcia; ----- format: MM&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%D&lt;/span&gt; - dzień zrobienia zdjęcia; -------- format: DD&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%N&lt;/span&gt; - oryginalna nazwa&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <widget class="QGroupBox" name="groupBox_3">
+              <property name="title">
+               <string>Metadane EXIF</string>
               </property>
-              <property name="textFormat">
-               <enum>Qt::RichText</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_11">
-              <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%h&lt;/span&gt; - godzina zrobienia zdjęcia; -------- format: hhmmss&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%m&lt;/span&gt; - minuta zrobienia zdjęcia;  -------- format: mm&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%s&lt;/span&gt; - sekunda zrobienia zdjęcia: -------- format: ss&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%\&lt;/span&gt; - wykonanie kolejnego podfolderu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::RichText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QCheckBox" name="exifExtendedInfo">
+                 <property name="text">
+                  <string>Wyświetl rozszerzone informacje</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTextEdit" name="exifInfo">
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="Line" name="line">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+          </widget>
+          <widget class="QWidget" name="previewTab">
+           <attribute name="icon">
+            <iconset resource="resource.qrc">
+             <normaloff>:/icons/rubber/icons/rubber-icons/desktop.ico</normaloff>:/icons/rubber/icons/rubber-icons/desktop.ico</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Podgląd obrazu</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout">
+            <property name="leftMargin">
+             <number>3</number>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_12">
-            <property name="lineWidth">
-             <number>1</number>
+            <property name="topMargin">
+             <number>3</number>
             </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład tworzenia katalogów: &lt;/span&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%Y-%M%\%Y-%M-%D&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Umieści zdjęcia w podkatalogach według schematu: 2015-03 \ 2015-03-27&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład zmiany nazwy: &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%Y%M%D-%h%m%s&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;_&lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%N&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Zmieni nazwę według schematu: 20150327-145513_NazwaPliku&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#00007f;&quot;&gt;Przykład przesuwania daty i czasu: &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;%Y+3 %M-2 %D+1 %h-2 %m+15 %s-30&lt;/span&gt;&lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;&lt;br/&gt;&lt;/span&gt;Do roku dodaje wartość 3, od miesiąca odejmuje 2, do dni dodaje 1, od godziny odejmuje 2, do minut dodaje 15, od sekund odejmuje 30. Dla przykładowej daty 2015-06-04 i czasu 15:35:45 efektem przesunięcia będzie data i czas: 2018-04-05 13:50:15.&lt;br/&gt;Poszczególne wartości mogą być w dowolnej kolejności oraz muszą być oddzielone spacją. Dopuszczalne znaki przesunięcia to '+' oraz '-'.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <property name="rightMargin">
+             <number>3</number>
             </property>
-            <property name="textFormat">
-             <enum>Qt::RichText</enum>
+            <property name="bottomMargin">
+             <number>3</number>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>114</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="infoTab">
-       <attribute name="icon">
-        <iconset resource="resource.qrc">
-         <normaloff>:/icons/rubber/icons/rubber-icons/system_monitor.ico</normaloff>:/icons/rubber/icons/rubber-icons/system_monitor.ico</iconset>
-       </attribute>
-       <attribute name="title">
-        <string>Informacje o obrazie</string>
-       </attribute>
-       <attribute name="toolTip">
-        <string>Rozszerzone informacje o obrazie</string>
-       </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_15" stretch="0">
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>6</number>
-        </property>
-        <property name="rightMargin">
-         <number>6</number>
-        </property>
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
-        <item>
-         <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>Metadane EXIF</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
-           <property name="leftMargin">
-            <number>6</number>
-           </property>
-           <property name="topMargin">
-            <number>6</number>
-           </property>
-           <property name="rightMargin">
-            <number>6</number>
-           </property>
-           <property name="bottomMargin">
-            <number>6</number>
-           </property>
-           <item>
-            <widget class="QCheckBox" name="exifExtendedInfo">
-             <property name="text">
-              <string>Wyświetl rozszerzone informacje</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTextEdit" name="exifInfo">
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="previewTab">
-       <attribute name="icon">
-        <iconset resource="resource.qrc">
-         <normaloff>:/icons/rubber/icons/rubber-icons/desktop.ico</normaloff>:/icons/rubber/icons/rubber-icons/desktop.ico</iconset>
-       </attribute>
-       <attribute name="title">
-        <string>Podgląd obrazu</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout">
-        <property name="leftMargin">
-         <number>3</number>
-        </property>
-        <property name="topMargin">
-         <number>3</number>
-        </property>
-        <property name="rightMargin">
-         <number>3</number>
-        </property>
-        <property name="bottomMargin">
-         <number>3</number>
-        </property>
-        <item row="0" column="0">
-         <widget class="ImgPreviewArea" name="scrollArea">
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>638</width>
-             <height>433</height>
-            </rect>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_8">
-            <item>
-             <widget class="QLabel" name="imgPreview">
-              <property name="text">
-               <string>Podgląd</string>
+            <item row="0" column="0">
+             <widget class="ImgPreviewArea" name="scrollArea">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
+              <property name="lineWidth">
+               <number>0</number>
               </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="scrollAreaWidgetContents">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>636</width>
+                 <height>493</height>
+                </rect>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_8">
+                <item>
+                 <widget class="QLabel" name="imgPreview">
+                  <property name="text">
+                   <string>Podgląd</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
              </widget>
             </item>
            </layout>
@@ -1382,7 +1416,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>670</width>
+     <width>700</width>
      <height>21</height>
     </rect>
    </property>

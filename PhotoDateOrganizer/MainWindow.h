@@ -40,6 +40,9 @@
 #include <QPainter>
 #include <QListView>
 #include <QScrollArea>
+#include <QFuture>
+#include <QFutureWatcher>
+#include <QPixmap>
 
 #include <windows.h>
 
@@ -60,6 +63,7 @@ typedef QPair<QString,QDateTime>	FileExif;
 typedef QVector<int>	TimeStepList;
 typedef QVector<int>	SizeSpeedList;
 typedef QList<TranslationSet> TranslationTable;
+typedef QMap<QString,QPixmap*> PreviewPixmapResource;
 
 enum mainTabs
 {
@@ -245,6 +249,7 @@ public:
 	QPixmap autoRotateImgExifOrientation( const QString& path );
 	int getExifRotateToNormalDegree( ExifOrientation orientTag );
 	void dontCheckVersion( unsigned int ver );
+	QPixmap* loadPreviewPixmap( const QString& path );
 
 public slots:
 	void selectFiles( void );
@@ -272,6 +277,7 @@ public slots:
 	void setModificationToExifDTchanged( int state );
 	void checkUpdate( void );
 	void imgPreviewDoubleClickedSlot( QMouseEvent * e ) const;
+	void previewPixmapLoaded( void );
 
 private:
 	Ui::MainWindow *ui;
@@ -294,6 +300,10 @@ private:
 	QString selFilePath;
 	Update* update;
 	bool forceCheckUpdate;
+	QFuture<QPixmap*> prevLoadfuture;
+	QFutureWatcher<QPixmap*> prevLoadWatch;
+	PreviewPixmapResource prvPixmapRes;
+	void clearPreviewImgCache( void );
 
 	void createExifTranslationTable( void );
 

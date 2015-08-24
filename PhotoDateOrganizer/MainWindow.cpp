@@ -7,6 +7,7 @@
 #include <QStyleFactory>
 #include <QTransform>
 #include <QDesktopServices>
+#include <QtConcurrent>
 
 extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
 
@@ -22,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	// turn on NTFS permission handling
 	qt_ntfs_permission_lookup++;
-	
+
 	QStyle* fusion = QStyleFactory::create("fusion");
 	qApp->setStyle(fusion);
 	
@@ -55,6 +56,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->dateFrom->setDate( QDate::currentDate() );
 	ui->dateTo->setDate( QDate::currentDate() );
 	createExifTranslationTable();
+
+	// TODO - na razie ukrywamy
+	ui->copyAdditionalFiles->setVisible(false);
 
 	//update->checkUpdate();
 }
@@ -124,6 +128,7 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->setModificationToExifDT, SIGNAL(stateChanged(int)), this, SLOT(setModificationToExifDTchanged(int)) );
 		t = connect( ui->actionCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()) );
 		t = connect( ui->scrollArea, SIGNAL(imgPreviewDoubleClicked(QMouseEvent*)), this, SLOT(imgPreviewDoubleClickedSlot(QMouseEvent*)) );
+		t = connect( &prevLoadWatch, SIGNAL(finished()), this, SLOT(previewPixmapLoaded()) );
 		t = false; 
 	}
 	else
@@ -149,6 +154,7 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( ui->exifExtendedInfo, SIGNAL(stateChanged(int)), this, SLOT( exifExtendedInfoStateChanged(int) ) );
 		disconnect( ui->actionCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()) );
 		disconnect( ui->scrollArea, SIGNAL(imgPreviewDoubleClicked(QMouseEvent*)), this, SLOT(imgPreviewDoubleClickedSlot(QMouseEvent*)) );
+		disconnect( &prevLoadWatch, SIGNAL(finished()), this, SLOT(previewPixmapLoaded()) );
 	}
 }
 
@@ -170,6 +176,7 @@ void MainWindow::selectFiles( void )
 	updateFoundFilesCount(files);
 
 	// czyscimy
+	clearPreviewImgCache();
 	inFileList.clear();
 	firstFileDate = FileExif();
 	ui->status->clear();
@@ -285,6 +292,7 @@ void MainWindow::selectFolder( void )
 		return;
 
 	// czyscimy
+	clearPreviewImgCache();
 	inFileList.clear();
 	firstFileDate = FileExif();
 	ui->status->clear();
@@ -390,28 +398,6 @@ void MainWindow::selectFolder( void )
 
 void MainWindow::start( void )
 {
-	getExifOrientation( *inFileList.begin() );
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	return;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	if( inFileList.count() == 0 )
 		return;
 
@@ -1022,7 +1008,6 @@ void MainWindow::inputFileClicked( const QModelIndex& index, const QModelIndex& 
 	// *infoTab*
 	ui->inputFilesList->scrollTo( index );
 	QString path = index.data().toString();
-	//selFilePath = path;
 	// wyciagamy sama sciezke
 	path = path.right( path.count() - path.indexOf("</b>") - 4 );
 	selFilePath = path;
@@ -1030,18 +1015,27 @@ void MainWindow::inputFileClicked( const QModelIndex& index, const QModelIndex& 
 	ui->exifInfo->setText( info );
 
 	// *previewTab*
-	//QPixmap px(path);
-	// robimy automatyczny obrot
+	// ladowanie QPixmap robimy w innym watku
+	PreviewPixmapResource::iterator pxCacheItr = prvPixmapRes.find(path);
+	if( pxCacheItr != prvPixmapRes.end() )
+		ui->imgPreview->setPixmap( *pxCacheItr.value() );
+	else
+	{
+		ui->imgPreview->setText("Ładuję podgląd...");
+		prevLoadfuture = QtConcurrent::run(this, &MainWindow::loadPreviewPixmap, path);
+		prevLoadWatch.setFuture(prevLoadfuture);
+	}
+	
+	/* // ponizsze wykonujemy po zaladowaniu obrazu z innego watku
 	QPixmap px(path);
+	// robimy automatyczny obrot
 	px = autoRotateImgExifOrientation(path);
-
-	//auto s = ui->imgPreview->geometry().bottomRight().x() - ui->imgPreview->geometry().bottomLeft().x();
-	//px = px.scaledToWidth( s );
 
 	auto s = ui->imgPreview->geometry().bottomRight().y() - ui->imgPreview->geometry().topRight().y();
 	px = px.scaledToHeight( s );
 
 	ui->imgPreview->setPixmap(px);
+	*/
 }
 
 void MainWindow::createExifTranslationTable( void )
@@ -1433,6 +1427,34 @@ void MainWindow::imgPreviewDoubleClickedSlot( QMouseEvent * e ) const
 	if( selFilePath == "" )
 		return;
 	QDesktopServices::openUrl(QUrl::fromLocalFile(selFilePath));
+}
+
+QPixmap* MainWindow::loadPreviewPixmap( const QString& path )
+{
+	if( path == "" )
+		return nullptr;
+	QPixmap* px = new QPixmap(path);
+	*px = autoRotateImgExifOrientation(path);
+	auto s = ui->imgPreview->geometry().bottomRight().y()*0.9 - ui->imgPreview->geometry().topRight().y()*0.9;
+	*px = px->scaledToHeight( s );
+	ui->imgPreview->setPixmap(*px);
+	prvPixmapRes.insert(path,px);
+}
+
+void MainWindow::clearPreviewImgCache( void )
+{
+	for( PreviewPixmapResource::iterator itr = prvPixmapRes.begin();
+		itr != prvPixmapRes.end(); ++itr )
+	{
+		if( itr.value() != nullptr )
+			delete itr.value();
+	}
+	prvPixmapRes.clear();
+}
+
+void MainWindow::previewPixmapLoaded( void )
+{
+
 }
 
 
