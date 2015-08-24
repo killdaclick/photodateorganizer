@@ -123,6 +123,7 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->setExifToModificationDT, SIGNAL(stateChanged(int)), this, SLOT(setExifToModificationDTchanged(int)) );
 		t = connect( ui->setModificationToExifDT, SIGNAL(stateChanged(int)), this, SLOT(setModificationToExifDTchanged(int)) );
 		t = connect( ui->actionCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()) );
+		t = connect( ui->scrollArea, SIGNAL(imgPreviewDoubleClicked(QMouseEvent*)), this, SLOT(imgPreviewDoubleClickedSlot(QMouseEvent*)) );
 		t = false; 
 	}
 	else
@@ -147,6 +148,7 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( ui->imgPreview, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(imgPreviewMenuRequested(QPoint)) );
 		disconnect( ui->exifExtendedInfo, SIGNAL(stateChanged(int)), this, SLOT( exifExtendedInfoStateChanged(int) ) );
 		disconnect( ui->actionCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()) );
+		disconnect( ui->scrollArea, SIGNAL(imgPreviewDoubleClicked(QMouseEvent*)), this, SLOT(imgPreviewDoubleClickedSlot(QMouseEvent*)) );
 	}
 }
 
@@ -832,8 +834,16 @@ ExifOrientation MainWindow::getExifOrientation( const QString& filePath )
 		return EO_ERROR;
 
 	QProcess p;
+	QString qapp = "";
 	QString extendedInfoStr = "";
-	QString startCmd = "\"" + qApp->applicationDirPath().replace("/","\\") + "\\" + QString(EXIV2_BIN) + "\" " + EXIV2_GET_ORIENTATION_VAL + " \"" + filePath + "\"";
+
+	#ifdef QT_DEBUG
+		qapp = QDir::currentPath();
+	#else
+		qapp = qApp->applicationDirPath().replace("/","\\");
+	#endif
+
+	QString startCmd = "\"" + qapp + "\\" + QString(EXIV2_BIN) + "\" " + EXIV2_GET_ORIENTATION_VAL + " \"" + filePath + "\"";
 	p.start( startCmd );
 	p.waitForFinished();
 
@@ -1012,9 +1022,10 @@ void MainWindow::inputFileClicked( const QModelIndex& index, const QModelIndex& 
 	// *infoTab*
 	ui->inputFilesList->scrollTo( index );
 	QString path = index.data().toString();
-	selFilePath = path;
+	//selFilePath = path;
 	// wyciagamy sama sciezke
 	path = path.right( path.count() - path.indexOf("</b>") - 4 );
+	selFilePath = path;
 	auto info = getExifOutput( path, Preferences::Instance().getLanguage() );
 	ui->exifInfo->setText( info );
 
@@ -1167,12 +1178,12 @@ void MainWindow::imgPreviewMenuRequested( QPoint p )
 
 void MainWindow::imgRotateLeft( void )
 {
-	imgRotate(90);
+	imgRotate(-90);
 }
 
 void MainWindow::imgRotateRight( void )
 {
-	imgRotate(-90);
+	imgRotate(90);
 }
 
 void MainWindow::imgRotate( int direction )
@@ -1416,6 +1427,32 @@ void MainWindow::checkUpdate( void )
 	forceCheckUpdate = true;
 	update->checkUpdate();
 }
+
+void MainWindow::imgPreviewDoubleClickedSlot( QMouseEvent * e ) const
+{
+	if( selFilePath == "" )
+		return;
+	QDesktopServices::openUrl(QUrl::fromLocalFile(selFilePath));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1722,6 +1759,56 @@ void Update::checkUpdate( void )
 	if( updateUrl.isValid() )
 		fdUpdate.download(updateUrl);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ImgPreviewArea::ImgPreviewArea(QWidget* parent) : QScrollArea(parent)
+{
+
+}
+
+ImgPreviewArea::~ImgPreviewArea()
+{
+
+}
+
+void ImgPreviewArea::mouseDoubleClickEvent(QMouseEvent * e)
+{
+	emit imgPreviewDoubleClicked(e);	
+	e->accept();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

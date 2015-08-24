@@ -1100,7 +1100,7 @@
          <number>3</number>
         </property>
         <item row="0" column="0">
-         <widget class="QScrollArea" name="scrollArea">
+         <widget class="ImgPreviewArea" name="scrollArea">
           <property name="widgetResizable">
            <bool>true</bool>
           </property>
@@ -1514,6 +1514,12 @@
    <class>InputFilesView</class>
    <extends>QListView</extends>
    <header>MainWindow.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ImgPreviewArea</class>
+   <extends>QScrollArea</extends>
+   <header location="global">MainWindow.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

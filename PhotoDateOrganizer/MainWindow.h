@@ -39,6 +39,7 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QListView>
+#include <QScrollArea>
 
 #include <windows.h>
 
@@ -91,6 +92,35 @@ enum ExifOrientationRotateToNormal
 	EORN_ROT_90,
 	EORN_TRANSVERSE,
 	EORN_ROT_270
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class ImgPreviewArea : public QScrollArea
+{
+	Q_OBJECT
+
+public:
+	ImgPreviewArea(QWidget * parent = 0);
+	~ImgPreviewArea();
+
+protected:
+	virtual void mouseDoubleClickEvent(QMouseEvent * e);
+
+signals:
+	void imgPreviewDoubleClicked( QMouseEvent * e );
 };
 
 class Update : public QWidget
@@ -241,6 +271,7 @@ public slots:
 	void setExifToModificationDTchanged( int state );
 	void setModificationToExifDTchanged( int state );
 	void checkUpdate( void );
+	void imgPreviewDoubleClickedSlot( QMouseEvent * e ) const;
 
 private:
 	Ui::MainWindow *ui;
@@ -269,5 +300,7 @@ private:
 signals:
 	void progressBarSetValue( int val );
 };
+
+
 
 #endif // MAINWINDOW_H
