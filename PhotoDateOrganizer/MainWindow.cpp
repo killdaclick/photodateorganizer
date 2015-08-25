@@ -8,6 +8,7 @@
 #include <QTransform>
 #include <QDesktopServices>
 #include <QtConcurrent>
+#include <QDesktopWidget>
 
 extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
 
@@ -19,7 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	timToF(nullptr),
 	convFilesSizeTim(nullptr),
 	selFilePath(""),
-	forceCheckUpdate(false)
+	forceCheckUpdate(false),
+	afeDialog(nullptr)
 {
 	// turn on NTFS permission handling
 	qt_ntfs_permission_lookup++;
@@ -37,28 +39,24 @@ MainWindow::MainWindow(QWidget *parent) :
 		QMessageBox::warning(this, tr("Brak pliku aplikacji"), tr("Wykryto brak wymaganego pliku") + " " + QString(EXIV2_DLL), QMessageBox::Abort );
 		QTimer::singleShot(0, this, SLOT(close()));
 	}
-	// TODO
-	/*if( !QFile::exists(QDir::currentPath() + "/" + EXIV2_DLL) )
-	{
-		QMessageBox::warning(this, tr("Brak pliku aplikacji"), tr("Wykryto brak wymaganego pliku") + " " + QString(JPEGTRAN_BIN), QMessageBox::Abort );
-		QTimer::singleShot(0, this, SLOT(close()));
-	}*/
 
 	ui->setupUi(this);
+	setAutoGeometrySize();
 	ui->inputFilesList->setModel(&inputFilesModel);
 	ui->inputFilesList->setItemDelegate(&htmlDelegate);
 	ui->imgPreview->setContextMenuPolicy( Qt::CustomContextMenu );
 	auto& p = Preferences::Instance();
 	p.createDefaultSettings(ui);
 	p.loadSettings( ui );
-	update = new Update(this);
+	update = new Update(nullptr);
 	enableSignals(true);
+	ui->chooseAdditionalFiles->setEnabled(ui->copyAdditionalFiles->isChecked());
 	ui->dateFrom->setDate( QDate::currentDate() );
 	ui->dateTo->setDate( QDate::currentDate() );
 	createExifTranslationTable();
 
 	// TODO - na razie ukrywamy
-	ui->copyAdditionalFiles->setVisible(false);
+	//ui->copyAdditionalFiles->setVisible(false);
 
 	//update->checkUpdate();
 }
@@ -68,6 +66,19 @@ MainWindow::~MainWindow()
 	enableSignals(false);
 	
 	delete ui;
+}
+
+void MainWindow::setAutoGeometrySize( void )
+{
+	auto screen = QApplication::desktop()->availableGeometry();
+	QRect mainGeom = this->geometry();
+	QPoint mainPos = this->pos();
+	QRect screenAdj = mainGeom;
+	if( mainGeom.height() > screen.height() )
+		screenAdj.setHeight(screen.height()*0.95);
+	if( mainGeom.width() > screen.width() )
+		screenAdj.setWidth(screen.width()*0.95);
+	this->resize(screenAdj.width(), screenAdj.height());
 }
 
 bool MainWindow::changeFileTime( const QString& filePath, const QDateTime& t )
@@ -91,7 +102,6 @@ bool MainWindow::changeFileTime( const QString& filePath, const QDateTime& t )
 	FILETIME ft;
 
 	SystemTimeToFileTime(&st,&ft);
-
 	//set the filetime on the file
 	bool ret = SetFileTime(filename,&ft,(LPFILETIME) NULL,&ft);
 	//close our handle.
@@ -129,6 +139,8 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->actionCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()) );
 		t = connect( ui->scrollArea, SIGNAL(imgPreviewDoubleClicked(QMouseEvent*)), this, SLOT(imgPreviewDoubleClickedSlot(QMouseEvent*)) );
 		t = connect( &prevLoadWatch, SIGNAL(finished()), this, SLOT(previewPixmapLoaded()) );
+		t = connect( ui->chooseAdditionalFiles, SIGNAL(clicked()), this, SLOT(chooseAdditionalFiles()) );
+		t = connect( ui->copyAdditionalFiles, SIGNAL(stateChanged(int)), this, SLOT(copyAdditionalFilesState(int)) );
 		t = false; 
 	}
 	else
@@ -155,6 +167,8 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( ui->actionCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()) );
 		disconnect( ui->scrollArea, SIGNAL(imgPreviewDoubleClicked(QMouseEvent*)), this, SLOT(imgPreviewDoubleClickedSlot(QMouseEvent*)) );
 		disconnect( &prevLoadWatch, SIGNAL(finished()), this, SLOT(previewPixmapLoaded()) );
+		disconnect( ui->chooseAdditionalFiles, SIGNAL(clicked()), this, SLOT(chooseAdditionalFiles()) );
+		disconnect( ui->copyAdditionalFiles, SIGNAL(stateChanged(int)), this, SLOT(copyAdditionalFilesState(int)) );
 	}
 }
 
@@ -176,6 +190,11 @@ void MainWindow::selectFiles( void )
 	updateFoundFilesCount(files);
 
 	// czyscimy
+	if( afeDialog != nullptr )
+	{
+		delete afeDialog;
+		afeDialog = nullptr;
+	}
 	clearPreviewImgCache();
 	inFileList.clear();
 	firstFileDate = FileExif();
@@ -292,6 +311,11 @@ void MainWindow::selectFolder( void )
 		return;
 
 	// czyscimy
+	if( afeDialog != nullptr )
+	{
+		delete afeDialog;
+		afeDialog = nullptr;
+	}
 	clearPreviewImgCache();
 	inFileList.clear();
 	firstFileDate = FileExif();
@@ -584,20 +608,108 @@ void MainWindow::start( void )
 		// sumujemy rozmiar plikow
 		convFilesSize += fi.size();
 		updateFileSizeLabel( ui->sizeToFinish, convFilesSize );
-
-		// TODO
-		// dodajemy do listy pliki dodatkowe do kopiowania o ustalonych rozszerzeniach (jezeli istnieja)
-		//if( ui->copyAdditionalFiles->isChecked() && ui->addFilesExt->text() != "" )
-		//	addAdditionalFilesToCopy( *i, addFilesList );
-		// \TODO
-
 		delete dt;
-
 		fNr++;
 		timToF->step();
 		updateAvgTimeToFinish( timToF->getAvgTimeToFinish() );
 		QApplication::processEvents();
 	}
+
+	// TODO
+	if( afeDialog != nullptr )
+	{
+		auto exts = afeDialog->getSelectedFilesExtension();
+		QStringList extsFilter;
+		foreach( auto ext, exts )
+		{
+			extsFilter.push_back("*." + ext);
+		}
+		if( ui->copyAdditionalFiles->isChecked() && exts.size() > 0 )
+		{
+			auto ret = QMessageBox::question( this, tr("Kopiowanie plików dodatkowych"), tr("Zakończono konwertowanie plików, czy rozpocząć kopiowanie plików o dodatkowych rozszerzeniach?"), 
+				QMessageBox::Ok, QMessageBox::Cancel );
+			if( ret == QMessageBox::Ok )
+			{
+				ui->status->appendHtml(tr("Kopiowanie dodatkowych plików: "));
+				auto uDirs = afeDialog->getUniqueDirs();
+				QVector<QPair<QString,QString>> copyFromTo;
+				foreach( auto udir, uDirs )
+				{
+					QDir d(udir);
+					auto afToCpy = d.entryInfoList( extsFilter, QDir::Files );
+					if( afToCpy.size() == 0 )
+						continue;
+					foreach( auto af, afToCpy )
+					{
+						if( cancel )
+							break;
+						QDateTime* dt = nullptr;
+						QString afp = af.absoluteFilePath();
+						// probojemy z exif
+						dt = getExifImgDateTime(afp);
+						// probojemy z data modyfikacji
+						if( dt == nullptr )
+							dt = getModificationDateTime(afp);
+						if( dt == nullptr )
+							continue;
+						QString dstDirPath;
+						if( !getSubfolderPath(afp, dt, dstDirPath) )
+						{
+							delete dt;
+							continue;
+						}
+						QString dstFileName;
+						if( !getChangedFileName( afp, dt, dstFileName ) )
+						{
+							delete dt;
+							continue;
+						}
+						QString fPath = dstDirPath + "\\" + dstFileName;
+						if( QFile::exists( ui->outputFolder->text() + "\\" + fPath ) )
+						{
+							delete dt;
+							continue;
+						}
+						if( !Utility::mkPath( ui->outputFolder->text() + "\\" + dstDirPath ) )
+						{
+							delete dt;
+							continue;
+						}
+						QPair<QString,QString> fromTo;
+						fromTo.first = afp;
+						fromTo.second = ui->outputFolder->text() + "\\" + fPath;
+						copyFromTo.push_back( fromTo );
+						totFsize += af.size();
+						updateFileSizeLabel( ui->totalSize, totFsize );
+						QApplication::processEvents();
+						delete dt;
+					}
+					if( cancel )
+						break;
+				}
+
+				// wlasciwe kopiowanie
+				int cpyCnt = 1;
+				foreach( auto cpy, copyFromTo )
+				{
+					ui->status->appendHtml("<b>[[" + QString::number(cpyCnt) + "\\" + QString::number(copyFromTo.size()) + "]]</b> " + cpy.second);
+					QFileInfo fi(cpy.first);
+					if( !QFile::copy( cpy.first, cpy.second ) )
+					{
+						ui->status->appendHtml("<font color='red'>" + tr("Błąd kopiowania") + "</font><br>");
+					}
+					else
+					{
+						convFilesSize += fi.size();
+						updateFileSizeLabel( ui->sizeToFinish, convFilesSize );
+						ui->status->appendHtml("<font color='green'>" + tr("OK") + "</font><br>");
+					}
+					QApplication::processEvents();
+				}
+			}
+		}
+	}
+	// \TODO
 
 	if( cancel )
 		ui->status->appendHtml(tr("<font color='red'>Przerwano pracę na życzenie użytkownika</font><br>"));
@@ -615,18 +727,6 @@ void MainWindow::start( void )
 		allOk = "<font color='green'>";
 	ui->status->appendHtml(tr("<b>Przekonwertowano poprawnie ") + allOk + QString::number(fNr-1-errCnt) + "</font>" + tr(" z <font color='green'>") + QString::number(fCnt) +
 		tr("</font> plików w ") + QString::number(elapsed/1000) + "." + QString::number(elapsed%1000) + tr(" sekundy.</font></b><br>"));
-
-	// TODO
-	/*if( ui->copyAdditionalFiles->isChecked() && ui->addFilesExt->text() != "" )
-	{
-		auto ret = QMessageBox::question( this, tr("Kopiowanie plików dodatkowych"), tr("Zakończono konwertowanie plików, czy rozpocząć kopiowanie plików dodatkowych o wybranych rozszerzeniach: ") + 
-			ui->addFilesExt->text() + " ?", QMessageBox::Ok, QMessageBox::Cancel );
-		if( ret == QMessageBox::Ok )
-		{
-
-		}
-	}*/
-	// \TODO
 
 	cancel = false;
 	started = false;
@@ -766,6 +866,37 @@ void MainWindow::outputFolder( void )
 		| QFileDialog::DontResolveSymlinks);
 
 	ui->outputFolder->setText(dir.replace("/","\\").replace("\\\\","\\"));
+}
+
+QDateTime* MainWindow::getModificationDateTime( const QString& filePath )
+{
+	//getthe handle to the file
+	HANDLE filename = CreateFile((LPCWSTR)filePath.utf16(),
+	GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+	FILE_ATTRIBUTE_NORMAL, NULL);
+	if( filename == INVALID_HANDLE_VALUE )
+		return false;
+
+	//creation of a filetimestruct and convert our new systemtime
+	FILETIME ft;
+	LPFILETIME modTime = new FILETIME;
+	bool ret = GetFileTime(filename, modTime, NULL, NULL);
+	//close our handle.
+	CloseHandle(filename);
+
+	LPSYSTEMTIME st = new SYSTEMTIME;
+	FileTimeToSystemTime(modTime, st);
+	QDateTime* dt = new QDateTime();
+	QDate d;
+	d.setDate(st->wYear, st->wMonth, st->wDay);
+	QTime t;
+	t.setHMS(st->wHour, st->wMinute, st->wSecond);
+	dt->setDate(d);
+	dt->setTime(t);
+	delete st;
+	delete modTime;
+
+	return dt;
 }
 
 QDateTime* MainWindow::getExifImgDateTime( const QString& filePath )
@@ -1457,6 +1588,20 @@ void MainWindow::previewPixmapLoaded( void )
 
 }
 
+void MainWindow::chooseAdditionalFiles( void )
+{
+	if( afeDialog == nullptr )
+		afeDialog = new AdditionalFilesExtension(inFileList, this);
+	afeDialog->exec();
+}
+
+void MainWindow::copyAdditionalFilesState( int state )
+{
+	ui->chooseAdditionalFiles->setEnabled( state == Qt::Checked ? true : false );
+}
+
+
+
 
 
 
@@ -1726,7 +1871,7 @@ void InputFilesView::currentChanged(const QModelIndex & current, const QModelInd
 
 
 
-Update::Update(MainWindow* mainWin) : QWidget(mainWin)
+Update::Update(MainWindow* mainWin) : QObject(mainWin)
 {
 	this->mainWin = mainWin;
 	
@@ -1822,6 +1967,137 @@ void ImgPreviewArea::mouseDoubleClickEvent(QMouseEvent * e)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AdditionalFilesExtension::AdditionalFilesExtension( const QStringList& files, 
+	QWidget* parent ) : QDialog(parent), ui(new Ui::AdditionalFilesExtension)
+{
+	ui->setupUi(this);
+
+	allFilesExtension = getAllFilesExtension(files);
+	addExtensionCheckboxes(allFilesExtension);
+
+	connect( ui->okBtn, SIGNAL(clicked()), this, SLOT(okClicked()) );
+	connect( ui->cancelBtn, SIGNAL(clicked()), this, SLOT(cancelClicked()) );
+}
+
+AdditionalFilesExtension::~AdditionalFilesExtension()
+{
+	delete ui;
+}
+
+QSet<QString> AdditionalFilesExtension::getSelectedFilesExtension( void )
+{
+	return selFilesExtension;
+}
+
+int AdditionalFilesExtension::exec( void )
+{
+	// zapamietujemy stan pierwotny
+	checkState.clear();
+	foreach( auto box, allExtensionCheckboxes )
+		checkState.push_back( box->isChecked());
+	
+	return QDialog::exec();
+}
+
+QSet<QString> AdditionalFilesExtension::getAllFilesExtension( const QStringList& filesExtension )
+{
+	QSet<QString> ext;
+	QSet<QString> uDirs = createUniqueDirs(filesExtension);
+	for( QSet<QString>::const_iterator i = uDirs.begin(); i != uDirs.end(); ++i )
+	{
+		QDir d(*i);
+		auto files = d.entryInfoList( QDir::Files );
+		//auto files = Utility::findAll( "*", *i, true, QDir::Files );
+		foreach( auto f, files )
+		{
+			QFileInfo fi(f);
+			ext.insert(fi.suffix());
+		}
+	}
+
+	return ext;
+}
+
+QSet<QString> AdditionalFilesExtension::createUniqueDirs( const QStringList& inFiles )
+{
+	uniqueDirs.clear();
+	for( QStringList::const_iterator i = inFiles.begin(); i != inFiles.end(); ++i )
+	{
+		QFileInfo fi(*i);
+		uniqueDirs.insert(fi.absoluteDir().absolutePath());
+	}
+	
+	return uniqueDirs;
+}
+
+void AdditionalFilesExtension::addExtensionCheckboxes( const QSet<QString>& allFilesExtension )
+{
+	ui->noneExt->setVisible(allFilesExtension.size() == 0);
+	foreach( auto ext, allFilesExtension )
+	{
+		QCheckBox* extBox = new QCheckBox(this);
+		extBox->setChecked(false);
+		extBox->setText("*."+ext);
+		allExtensionCheckboxes.push_back(extBox);
+		ui->layout->addWidget(extBox);
+	}
+}
+
+void AdditionalFilesExtension::okClicked( void )
+{
+	QSet<QString>::const_iterator allFitr = allFilesExtension.begin();
+	QVector<QCheckBox*>::const_iterator allCBitr = allExtensionCheckboxes.begin();
+	selFilesExtension.clear();
+	for( ; ; )
+	{
+		if( allFitr == allFilesExtension.end() || allCBitr == allExtensionCheckboxes.end() )
+			break;
+
+		if( (*allCBitr)->isChecked() )
+			selFilesExtension.insert( *allFitr );
+		
+		++allFitr;
+		++allCBitr;
+	}
+	
+	accepted();
+	QDialog::close();
+}
+
+void AdditionalFilesExtension::cancelClicked( void )
+{
+	// przywracamy checkboxy
+	QVector<bool>::const_iterator chk = checkState.begin();
+	QVector<QCheckBox*>::const_iterator cb = allExtensionCheckboxes.begin();
+	for( ; ; )
+	{
+		if( chk == checkState.end() || cb == allExtensionCheckboxes.end() )
+			break;
+		(*cb)->setChecked(*chk);
+		
+		++chk;
+		++cb;
+	}
+
+	reject();
+	QDialog::close();
+}
 
 
 
