@@ -48,6 +48,7 @@
 
 #include "ChangeLanguage.h"
 #include "FileDownloader.h"
+#include "ui_AdditionalFilesExtension.h"
 
 const unsigned int appVer = 0x010501;
 const QString appWWW = "http://photodateorganizer.sourceforge.net/";
@@ -127,7 +128,7 @@ signals:
 	void imgPreviewDoubleClicked( QMouseEvent * e );
 };
 
-class Update : public QWidget
+class Update : public QObject
 {
 	Q_OBJECT
 
@@ -212,6 +213,38 @@ private:
 };
 
 namespace Ui {
+class AdditionalFilesExtension;
+}
+
+class AdditionalFilesExtension : public QDialog
+{
+	Q_OBJECT
+
+public:
+	AdditionalFilesExtension( const QStringList& files, QWidget* parent = nullptr );
+	~AdditionalFilesExtension();
+	QSet<QString> getSelectedFilesExtension( void );
+	QSet<QString> createUniqueDirs( const QStringList& inFiles );
+	QSet<QString> getUniqueDirs( void ) { return uniqueDirs; }
+	QSet<QString> getAllFilesExtension( const QStringList& filesExtension );
+
+public slots:
+	int exec( void );
+	void okClicked( void );
+	void cancelClicked( void );
+
+private:
+	Ui::AdditionalFilesExtension *ui;
+	QSet<QString> selFilesExtension;
+	QSet<QString> allFilesExtension;
+	QVector<QCheckBox*> allExtensionCheckboxes;
+	QVector<bool> checkState;
+	QSet<QString> uniqueDirs;
+
+	void addExtensionCheckboxes( const QSet<QString>& allFilesExtension );
+};
+
+namespace Ui {
 class MainWindow;
 }
 
@@ -227,6 +260,7 @@ public:
 
 	bool changeFileTime( const QString& filePath, const QDateTime& t );
 	QDateTime* getExifImgDateTime( const QString& filePath );
+	QDateTime* getModificationDateTime( const QString& filePath );
 	QString getExifOutput( const QString& filePath, LANGUAGES lang, bool extendedInfo = false );
 	ExifOrientation getExifOrientation( const QString& filePath );
 	void enableSignals( bool enable );
@@ -250,6 +284,7 @@ public:
 	int getExifRotateToNormalDegree( ExifOrientation orientTag );
 	void dontCheckVersion( unsigned int ver );
 	QPixmap* loadPreviewPixmap( const QString& path );
+	void setAutoGeometrySize( void );
 
 public slots:
 	void selectFiles( void );
@@ -278,12 +313,15 @@ public slots:
 	void checkUpdate( void );
 	void imgPreviewDoubleClickedSlot( QMouseEvent * e ) const;
 	void previewPixmapLoaded( void );
+	void chooseAdditionalFiles( void );
+	void copyAdditionalFilesState( int state );
 
 private:
 	Ui::MainWindow *ui;
 
 	InFileList inFileList;
 	FileExif firstFileDate;
+	QStringList additionalExtensionFiles;
 	QByteArray defaultSettings;
 	bool started;
 	bool cancel;
@@ -304,6 +342,7 @@ private:
 	QFutureWatcher<QPixmap*> prevLoadWatch;
 	PreviewPixmapResource prvPixmapRes;
 	void clearPreviewImgCache( void );
+	AdditionalFilesExtension* afeDialog;
 
 	void createExifTranslationTable( void );
 

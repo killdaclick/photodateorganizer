@@ -28,7 +28,8 @@ HEADERS  += MainWindow.h \
 
 FORMS    += MainWindow.ui \
 			AboutWindow.ui \
-			ChangeLanguage.ui
+			ChangeLanguage.ui \
+			AdditionalFilesExtension.ui
 			
 TRANSLATIONS = photodateorganizer_en.ts
 			
