@@ -59,7 +59,7 @@ bool Preferences::deserializeSettings( QByteArray* def )
 	}
 
 	*ser >> recursiveFolders;
-	*ser >> useExif;
+	*ser >> setModificationToExifDT;
 	*ser >> changeOutputFileName;
 	*ser >> newNameTemplate;
 	*ser >> createOutputFiles;
@@ -76,7 +76,6 @@ bool Preferences::deserializeSettings( QByteArray* def )
 	}
 	*ser >> exifExtendedInfo;
 	*ser >> copyAdditionalFiles;
-	//*ser >> addFilesExt;
 	*ser >> dontCheckVerNr;
 
 	if( ser != nullptr )
@@ -95,7 +94,7 @@ void Preferences::createDefaultSettings( Ui::MainWindow *ui )
 
 	def << APP_CONFIG_VERSION;
 	def << ui->recursiveFoldersCheckbox->isChecked();
-	//def << ui->useExifDate->isChecked();
+	def << ui->setModificationToExifDT->isChecked();
 	def << ui->changeOutputFileName->isChecked();
 	def << ui->newNameTemplate->text();
 	def << ui->createOutputFiles->isChecked();
@@ -107,7 +106,6 @@ void Preferences::createDefaultSettings( Ui::MainWindow *ui )
 	def << LANGUAGES::POLISH;
 	def << ui->exifExtendedInfo->isChecked();
 	def << ui->copyAdditionalFiles->isChecked();
-	//def << ui->addFilesExt->text();
 	def << dontCheckVerNr;
 }
 
@@ -125,7 +123,7 @@ bool Preferences::serializeSettings( void )
 
 	ser << APP_CONFIG_VERSION;
 	ser << recursiveFolders;
-	ser << useExif;
+	ser << setModificationToExifDT;
 	ser << changeOutputFileName;
 	ser << newNameTemplate;
 	ser << createOutputFiles;
@@ -148,7 +146,7 @@ bool Preferences::serializeSettings( void )
 bool Preferences::serializeSettings( Ui::MainWindow *ui )
 {
 	recursiveFolders = ui->recursiveFoldersCheckbox->isChecked();
-	//useExif = ui->useExifDate->isChecked();
+	setModificationToExifDT = ui->setModificationToExifDT->isChecked();
 	changeOutputFileName = ui->changeOutputFileName->isChecked();
 	newNameTemplate = ui->newNameTemplate->text();
 	createOutputFiles = ui->createOutputFiles->isChecked();

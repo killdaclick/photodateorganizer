@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
 		MainWindow w;
 		if( restoreDefaults )
 			w.restoreDefaultSettings();
+		else
+			w.loadSettings();
 		w.show();
 
 		int ret = a.exec();

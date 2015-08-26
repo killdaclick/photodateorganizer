@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->imgPreview->setContextMenuPolicy( Qt::CustomContextMenu );
 	auto& p = Preferences::Instance();
 	p.createDefaultSettings(ui);
-	p.loadSettings( ui );
+	//p.loadSettings( ui );
 	update = new Update(nullptr);
 	enableSignals(true);
 	ui->chooseAdditionalFiles->setEnabled(ui->copyAdditionalFiles->isChecked());
@@ -1024,6 +1024,11 @@ void MainWindow::restoreDefaultSettings( void )
 	p.serializeSettings(ui);*/
 }
 
+void MainWindow::loadSettings( void )
+{
+	Preferences::Instance().loadSettings( ui );
+}
+
 void MainWindow::aboutToQuit( void )
 {
 	Preferences::Instance().serializeSettings(ui);
@@ -1293,6 +1298,8 @@ void MainWindow::imgPreviewMenuRequested( QPoint p )
 	if( ui->imgPreview->pixmap() == 0 )
 		return;
 	imgPreviewMenu = new QMenu(this);
+	imgPreviewMenu->addAction(tr("Otwórz w domyślnej aplikacji"), this, SLOT(imgDoubleClicked()));
+	imgPreviewMenu->addSeparator();
 	imgPreviewMenu->addAction(tr("Automatyczny obrót"), this, SLOT(imgRotateAuto()));
 	imgPreviewMenu->addSeparator();
 	imgPreviewMenu->addAction(tr("Obróć w lewo"), this, SLOT(imgRotateLeft()));
@@ -1334,6 +1341,13 @@ QPixmap MainWindow::autoRotateImgExifOrientation( const QString& path )
 	trans = trans.rotate(rot);
 	QPixmap pxnew = px.transformed(trans);
 	return pxnew;
+}
+
+void MainWindow::imgDoubleClicked( void ) const
+{
+	if( selFilePath == "" )
+		return;
+	QDesktopServices::openUrl(QUrl::fromLocalFile(selFilePath));
 }
 
 void MainWindow::imgRotateAuto( void )
@@ -1555,17 +1569,14 @@ void MainWindow::checkUpdate( void )
 
 void MainWindow::imgPreviewDoubleClickedSlot( QMouseEvent * e ) const
 {
-	if( selFilePath == "" )
-		return;
-	QDesktopServices::openUrl(QUrl::fromLocalFile(selFilePath));
+	imgDoubleClicked();
 }
 
 QPixmap* MainWindow::loadPreviewPixmap( const QString& path )
 {
 	if( path == "" )
 		return nullptr;
-	QPixmap* px = new QPixmap(path);
-	*px = autoRotateImgExifOrientation(path);
+	QPixmap* px = new QPixmap(autoRotateImgExifOrientation(path));
 	auto s = ui->imgPreview->geometry().bottomRight().y()*0.9 - ui->imgPreview->geometry().topRight().y()*0.9;
 	*px = px->scaledToHeight( s );
 	ui->imgPreview->setPixmap(*px);
@@ -1905,19 +1916,23 @@ void Update::updateDownloaded( QByteArray data )
 	{
 		ret = QMessageBox::information(0, tr("Aktualizacja aplikacji"), tr("Dostępna jest nowa wersja aplikacji: ") +
 			MainWindow::getVersionString(ver), tr("Pobierz aktualizację"), tr("Nie przypominaj dla tej wersji"), tr("Zamknij"), 0, 2 );
+		switch(ret)
+		{
+		case 0:
+			QDesktopServices::openUrl(appWWW);
+			break;
+		case 1:
+			p.setDontCheckVersion( ver );
+			p.serializeSettings(mainWin->ui);
+			break;
+		}
 		if( mainWin->forceCheckUpdate )
 			mainWin->forceCheckUpdate = false;
 	}
-
-	switch(ret)
+	else if( ver == appVer && mainWin->forceCheckUpdate )
 	{
-	case 0:
-		QDesktopServices::openUrl(appWWW);
-		break;
-	case 1:
-		p.setDontCheckVersion( ver );
-		p.serializeSettings(mainWin->ui);
-		break;
+		QMessageBox::information(0, tr("Aktualizacja aplikacji"), tr("Aplikacja jest w najnowszej wersji"), QMessageBox::Ok );
+		return;
 	}
 }
 

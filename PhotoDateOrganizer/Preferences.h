@@ -34,7 +34,7 @@ private:
 	QByteArray defaultSettings;
 
 	bool recursiveFolders;
-	bool useExif;
+	bool setModificationToExifDT;
 	bool changeOutputFileName;
 	QString newNameTemplate;
 	bool createOutputFiles;
@@ -47,7 +47,6 @@ private:
 	QTranslator* langTrans;
 	bool exifExtendedInfo;
 	bool copyAdditionalFiles;
-	//QString addFilesExt;
 	unsigned int dontCheckVerNr;
 };
 

@@ -294,6 +294,7 @@ public slots:
 	void newNameTemplateChanged(const QString & text);
 	void subfoldersNameTemplateChanged(const QString & text);
 	void restoreDefaultSettings( void );
+	void loadSettings( void );
 	void aboutToQuit( void );
 	void aboutWindow( void );
 	void actionSetupUpdateSlot( void );
@@ -315,6 +316,7 @@ public slots:
 	void previewPixmapLoaded( void );
 	void chooseAdditionalFiles( void );
 	void copyAdditionalFilesState( int state );
+	void imgDoubleClicked( void ) const;
 
 private:
 	Ui::MainWindow *ui;
