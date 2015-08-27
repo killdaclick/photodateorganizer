@@ -21,7 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	convFilesSizeTim(nullptr),
 	selFilePath(""),
 	forceCheckUpdate(false),
-	afeDialog(nullptr)
+	afeDialog(nullptr),
+	imgPreviewMenu(nullptr)
 {
 	// turn on NTFS permission handling
 	qt_ntfs_permission_lookup++;
@@ -1297,14 +1298,16 @@ void MainWindow::imgPreviewMenuRequested( QPoint p )
 {
 	if( ui->imgPreview->pixmap() == 0 )
 		return;
-	imgPreviewMenu = new QMenu(this);
-	imgPreviewMenu->addAction(tr("Otwórz w domyślnej aplikacji"), this, SLOT(imgDoubleClicked()));
-	imgPreviewMenu->addSeparator();
-	imgPreviewMenu->addAction(tr("Automatyczny obrót"), this, SLOT(imgRotateAuto()));
-	imgPreviewMenu->addSeparator();
-	imgPreviewMenu->addAction(tr("Obróć w lewo"), this, SLOT(imgRotateLeft()));
-	imgPreviewMenu->addAction(tr("Obróć w prawo"), this, SLOT(imgRotateRight()));
-	connect( imgPreviewMenu, SIGNAL(aboutToHide()), imgPreviewMenu, SLOT(deleteLater()) );
+	if( imgPreviewMenu == nullptr )
+	{
+		imgPreviewMenu = new QMenu(this);
+		imgPreviewMenu->addAction(tr("Otwórz w domyślnej aplikacji"), this, SLOT(imgDoubleClicked()));
+		imgPreviewMenu->addSeparator();
+		imgPreviewMenu->addAction(tr("Automatyczny obrót"), this, SLOT(imgRotateAuto()));
+		imgPreviewMenu->addAction(tr("Obróć w lewo"), this, SLOT(imgRotateLeft()));
+		imgPreviewMenu->addAction(tr("Obróć w prawo"), this, SLOT(imgRotateRight()));
+		//connect( imgPreviewMenu, SIGNAL(aboutToHide()), imgPreviewMenu, SLOT(deleteLater()) );
+	}
 	imgPreviewMenu->exec( ui->imgPreview->mapToGlobal(p) );
 }
 
@@ -1570,6 +1573,7 @@ void MainWindow::checkUpdate( void )
 void MainWindow::imgPreviewDoubleClickedSlot( QMouseEvent * e ) const
 {
 	imgDoubleClicked();
+	e->accept();
 }
 
 QPixmap* MainWindow::loadPreviewPixmap( const QString& path )

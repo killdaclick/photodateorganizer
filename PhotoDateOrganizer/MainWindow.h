@@ -336,7 +336,6 @@ private:
 	QStandardItemModel inputFilesModel;
 	HTMLDelegate htmlDelegate;
 	TranslationTable exifTransTable;
-	QMenu* imgPreviewMenu;
 	QString selFilePath;
 	Update* update;
 	bool forceCheckUpdate;
@@ -345,6 +344,7 @@ private:
 	PreviewPixmapResource prvPixmapRes;
 	void clearPreviewImgCache( void );
 	AdditionalFilesExtension* afeDialog;
+	QMenu* imgPreviewMenu;
 
 	void createExifTranslationTable( void );
 
