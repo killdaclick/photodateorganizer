@@ -653,32 +653,53 @@ void MainWindow::start( void )
 							dt = getModificationDateTime(afp);
 						if( dt == nullptr )
 							continue;
-						QString dstDirPath;
-						if( !getSubfolderPath(afp, dt, dstDirPath) )
+
+						// tworzymy subfoldery zwiazane z oryginlana struktura
+						QString dstDirPath = "";
+						QString orgSub = "";
+						QString fPath = "";
+						if( ui->saveOrgSubfolders->isChecked() )
+							orgSub = af.path().replace(srcFolder, "");	// czyscimy czesc wspolna i dodajemy do sciezki katalogu wynikowego
+						fPath = ui->outputFolder->text();
+						fPath += orgSub + "/";
+						
+						if( ui->createOutputSubfolders->isChecked() )
 						{
-							delete dt;
-							continue;
+							if( !getSubfolderPath(afp, dt, dstDirPath) )
+							{
+								delete dt;
+								continue;
+							}
 						}
+						else
+							dstDirPath = ui->outputFolder->text();
 						QString dstFileName;
-						if( !getChangedFileName( afp, dt, dstFileName ) )
+						if( ui->changeOutputFileName->isChecked() )
+						{
+							if( !getChangedFileName( afp, dt, dstFileName ) )
+							{
+								delete dt;
+								continue;
+							}
+						}
+						else
+							dstFileName = af.fileName();
+
+						QString mkDstPath = fPath + dstDirPath;
+						fPath += dstDirPath + "\\" + dstFileName;
+						if( QFile::exists( fPath ) )
 						{
 							delete dt;
 							continue;
 						}
-						QString fPath = dstDirPath + "\\" + dstFileName;
-						if( QFile::exists( ui->outputFolder->text() + "\\" + fPath ) )
-						{
-							delete dt;
-							continue;
-						}
-						if( !Utility::mkPath( ui->outputFolder->text() + "\\" + dstDirPath ) )
+						if( !Utility::mkPath( mkDstPath ) )
 						{
 							delete dt;
 							continue;
 						}
 						QPair<QString,QString> fromTo;
 						fromTo.first = afp;
-						fromTo.second = ui->outputFolder->text() + "\\" + fPath;
+						fromTo.second = fPath;
 						copyFromTo.push_back( fromTo );
 						totFsize += af.size();
 						updateFileSizeLabel( ui->totalSize, totFsize );
@@ -705,6 +726,7 @@ void MainWindow::start( void )
 						updateFileSizeLabel( ui->sizeToFinish, convFilesSize );
 						ui->status->appendHtml("<font color='green'>" + tr("OK") + "</font><br>");
 					}
+					cpyCnt++;
 					QApplication::processEvents();
 				}
 			}
