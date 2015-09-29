@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>923</height>
+    <width>725</width>
+    <height>968</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -48,9 +48,12 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="5,100,2,0,0">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="3,7,1,0,0">
     <item>
      <widget class="QGroupBox" name="groupBox">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -341,6 +344,18 @@
     </item>
     <item>
      <widget class="QScrollArea" name="scrollArea_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>535</height>
+       </size>
+      </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -358,9 +373,15 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>682</width>
-         <height>546</height>
+         <width>707</width>
+         <height>535</height>
         </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_14">
         <item>
@@ -1191,8 +1212,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>652</width>
-                 <height>493</height>
+                 <width>677</width>
+                 <height>482</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1308,21 +1329,55 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QProgressBar" name="progressBar">
-        <property name="toolTip">
-         <string>Pasek postępu prac</string>
+       <widget class="QLabel" name="label_21">
+        <property name="text">
+         <string>Pliki:</string>
         </property>
-        <property name="value">
-         <number>0</number>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="filesComplete">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>0</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="invertedAppearance">
-         <bool>false</bool>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_25">
+        <property name="text">
+         <string>/</string>
         </property>
-        <property name="format">
-         <string>%p%</string>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="filesCntTot">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_27">
+        <property name="text">
+         <string>|</string>
         </property>
        </widget>
       </item>
@@ -1343,7 +1398,7 @@
        <widget class="QLabel" name="sizeToFinish">
         <property name="minimumSize">
          <size>
-          <width>41</width>
+          <width>55</width>
           <height>0</height>
          </size>
         </property>
@@ -1372,7 +1427,7 @@
        <widget class="QLabel" name="totalSize">
         <property name="minimumSize">
          <size>
-          <width>41</width>
+          <width>55</width>
           <height>0</height>
          </size>
         </property>
@@ -1459,6 +1514,25 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QProgressBar" name="progressBar">
+        <property name="toolTip">
+         <string>Pasek postępu prac</string>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+        <property name="format">
+         <string>%p%</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
@@ -1468,7 +1542,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>700</width>
+     <width>725</width>
      <height>21</height>
     </rect>
    </property>

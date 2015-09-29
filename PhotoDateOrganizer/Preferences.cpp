@@ -154,7 +154,7 @@ bool Preferences::serializeSettings( Ui::MainWindow *ui )
 	createOutputSubfolders = ui->createOutputSubfolders->isChecked();
 	subfoldersNameTemplate = ui->subfoldersNameTemplate->text();
 	saveOrgSubfolders = ui->saveOrgSubfolders->isChecked();
-	lastPath = lastPath;
+	lastPath;
 	exifExtendedInfo = ui->exifExtendedInfo->isChecked();
 	copyAdditionalFiles = ui->copyAdditionalFiles->isChecked();
 	//addFilesExt = ui->addFilesExt->text();

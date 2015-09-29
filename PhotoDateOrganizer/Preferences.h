@@ -27,6 +27,8 @@ public:
 	LANGUAGES getLanguage( void );
 	void setDontCheckVersion( unsigned int ver ) { dontCheckVerNr = ver; }
 	unsigned int getDontCheckVersion( void ) { return dontCheckVerNr; }
+	QString getLastPath( void ) { return lastPath; }
+	void setLastPath( const QString& lastp ) { lastPath = lastp; }
 
 private:
 	Preferences();
