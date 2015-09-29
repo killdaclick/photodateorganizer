@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	// TODO - na razie ukrywamy
 	//ui->copyAdditionalFiles->setVisible(false);
 
-	//update->checkUpdate();
+	update->checkUpdate();
 }
 
 MainWindow::~MainWindow()
@@ -551,6 +551,9 @@ void MainWindow::start( void )
 						fPath += dstDirPath + "\\" + dstFileName;
 						if( QFile::exists( fPath ) )
 						{
+							ui->status->appendHtml(fPath.replace("/","\\").replace("\\\\","\\"));
+							ui->status->appendHtml("<font color='red'>" + tr("Plik docelowy już istnieje - pomijam") + "</font><br>");
+							QApplication::processEvents();
 							delete dt;
 							continue;
 						}

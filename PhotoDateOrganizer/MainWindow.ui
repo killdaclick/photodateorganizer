@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>725</width>
+    <width>737</width>
     <height>968</height>
    </rect>
   </property>
@@ -373,7 +373,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>707</width>
+         <width>719</width>
          <height>535</height>
         </rect>
        </property>
@@ -1212,7 +1212,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>677</width>
+                 <width>660</width>
                  <height>482</height>
                 </rect>
                </property>
@@ -1398,7 +1398,7 @@
        <widget class="QLabel" name="sizeToFinish">
         <property name="minimumSize">
          <size>
-          <width>55</width>
+          <width>60</width>
           <height>0</height>
          </size>
         </property>
@@ -1427,7 +1427,7 @@
        <widget class="QLabel" name="totalSize">
         <property name="minimumSize">
          <size>
-          <width>55</width>
+          <width>60</width>
           <height>0</height>
          </size>
         </property>
@@ -1542,7 +1542,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>725</width>
+     <width>737</width>
      <height>21</height>
     </rect>
    </property>
