@@ -105,7 +105,7 @@ void Preferences::createDefaultSettings( Ui::MainWindow *ui )
 	def << QDir::currentPath();	// lastPath
 	def << LANGUAGES::POLISH;
 	def << ui->exifExtendedInfo->isChecked();
-	def << ui->copyAdditionalFiles->isChecked();
+	//def << ui->copyAdditionalFiles->isChecked();
 	def << dontCheckVerNr;
 }
 
@@ -156,7 +156,7 @@ bool Preferences::serializeSettings( Ui::MainWindow *ui )
 	saveOrgSubfolders = ui->saveOrgSubfolders->isChecked();
 	lastPath;
 	exifExtendedInfo = ui->exifExtendedInfo->isChecked();
-	copyAdditionalFiles = ui->copyAdditionalFiles->isChecked();
+	//copyAdditionalFiles = ui->copyAdditionalFiles->isChecked();
 	//addFilesExt = ui->addFilesExt->text();
 	dontCheckVerNr;
 
@@ -186,7 +186,7 @@ void Preferences::loadSettings( Ui::MainWindow *ui )
 
 	ui->exifExtendedInfo->setChecked(exifExtendedInfo);
 
-	ui->copyAdditionalFiles->setChecked(copyAdditionalFiles);
+//	ui->copyAdditionalFiles->setChecked(copyAdditionalFiles);
 	//ui->addFilesExt->setText(addFilesExt);
 }
 

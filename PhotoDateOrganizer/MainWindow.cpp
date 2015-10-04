@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	//p.loadSettings( ui );
 	update = new Update(nullptr);
 	enableSignals(true);
-	ui->chooseAdditionalFiles->setEnabled(ui->copyAdditionalFiles->isChecked());
+	//ui->chooseAdditionalFiles->setEnabled(ui->copyAdditionalFiles->isChecked());
 	ui->dateFrom->setDate( QDate::currentDate() );
 	ui->dateTo->setDate( QDate::currentDate() );
 	createExifTranslationTable();
@@ -140,8 +140,8 @@ void MainWindow::enableSignals( bool enable )
 		t = connect( ui->actionCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()) );
 		t = connect( ui->scrollArea, SIGNAL(imgPreviewDoubleClicked(QMouseEvent*)), this, SLOT(imgPreviewDoubleClickedSlot(QMouseEvent*)) );
 		t = connect( &prevLoadWatch, SIGNAL(finished()), this, SLOT(previewPixmapLoaded()) );
-		t = connect( ui->chooseAdditionalFiles, SIGNAL(clicked()), this, SLOT(chooseAdditionalFiles()) );
-		t = connect( ui->copyAdditionalFiles, SIGNAL(stateChanged(int)), this, SLOT(copyAdditionalFilesState(int)) );
+		//t = connect( ui->chooseAdditionalFiles, SIGNAL(clicked()), this, SLOT(chooseAdditionalFiles()) );
+		//t = connect( ui->copyAdditionalFiles, SIGNAL(stateChanged(int)), this, SLOT(copyAdditionalFilesState(int)) );
 		t = false; 
 	}
 	else
@@ -168,8 +168,8 @@ void MainWindow::enableSignals( bool enable )
 		disconnect( ui->actionCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()) );
 		disconnect( ui->scrollArea, SIGNAL(imgPreviewDoubleClicked(QMouseEvent*)), this, SLOT(imgPreviewDoubleClickedSlot(QMouseEvent*)) );
 		disconnect( &prevLoadWatch, SIGNAL(finished()), this, SLOT(previewPixmapLoaded()) );
-		disconnect( ui->chooseAdditionalFiles, SIGNAL(clicked()), this, SLOT(chooseAdditionalFiles()) );
-		disconnect( ui->copyAdditionalFiles, SIGNAL(stateChanged(int)), this, SLOT(copyAdditionalFilesState(int)) );
+		//disconnect( ui->chooseAdditionalFiles, SIGNAL(clicked()), this, SLOT(chooseAdditionalFiles()) );
+		//disconnect( ui->copyAdditionalFiles, SIGNAL(stateChanged(int)), this, SLOT(copyAdditionalFilesState(int)) );
 	}
 }
 
@@ -461,15 +461,15 @@ void MainWindow::start( void )
 		return;
 	}
 
-	// wyszukiwanie plikow z dodatkowymi rozszerzeniami
-	QVector<QPair<QString,QString>> addCopyFromTo;
-	int addCpyTotal = 0;
+	qint64 totFsize = filesSize;	// calkowity rozmiar plikow do przetworzenia ktory moze sie zmniejszac ze wzgledu na pliki ktorych nie mozna byly przekonwertowac
 	int addFilesCnt = 0;
+	int addCpyTotal = 0;
+	// wyszukiwanie plikow z dodatkowymi rozszerzeniami
+	/*QVector<QPair<QString,QString>> addCopyFromTo;
 	if( afeDialog == nullptr )
 		afeDialog = new AdditionalFilesExtension(inFileList, this);
 	QSet<QString> additionalExts = afeDialog->getSelectedFilesExtension();
 	bool copyAdditionalFiles = false;
-	qint64 totFsize = filesSize;	// calkowity rozmiar plikow do przetworzenia ktory moze sie zmniejszac ze wzgledu na pliki ktorych nie mozna byly przekonwertowac
 	if( ui->copyAdditionalFiles->isChecked() && additionalExts.size() == 0 )
 	{
 		if( QMessageBox::question( this, tr("Kopiowanie plików dodatkowych"), tr("Wybrano opcję kopiowania plików z dodatkowymi rozszerzeniami, ale nie wybrano żadnego rozszerzenia.<br>Czy otworzyć okno wyboru rozszerzeń plików?"), QMessageBox::Yes, QMessageBox::No ) == QMessageBox::Yes )
@@ -581,6 +581,7 @@ void MainWindow::start( void )
 
 	if( ui->copyAdditionalFiles->isChecked() && additionalExts.size() > 0 )
 		ui->status->appendHtml(tr("<b>Znaleziono <font color='green'>") + QString::number(addFilesCnt) + tr("</font> dodatkowych plików.</b>"));
+	*/
 	ui->filesCntTot->setText(QString::number(ui->filesCnt->text().toInt() + addFilesCnt));
 	ui->status->appendHtml(tr("<b>Rozpoczęcie konwersji plików: </b>"));
 	QApplication::processEvents();
@@ -745,8 +746,9 @@ void MainWindow::start( void )
 		QApplication::processEvents();
 	}
 
-	// wlasciwe kopiowanie
 	int addCpyCnt = 0;
+	// wlasciwe kopiowanie
+	/*int addCpyCnt = 0;
 	if( copyAdditionalFiles && !cancel && addCopyFromTo.size() > 0 )
 	{
 		ui->status->appendHtml(tr("<b>Kopiowanie dodatkowych plików: </b>"));
@@ -786,7 +788,7 @@ void MainWindow::start( void )
 			QApplication::processEvents();
 		}
 		addCpyTotal = addCopyFromTo.size();
-	}
+	}*/
 
 	if( cancel )
 		ui->status->appendHtml(tr("<font color='red'>Przerwano pracę na życzenie użytkownika</font><br>"));
@@ -808,6 +810,8 @@ void MainWindow::start( void )
 	cancel = false;
 	started = false;
 	ui->startBtn->setText(APP_START_BUTTON_TXT);
+	
+	QMessageBox::information(this, tr("Zakończono konwersję"), tr("Zakończono konwersję"), QMessageBox::Close );
 }
 
 bool MainWindow::isNewNameTemplateValid( void )
@@ -1687,10 +1691,10 @@ void MainWindow::chooseAdditionalFiles( void )
 	afeDialog->exec();
 }
 
-void MainWindow::copyAdditionalFilesState( int state )
+/*void MainWindow::copyAdditionalFilesState( int state )
 {
 	ui->chooseAdditionalFiles->setEnabled( state == Qt::Checked ? true : false );
-}
+}*/
 
 
 

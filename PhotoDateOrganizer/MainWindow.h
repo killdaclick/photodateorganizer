@@ -50,7 +50,7 @@
 #include "FileDownloader.h"
 #include "ui_AdditionalFilesExtension.h"
 
-const unsigned int appVer = 0x010501;
+const unsigned int appVer = 0x010600;
 const QString appWWW = "http://photodateorganizer.sourceforge.net/";
 
 struct TranslationSet
@@ -315,7 +315,7 @@ public slots:
 	void imgPreviewDoubleClickedSlot( QMouseEvent * e ) const;
 	void previewPixmapLoaded( void );
 	void chooseAdditionalFiles( void );
-	void copyAdditionalFilesState( int state );
+	//void copyAdditionalFilesState( int state );
 	void imgDoubleClicked( void ) const;
 
 private:
